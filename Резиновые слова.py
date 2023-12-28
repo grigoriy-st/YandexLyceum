@@ -14,4 +14,5 @@ if len(string) % 2 !=0:
         print(f'{sec}{space}')
 
 else:
+    #допиши цикл для слов с чётной длиной
     pass
