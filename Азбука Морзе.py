@@ -42,7 +42,6 @@ def get_key(value):
     global MorseCode
     for k, v in MorseCode.items():
         if v == value:
-            print(k)
             return k
 
 def encode_to_morse(text):
@@ -62,34 +61,46 @@ def encode_to_morse(text):
     return output
 
 
-def decode_from_morse(code):
+def decode_from_morse(text):
     '''Функция декодирования сообщения'''
     global MorseCode
-    string = code.split('\n')
     output = []
     # разделяет строку на перенос, но не на пробел
-    for i in string:
+    for i in text:
         temp = []
-        if i in list(MorseCode.values()):
-            temp.append(get_key(i))
-        else:
-            temp.append(i)
+        for j in i.split():
+            if j in list(MorseCode.values()):
+                temp.append(get_key(j))
+            else:
+                temp.append(j)
         output.append(''.join(i for i in temp))
     output = ' '.join(i for i in output)
     return output
 
 def main():
+    print('Программа работает только с латинским алфавитом')
     while True:
         answer = input('Вы хотите "закодировать", "декодировать"')
         if answer == "закодировать":
             text = input('Введите текст:\n')
             encode = encode_to_morse(text)
             print('\nЗакодированный текст:\n', encode, sep='\n')
-        elif answer == "декодировать":
-            text = input('Введите текст:\n')
+        elif answer == "декодировать" or answer == '2':
+            text = []
+            print('Вводите текст до пустой строки:')
+            while True: # Цикл для ввода многострочного текста
+                line = input()
+                if not line:
+                    break
+                text.append(line)
             decode = decode_from_morse(text)
-            print('\nДекодированный текст:', decode, sep='\n')
-
+            print('\nДекодированный текст:', decode.capitalize(), sep='\n')
+        else:
+            print('\n\nЕсли хотите продолжить напишите "да"')
+            print('Чтобы закончить программу нажмите Enter')
+            if input():
+                continue
+            break
 
 
 main()
