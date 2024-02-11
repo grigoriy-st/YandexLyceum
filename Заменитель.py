@@ -18,7 +18,7 @@ def placeholder(*lines, **holders):
             if temp == st.replace('|_', '_') and temp not in dict1[st]:    # за
                 dict1[st].append(lines[i])
                 dict1[st] = sorted(dict1[st]) # сортировка в алфавитном порядке
-    for i in list(dict1):
+    for i in list(dict1):    # удаление шаблонов, к которым не подошла ни одна строка
         if not dict1[i]:
             del dict1[i]
     return dict1
@@ -36,6 +36,7 @@ holders = {'h1': '|_ _ _.', 'h2': '|_ _ _ _, _ _ _ _.',
            'h7': '|_ _, |_ _!', 'h8': '|_ _ _!', 'h9': '|_ _ _ _, _ _ _ _,'}
 for k, v in placeholder(*lines, **holders).items():
     print(k, "->", *v)
+    
 '''Заменять можно много чего. Например, в схеме предложения нижнее подчеркивание заменяет слово. 
 А черточка с вертикальной чертой спереди заменяет слово, начинающееся с большой буквы.
 
