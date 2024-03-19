@@ -1,13 +1,21 @@
-class Polynomial:
-    def __init__(self, list1):
-        if len(list1) == 2:
-            list1.insert(0, 0)
-        self.free, self.x1, self.x2 = list1
+class Queue:
+    def __init__(self, *list1):
+        self.main_list = list1
 
-    def poly(self):
-        ...
+    def append(self, other):
+        self.main_list += other
+    
+    def copy(self):
+        return self.main_list[:]
+    
+    def pop(self):
+        temp = self.main_list[0][:]
+        del self.main_list[0]
+        if not self.main_list:
+            return None
+        return temp
 
-poly = Polynomial([10, -1])
-print(poly(0))
-print(poly(1))
-print(poly(2))
+    def extend(self, other_queue):
+        self.main_list.append(other_queue)
+
+    def 
