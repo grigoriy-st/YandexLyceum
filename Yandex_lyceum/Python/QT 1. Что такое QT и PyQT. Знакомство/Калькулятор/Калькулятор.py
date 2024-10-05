@@ -8,7 +8,7 @@ from PyQt6.QtWidgets import QApplication, QWidget, QMainWindow
 class Calculator(QMainWindow):
     def __init__(self):
         super().__init__()
-        uic.loadUi(r'G:\___PROJECTS___\YandexLyceum\Yandex_lyceum\Python\QT 1. Что такое QT и PyQT. Знакомство\Калькулятор\Калькулятор.ui', self)
+        uic.loadUi(r'Калькулятор.ui', self)
         self.initUI()
 
     def initUI(self):
@@ -25,7 +25,8 @@ class Calculator(QMainWindow):
 
         for btn in op_buttons:
             btn.clicked.connect(self.click_btn)
-
+        self.last_is_eq = False
+        self.last_is_op = False
 
     def click_btn(self):
         sender = self.sender()
@@ -44,6 +45,7 @@ class Calculator(QMainWindow):
                         result = 'ОШИБКА'
                     self.secondary_label.setText("")
                     self.main_label.setText(str(result))
+                    self.last_is_eq = True
                 case '/':
                     self.secondary_label.setText(main_label + ' /')
                 case '*':
@@ -53,17 +55,28 @@ class Calculator(QMainWindow):
                 case '+':
                     self.secondary_label.setText(main_label + ' +')
                 case '±':
-                    self.main_label.setText(str(int(main_label) * -1))
+                    if int(main_label) != 0:
+                        self.main_label.setText(str(int(main_label) * -1))
+            self.last_is_op = True
 
         elif sender.text().isdigit():
+            if self.last_is_eq:
+                self.main_label.setText("0")
+                self.last_is_eq = False
+
             if not secondary_label:
                 if main_label == '0':
                     self.main_label.setText(sender.text())
                 else:
                     self.main_label.setText(main_label + sender.text())
             elif secondary_label:
-                self.main_label.setText(sender.text())
-
+                if self.last_is_op:
+                    self.main_label.setText(sender.text())
+                    self.last_is_op = False
+                elif main_label == '0':
+                    self.main_label.setText(sender.text())
+                else:
+                    self.main_label.setText(main_label + sender.text())
 
         elif sender.text() in ['C', 'CE', '.']:
             match sender.text():
@@ -75,12 +88,11 @@ class Calculator(QMainWindow):
                 case '.':
                     if '.' not in self.main_label.text():
                         self.main_label.setText(self.main_label.text() + '.')
-                
 
-        
-
-
-                
+'''Добавить функционал на:
+- Экспоненциальную запись
+- С плавающей точкой
+'''                
 
         
         
