@@ -1,0 +1,48 @@
+waffle.bmp
+----------
+Summary: 981 GB
+
+cherry.docx
+marshmallow.docx
+----------
+Summary: 822 MB
+
+apple.exe
+----------
+Summary: 1 MB
+
+cultured_milk_foods.jpg
+----------
+Summary: 111 MB
+
+orange.pas
+----------
+Summary: 71 GB
+
+candy.pptx
+mutton.pptx
+----------
+Summary: 541 GB
+
+aubergine.rar
+----------
+Summary: 631 MB
+
+kohlrabi.txt
+milkshake.txt
+turkey.txt
+----------
+Summary: 541 GB
+
+barley.xlsx
+croissant.xlsx
+juice.xlsx
+poultry.xlsx
+semolina.xlsx
+----------
+Summary: 732 GB
+
+toffee.zip
+----------
+Summary: 361 MB
+

@@ -1,4 +1,11 @@
-<?xml version="1.0" encoding="UTF-8"?>
+import sys
+import os
+import io
+
+from PyQt6 import uic
+from PyQt6.QtWidgets import QApplication, QMainWindow
+
+template = '''<?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
  <class>MainWindow</class>
  <widget class="QMainWindow" name="MainWindow">
@@ -145,3 +152,68 @@
  <resources/>
  <connections/>
 </ui>
+'''
+
+
+class FileStat(QMainWindow):
+
+    def __init__(self):
+        super().__init__()
+        f = io.StringIO(template)
+        uic.loadUi(f, self)
+        self.initUI()
+
+    def initUI(self):
+        self.statusbar = self.statusBar()
+        self.button.clicked.connect(self.calculate)
+
+    def calculate(self):
+        file_name = self.filenameEdit.text()
+        result_list = []
+
+        if os.path.isfile('./' + file_name):
+            file = open(file_name, "r", encoding="utf-8")
+            file_strings = file.readlines()
+
+            if file_strings:
+                for line in file_strings:
+                    result_list.extend(line.split())
+
+                result_list = list(map(int, result_list))
+                self.minEdit.setText(str(min(result_list)))
+                self.maxEdit.setText(str(max(result_list)))
+
+                avg_num = float(sum(result_list)) / len(result_list)
+                avg_num = round(avg_num, 2)
+                avg_num = avg_num.replace('.', ',')
+                self.avgEdit.setText(avg_num)
+                self.statusbar.showMessage("")
+
+            # write out file
+                out = open("out.txt", 'w', encoding="utf-8")
+
+                out.write(f'Максимальное значение = {self.maxEdit.text()}\n')
+                out.write(f'Минимальное значение = {self.minEdit.text()}\n')
+                out.write(f'Среднее значение = {self.avgEdit.text()}')
+
+                out.close()
+            else:
+                self.minEdit.setText('0')
+                self.maxEdit.setText('0')
+                self.avgEdit.setText('0,00')
+                self.statusbar.showMessage("Указанный файл пуст")
+
+        else:
+            self.minEdit.setText('0')
+            self.maxEdit.setText('0')
+            self.avgEdit.setText('0,00')
+            self.statusbar.showMessage("Указанный файл не существует")
+
+        file.close()
+
+
+if __name__ == '__main__':
+    app = QApplication(sys.argv)
+    ex = FileStat()
+    ex.show()
+    sys.exit(app.exec())
