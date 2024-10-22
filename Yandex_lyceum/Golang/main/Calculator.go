@@ -68,6 +68,11 @@ func Calc(expression string) (float64, error) {
 }
 
 func main() {
-	fmt.Println(Calc("1+3*6-(10*3)+5"))
+	a := "4 * (15 * 3 / (10 - 9))"
+	// b := "3 + 5 * (2 - 1) / 4"
+	// c := "7 + 5 - 3 * (10 + 5 * 4) - 1"
+	// d := "1+3*6-(10*3)+5"
+	// e := "3 + * 5"
 
+	fmt.Println(Calc(a))
 }
