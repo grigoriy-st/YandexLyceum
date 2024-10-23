@@ -2,7 +2,6 @@ package main
 
 import (
 	"fmt"
-	"regexp"
 	"strconv"
 	"strings"
 )
@@ -38,13 +37,11 @@ func ExecuteBinOps(seq []string, pos int, sign string) ([]string, error) {
 }
 
 func ExecuteArifOps(seq []string) (string, error) {
-	// ( 10 + 5 * 4 )
-	// result := 0
-
 	for {
 		if len(seq) == 1 {
 			break
 		}
+
 		// Execute high priority operations
 		for i := 0; i < len(seq); i++ {
 			if string(seq[i]) == "*" || string(seq[i]) == "/" {
@@ -53,8 +50,10 @@ func ExecuteArifOps(seq []string) (string, error) {
 					fmt.Println(err)
 				}
 				seq = TempSeq
+				i -= 1
 			}
 		}
+
 		// Execute other operations
 		for i := 0; i < len(seq); i++ {
 			if string(seq[i]) == "+" || string(seq[i]) == "-" {
@@ -69,114 +68,142 @@ func ExecuteArifOps(seq []string) (string, error) {
 	return seq[0], nil
 }
 
-func FindRightBrckt(exp []string, startIndex int) int {
-	for i := startIndex; i < len(exp); i++ {
-		if string(exp[i]) == ")" {
-			return i
+func IsExpContainBrackets(exp []string) bool {
+	for i := 0; i < len(exp); i++ {
+		if string(exp[i]) == ")" || string(exp[i]) == "(" {
+			return true
 		}
 	}
-	return -1
+	return false
 }
 
-func ProcSlcWithBrckts(exp []string) []string {
-	// Функция избавляется и вычисляет все выражения со скобками
-	// Возвращает сроку с выражениями без скобок
-
+func SolveExpression(exp []string) (float64, error) {
 	for {
-		// Выход из циклас помощью нахождения скобок
-		if FindRightBrckt(exp, 0) == -1 {
+		if len(exp) == 1 {
+			break
+		}
+		if IsExpContainBrackets(exp) {
+			length_seq := len(exp)
+			IndexLeftBracket := -1
+			IndexRightBracket := -1
+
+			for i := 0; i < length_seq; i++ {
+				if string(exp[i]) == "(" {
+					if IndexLeftBracket == -1 || IndexRightBracket == -1 {
+						IndexLeftBracket = i
+					}
+				} else if string(exp[i]) == ")" {
+					if IndexLeftBracket != -1 || IndexRightBracket == -1 {
+						IndexRightBracket = i
+						break
+					}
+				}
+			}
+			TempExp := exp[IndexLeftBracket+1 : IndexRightBracket] // передача выражения вместе со скобками
+			ResultExp, err := ExecuteArifOps(TempExp)
+			if err != nil {
+				return 0.0, nil
+			}
+			TempExpression := exp[:IndexLeftBracket]
+			TempExpression = append(TempExpression, ResultExp)
+
+			for _, val := range exp[IndexRightBracket+1:] { // Добавление оставшейся части выражения
+				TempExpression = append(TempExpression, string(val))
+			}
+			exp = TempExpression
+		} else {
 			break
 		}
 
-		length_seq := len(exp)
-		IndexLeftBracket := -1
-		IndexRightBracket := -1
-
-		for i := 0; i < length_seq; i++ {
-			if string(exp[i]) == "(" {
-				if IndexLeftBracket == -1 || IndexRightBracket == -1 {
-					IndexLeftBracket = i
-				}
-			} else if string(exp[i]) == ")" {
-				if IndexLeftBracket != -1 || IndexRightBracket == -1 {
-					IndexRightBracket = i
-					break
-				}
-			}
-		}
-		TempExp := exp[IndexLeftBracket+1 : IndexRightBracket] // передача выражения вместе со скобками
-		ResultExp, err := ExecuteArifOps(TempExp)
-		if err != nil {
-			return []string{}
-		}
-		TempExpression := exp[:IndexLeftBracket]
-		TempExpression = append(TempExpression, ResultExp)
-
-		for _, val := range exp[IndexRightBracket+1:] { // Добавление оставшейся части выражения
-			TempExpression = append(TempExpression, string(val))
-		}
-		exp = TempExpression
 	}
-	return exp
-}
-
-func ProcSlcWithoutBrckts(seq []string) (float64, error) {
-	for {
-		if len(seq) == 1 {
-			break
-		}
-		for i := 0; i < len(seq); i++ {
-			if string(seq[i]) == "*" || string(seq[i]) == "/" {
-				TempSeq, err := ExecuteBinOps(seq, i, string(seq[i])) // seq, индекс операции, операция
-				if err != nil {
-					fmt.Println(err)
-				}
-				seq = TempSeq
-			}
-		}
-		// Execute other operations
-		for i := 0; i < len(seq); i++ {
-			if string(seq[i]) == "+" || string(seq[i]) == "-" {
-				TempSeq, err := ExecuteBinOps(seq, i, string(seq[i]))
-				if err != nil {
-					fmt.Println(err)
-				}
-				seq = TempSeq
-			}
-		}
-	}
-	result, _ := strconv.ParseFloat(seq[0], 64)
-	return result, nil
-}
-
-func Calc(expression string) (float64, error) {
-	RightsBracketsInSeq := false // правильный учёт расположения и наличия скобок
-
-	if (strings.Contains(expression, "(") == strings.Contains(expression, ")")) &&
-		strings.Count(expression, "(") >= 1 {
-		RightsBracketsInSeq = true
-	}
-	re := regexp.MustCompile(`(-?\d+\.\d+|-?\d+|\(|\)|\+|-|\*|/)`)
-	parts := re.FindAllString(expression, -1)
-	fmt.Println(parts)
-
-	if RightsBracketsInSeq {
-		parts = ProcSlcWithBrckts(parts)
-	}
-	result, err := ProcSlcWithoutBrckts(parts)
+	TempExp, err := ExecuteArifOps(exp)
 	if err != nil {
 		fmt.Println(err)
 	}
-	fmt.Print(result)
+	result, _ := strconv.ParseFloat(TempExp, 64)
+	return result, nil
+}
+
+func StrToSlice(str string) ([]string, error) {
+	result := []string{}
+	tempNum := []string{}
+	lenghtSeq := len(str)
+
+	for i, value := range str {
+		if strings.Contains("+)(-/*", string(value)) {
+			if len(tempNum) > 0 {
+				num := strings.Join(tempNum, "")
+				result = append(result, num)
+				tempNum = []string{}
+			}
+			result = append(result, string(value))
+		} else if strings.Contains("1234567890.", string(value)) {
+			tempNum = append(tempNum, string(value))
+
+			if i == lenghtSeq-1 {
+				num := strings.Join(tempNum, "")
+				result = append(result, num)
+			}
+		} else if string(value) == " " {
+			if len(tempNum) > 0 {
+				num := strings.Join(tempNum, "")
+				result = append(result, num)
+				tempNum = []string{}
+			}
+		} else {
+			return []string{}, fmt.Errorf("Invalid sign")
+		}
+	}
+
+	return result, nil
+}
+
+func IsRightSequence(seq []string) (bool, error) {
+	prevSign := string(seq[0])
+	for i := 1; i < len(seq); i++ {
+		if strings.Contains("*/+-", prevSign) && strings.Contains("*/+-", string(seq[i])) {
+			return false, fmt.Errorf("There are two operators in a row")
+		}
+		if strings.Contains("1234567890.", prevSign) && strings.Contains("1234567890.", string(seq[i])) {
+			return false, fmt.Errorf("There are two operands in a row")
+		}
+		prevSign = string(seq[i])
+	}
+	return true, nil
+}
+
+func Calc(expression string) (float64, error) {
+
+	if strings.Contains(expression, ")") {
+		if strings.Count(expression, ")") != strings.Count(expression, ")") {
+			return 0.0, fmt.Errorf("Different number of brackets")
+		}
+	}
+	parts, err := StrToSlice(expression)
+	if err != nil {
+		return 0.0, fmt.Errorf(err.Error())
+	}
+
+	_, err = IsRightSequence(parts)
+	if err != nil {
+		return 0.0, fmt.Errorf(err.Error())
+	}
+	fmt.Println(parts)
+
+	result, err := SolveExpression(parts)
+	if err != nil {
+		fmt.Println(err)
+	}
+
 	return result, nil
 }
 
 func main() {
-	// a := "4 * (15 * 3 / (10 - 9))"
+	// a := "4 * (15 * 3 / (10 - 9))"parts = {[]string} len:14, cap:16
 	// b := "3 + 5 * (2 - 1) / 4"
-	c := "7.112 + 5 - 3.3 * (10.23 + 5.3 * 4.1) - 1"
-	// d := "1+3*6-(10*3)+5"
+	// c := "7.112 + 5 - 3.3 * (10.23 + 5.3 * 4.1) - 1"
+	d := "1+3*6-(10*3)+5"
 	// e := "3 + * 5"
 
-	fmt.Println(Calc(c))
+	fmt.Println(Calc(d))
 }
