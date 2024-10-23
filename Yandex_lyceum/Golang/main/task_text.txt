@@ -40,3 +40,25 @@
 4.2 * (15.3 * 3.1 / (10 - 9))
 3 + 5 * (2 - 1) / 4
 3 + * 5
+
+panic: runtime error: index out of range [4] with length 4 [recovered]
+	panic: runtime error: index out of range [4] with length 4
+
+testing.tRunner.func1.2({0x54c960, 0xc000018180})
+	/go/src/testing/testing.go:1632 +0x230
+testing.tRunner.func1()
+	/go/src/testing/testing.go:1635 +0x35e
+panic({0x54c960?, 0xc000018180?})
+	/go/src/runtime/panic.go:785 +0x132
+command-line-arguments.ExecuteBinOps({0xc000086ac0, 0x4, 0x4}, 0x3, {0xc0000122c4, 0x1})
+	/temp/executing/source.go:12 +0x33f
+command-line-arguments.ExecuteArifOps({0xc000086ac0?, 0x4?, 0x4d4f6d?})
+	/temp/executing/source.go:48 +0x77
+command-line-arguments.SolveExpression({0xc000086ac0?, 0x4?, 0x55a9d9?})
+	/temp/executing/source.go:118 +0x1ab
+command-line-arguments.Calc({0x55abb6, 0x4})
+	/temp/executing/source.go:192 +0xbe
+command-line-arguments.TestCalc.func2(0xc00007eea0)
+	/temp/executing/source_test.go:72 +0x2c
+testing.tRunner(0xc00007eea0, 0xc000086a80)
+	/go/src/testing/testing.go:1690 +0xf4

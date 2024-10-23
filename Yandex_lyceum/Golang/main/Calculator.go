@@ -7,33 +7,33 @@ import (
 )
 
 func ExecuteBinOps(seq []string, pos int, sign string) ([]string, error) {
-	// выполняет все арифметические операции выражения в скобках
+	// выполняет все арифметические операции
 	first, _ := strconv.ParseFloat(seq[pos-1], 64)
 	second, _ := strconv.ParseFloat(seq[pos+1], 64)
-	TempQ := 0.0
+	tempQ := 0.0
 
 	switch sign {
 	case "*":
-		TempQ = first * second
+		tempQ = first * second
 	case "/":
 		if second == 0 {
 			return []string{}, fmt.Errorf("Devision by zero")
 		}
-		TempQ = first / second
+		tempQ = first / second
 	case "-":
-		TempQ = first - second
+		tempQ = first - second
 	case "+":
-		TempQ = first + second
+		tempQ = first + second
 	}
-
-	PartBeforeExp := seq[:pos-1] // rename PartBeforeExp
-	ResBinExp := strconv.FormatFloat(TempQ, 'f', -1, 64)
-	PartBeforeExp = append(PartBeforeExp, ResBinExp) // result BinExp
+	//
+	out := seq[:pos-1]
+	resBinExp := strconv.FormatFloat(tempQ, 'f', -1, 64)
+	out = append(out, resBinExp) // result BinExp
 
 	for _, val := range seq[pos+2:] { // PartAfterExp
-		PartBeforeExp = append(PartBeforeExp, string(val))
+		out = append(out, string(val))
 	}
-	return PartBeforeExp, nil
+	return out, nil
 }
 
 func ExecuteArifOps(seq []string) (string, error) {
@@ -42,26 +42,25 @@ func ExecuteArifOps(seq []string) (string, error) {
 			break
 		}
 
-		// Execute high priority operations
+		// Выполнение приоритетных операций
 		for i := 0; i < len(seq); i++ {
 			if string(seq[i]) == "*" || string(seq[i]) == "/" {
-				TempSeq, err := ExecuteBinOps(seq, i, string(seq[i])) // seq, индекс операции, операция
+				tempSeq, err := ExecuteBinOps(seq, i, string(seq[i])) // seq, индекс операции, операция
 				if err != nil {
-					fmt.Println(err)
+					return "", fmt.Errorf(err.Error())
 				}
-				seq = TempSeq
-				i -= 1
+				seq = tempSeq
 			}
 		}
 
-		// Execute other operations
+		// Выполнение других операций
 		for i := 0; i < len(seq); i++ {
 			if string(seq[i]) == "+" || string(seq[i]) == "-" {
-				TempSeq, err := ExecuteBinOps(seq, i, string(seq[i]))
+				tempSeq, err := ExecuteBinOps(seq, i, string(seq[i]))
 				if err != nil {
-					fmt.Println(err)
+					return "", fmt.Errorf(err.Error())
 				}
-				seq = TempSeq
+				seq = tempSeq
 			}
 		}
 	}
@@ -84,43 +83,43 @@ func SolveExpression(exp []string) (float64, error) {
 		}
 		if IsExpContainBrackets(exp) {
 			length_seq := len(exp)
-			IndexLeftBracket := -1
-			IndexRightBracket := -1
+			indexLeftBracket := -1
+			indexRightBracket := -1
 
 			for i := 0; i < length_seq; i++ {
 				if string(exp[i]) == "(" {
-					if IndexLeftBracket == -1 || IndexRightBracket == -1 {
-						IndexLeftBracket = i
+					if indexLeftBracket == -1 || indexRightBracket == -1 {
+						indexLeftBracket = i
 					}
 				} else if string(exp[i]) == ")" {
-					if IndexLeftBracket != -1 || IndexRightBracket == -1 {
-						IndexRightBracket = i
+					if indexLeftBracket != -1 || indexRightBracket == -1 {
+						indexRightBracket = i
 						break
 					}
 				}
 			}
-			TempExp := exp[IndexLeftBracket+1 : IndexRightBracket] // передача выражения вместе со скобками
-			ResultExp, err := ExecuteArifOps(TempExp)
+			tempExp := exp[indexLeftBracket+1 : indexRightBracket] // передача выражения вместе со скобками
+			resultExp, err := ExecuteArifOps(tempExp)
 			if err != nil {
 				return 0.0, nil
 			}
-			TempExpression := exp[:IndexLeftBracket]
-			TempExpression = append(TempExpression, ResultExp)
+			tempExpression := exp[:indexLeftBracket]
+			tempExpression = append(tempExpression, resultExp)
 
-			for _, val := range exp[IndexRightBracket+1:] { // Добавление оставшейся части выражения
-				TempExpression = append(TempExpression, string(val))
+			for _, val := range exp[indexRightBracket+1:] { // Добавление оставшейся части выражения
+				tempExpression = append(tempExpression, string(val))
 			}
-			exp = TempExpression
+			exp = tempExpression
 		} else {
 			break
 		}
 
 	}
-	TempExp, err := ExecuteArifOps(exp)
+	tempExp, err := ExecuteArifOps(exp)
 	if err != nil {
-		fmt.Println(err)
+		return 0.0, fmt.Errorf(err.Error())
 	}
-	result, _ := strconv.ParseFloat(TempExp, 64)
+	result, _ := strconv.ParseFloat(tempExp, 64)
 	return result, nil
 }
 
@@ -160,6 +159,7 @@ func StrToSlice(str string) ([]string, error) {
 
 func IsRightSequence(seq []string) (bool, error) {
 	prevSign := string(seq[0])
+
 	for i := 1; i < len(seq); i++ {
 		if strings.Contains("*/+-", prevSign) && strings.Contains("*/+-", string(seq[i])) {
 			return false, fmt.Errorf("There are two operators in a row")
@@ -188,22 +188,19 @@ func Calc(expression string) (float64, error) {
 	if err != nil {
 		return 0.0, fmt.Errorf(err.Error())
 	}
-	fmt.Println(parts)
 
 	result, err := SolveExpression(parts)
 	if err != nil {
-		fmt.Println(err)
+		return 0.0, fmt.Errorf(err.Error())
 	}
 
 	return result, nil
 }
 
 func main() {
-	// a := "4 * (15 * 3 / (10 - 9))"parts = {[]string} len:14, cap:16
-	// b := "3 + 5 * (2 - 1) / 4"
-	// c := "7.112 + 5 - 3.3 * (10.23 + 5.3 * 4.1) - 1"
-	d := "1+3*6-(10*3)+5"
-	// e := "3 + * 5"
-
+	d := "1+1" // 2
+	// d := "(2+2)*2" // 8
+	// d := "2+2*2" // 6
+	// d := "1/2" // 0.5
 	fmt.Println(Calc(d))
 }
