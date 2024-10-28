@@ -1,0 +1,229 @@
+import io
+import sys
+
+from PyQt6 import uic, QtWidgets
+from PyQt6.QtWidgets import QApplication, QMainWindow, QLabel, QWidget
+
+template = '''<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>MainWindow</class>
+ <widget class="QMainWindow" name="MainWindow">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>501</width>
+    <height>355</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>MainWindow</string>
+  </property>
+  <widget class="QWidget" name="centralwidget">
+   <widget class="QWidget" name="verticalLayoutWidget">
+    <property name="geometry">
+     <rect>
+      <x>10</x>
+      <y>10</y>
+      <width>491</width>
+      <height>241</height>
+     </rect>
+    </property>
+    <layout class="QVBoxLayout" name="verticalLayout">
+     <item>
+      <layout class="QHBoxLayout" name="horizontalLayout">
+       <item>
+        <widget class="QComboBox" name="parameterSelection">
+         <property name="maximumSize">
+          <size>
+           <width>100</width>
+           <height>16777215</height>
+          </size>
+         </property>
+         <item>
+          <property name="text">
+           <string>Год выпуска</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>Название</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>Продолжительность</string>
+          </property>
+         </item>
+        </widget>
+       </item>
+       <item>
+        <widget class="QLineEdit" name="queryLine">
+         <property name="maximumSize">
+          <size>
+           <width>200</width>
+           <height>16777215</height>
+          </size>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QPushButton" name="queryButton">
+         <property name="maximumSize">
+          <size>
+           <width>100</width>
+           <height>16777215</height>
+          </size>
+         </property>
+         <property name="text">
+          <string>Поиск</string>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </item>
+     <item>
+      <layout class="QHBoxLayout" name="horizontalLayout_2">
+       <property name="spacing">
+        <number>50</number>
+       </property>
+       <item>
+        <widget class="QLabel" name="label">
+         <property name="text">
+          <string>ID:</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QLineEdit" name="idEdit_2">
+         <property name="maximumSize">
+          <size>
+           <width>350</width>
+           <height>16777215</height>
+          </size>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </item>
+     <item>
+      <layout class="QHBoxLayout" name="horizontalLayout_5">
+       <item>
+        <widget class="QLabel" name="label_4">
+         <property name="text">
+          <string>Название:</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QLineEdit" name="titleEdit">
+         <property name="maximumSize">
+          <size>
+           <width>350</width>
+           <height>16777215</height>
+          </size>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </item>
+     <item>
+      <layout class="QHBoxLayout" name="horizontalLayout_4">
+       <item>
+        <widget class="QLabel" name="label_3">
+         <property name="text">
+          <string>Год выпуска: </string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QLineEdit" name="yearEdit">
+         <property name="maximumSize">
+          <size>
+           <width>350</width>
+           <height>16777215</height>
+          </size>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </item>
+     <item>
+      <layout class="QHBoxLayout" name="horizontalLayout_6">
+       <item>
+        <widget class="QLabel" name="label_5">
+         <property name="text">
+          <string>Жанр:</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QLineEdit" name="genreEdit">
+         <property name="maximumSize">
+          <size>
+           <width>350</width>
+           <height>16777215</height>
+          </size>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </item>
+     <item>
+      <layout class="QHBoxLayout" name="horizontalLayout_7">
+       <item>
+        <widget class="QLabel" name="label_6">
+         <property name="text">
+          <string>Продолжительность:</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QLineEdit" name="durationEdit">
+         <property name="maximumSize">
+          <size>
+           <width>350</width>
+           <height>16777215</height>
+          </size>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </item>
+    </layout>
+   </widget>
+  </widget>
+  <widget class="QMenuBar" name="menubar">
+   <property name="geometry">
+    <rect>
+     <x>0</x>
+     <y>0</y>
+     <width>501</width>
+     <height>21</height>
+    </rect>
+   </property>
+  </widget>
+  <widget class="QStatusBar" name="statusbar"/>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>
+'''
+
+class MyWidget(QMainWindow):
+    def __init__(self):
+        super().__init__()
+        f = io.StringIO(template)
+        uic.loadUi(f, self)
+        self.initUI()
+
+    def initUI(self):
+        self.errorLabel = QLabel("Неправильный запрос", self)
+        self.errorLabel.setGeometry(10, 250, 200, 40)
+        self.errorLabel.setVisible(False)
+
+if __name__ == '__main__':
+    app = QApplication(sys.argv)
+    ex = MyWidget()
+    ex.show()
+    sys.exit(app.exec())
