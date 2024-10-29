@@ -89,7 +89,7 @@
         </widget>
        </item>
        <item>
-        <widget class="QLineEdit" name="idEdit_2">
+        <widget class="QLineEdit" name="idEdit">
          <property name="maximumSize">
           <size>
            <width>350</width>
