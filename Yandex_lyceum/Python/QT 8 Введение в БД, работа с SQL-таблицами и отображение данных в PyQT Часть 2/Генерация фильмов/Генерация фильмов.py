@@ -56,6 +56,7 @@ class MyWidget(QMainWindow):
 
             if result:
                 self.statusBar.showMessage("")
+
                 self.tableWidget.setRowCount(len(result))
 
                 for index, line in enumerate(result):

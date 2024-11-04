@@ -4,7 +4,7 @@ import sys
 from PyQt6.QtWidgets import (
     QApplication, QMainWindow, QTableWidget,
     QTableWidgetItem, QPushButton, QPlainTextEdit,
-    QComboBox, QWidget, QLabel, QStatusBar
+    QComboBox, QLabel, QStatusBar
 )
 
 
@@ -16,6 +16,7 @@ class MyWidget(QMainWindow):
     def initUI(self):
         self.resize(700, 500)
         self.add_form = None
+        self.setWindowTitle("Фильмотека")
 
         self.addButton = QPushButton("Добавить", self)
         self.addButton.setGeometry(10, 10, 70, 30)
@@ -27,17 +28,18 @@ class MyWidget(QMainWindow):
                    'Жанр', ' Продолжительность']
         self.tableWidget.setColumnCount(5)
         self.tableWidget.setHorizontalHeaderLabels(headers)
-        self.update_table()
+        self.update_result()
 
     def adding(self):
-        self.add_form = AddWidget(self)
+        self.add_form = AddWidget(self, self.tableWidget)
         self.add_form.show()
+        self.add_form.pushButton.clicked.connect(self.update_result)
 
-    def update_table(self):
+    def update_result(self):
         con = sqlite3.connect('films_db.sqlite')
         cur = con.cursor()
         result = cur.execute(
-            f'''
+            '''
             select
                 films.id,
                 films.title,
@@ -51,10 +53,8 @@ class MyWidget(QMainWindow):
         con.close()
 
         self.tableWidget.setRowCount(len(result))
-
         for index, rec in enumerate(result):
             rec_id, title, year, genre, duration = rec
-
             self.tableWidget.setItem(index, 0, QTableWidgetItem(str(rec_id)))
             self.tableWidget.setItem(index, 1, QTableWidgetItem(str(title)))
             self.tableWidget.setItem(index, 2, QTableWidgetItem(str(year)))
@@ -62,13 +62,9 @@ class MyWidget(QMainWindow):
             self.tableWidget.setItem(index, 4, QTableWidgetItem(str(duration)))
 
 
-
-
-
 class AddWidget(QMainWindow):
-    def __init__(self, parent=None):
+    def __init__(self, table, parent=None):
         super().__init__(parent)
-        self.parent = parent
 
         self.initUI()
 
@@ -76,6 +72,7 @@ class AddWidget(QMainWindow):
         self.resize(300, 300)
         self.statusBar = QStatusBar()
         self.setStatusBar(self.statusBar)
+        self.setWindowTitle("Добавить элемент")
 
         self.lbl_title = QLabel("Название", self)
         self.lbl_title.setGeometry(0, 10, 100, 30)
@@ -100,7 +97,8 @@ class AddWidget(QMainWindow):
             '''
         ).fetchall()
         cur.close()
-        self.params = {genre[0]: index for index, genre in enumerate(self.params)}
+        self.params = {genre[0]: index
+                       for index, genre in enumerate(self.params)}
         self.comboBox.addItems(self.params.keys())
 
         self.lbl_dur = QLabel("Длина", self)
@@ -108,26 +106,22 @@ class AddWidget(QMainWindow):
         self.duration = QPlainTextEdit(self)
         self.duration.setGeometry(100, 130, 200, 30)
 
-        self.pushbutton = QPushButton('Добавить', self)
-        self.pushbutton.setGeometry(150, 250, 100, 30)
-        self.pushbutton.clicked.connect(self.exec_query)
+        self.pushButton = QPushButton('Добавить', self)
+        self.pushButton.setGeometry(150, 250, 100, 30)
+        self.pushButton.clicked.connect(self.get_adding_verdict)
 
-    def exec_query(self):
+    def get_adding_verdict(self):
         self.statusBar.showMessage("")
-
         title = self.title.toPlainText()
         year = self.year.toPlainText()
         genre = self.comboBox.currentText()
         duration = self.duration.toPlainText()
-        correct_input = self.get_adding_verdict(title, year, genre, duration)
 
-        if not correct_input:
-            self.statusBar.showMessage("Неверно заполнена форма")
-
-    def get_adding_verdict(self, title, year, genre, duration):
-        if not year.isdigit():
-            return False
         if not title or not year or not genre or not duration:
+            return False
+        if not year.isdigit() or int(year) > 2024:
+            return False
+        if int(duration) < 0:
             return False
 
         genre_id = self.params[genre]
@@ -142,15 +136,12 @@ class AddWidget(QMainWindow):
                 '''
             )
             con.commit()
-            self.parent.update_db()
-            self.close()
-
         except sqlite3.OperationalError:
             self.statusBar.showMessage("Неверно заполнена форма")
         finally:
             cur.close()
+            self.close()
         return True
-
 
 
 if __name__ == '__main__':
