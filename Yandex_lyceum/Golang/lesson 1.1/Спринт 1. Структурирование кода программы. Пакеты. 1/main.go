@@ -1,4 +1,4 @@
-package life
+package main
 
 import (
 	"errors"
@@ -23,15 +23,6 @@ func NewWorld(height, width int) (*World, error) {
 	}
 
 	return &World{height, width, arr}, nil
-}
-
-func (w *World) next(x, y int) bool {
-}
-
-func (w *World) neighbors(x, y int) int {
-}
-
-func NextState(oldWorld, newWorld World) {
 }
 
 // RandInit заполняет поля на указанное число процентов

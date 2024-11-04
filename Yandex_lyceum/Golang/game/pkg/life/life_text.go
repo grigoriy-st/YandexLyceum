@@ -1,7 +1,9 @@
-package life_t_test
+package life_test
 
 import (
 	"testing"
+
+	"github.com/Yandex_lyceum/Golang/game/pkg/life"
 )
 
 func TestNewWorld(t *testing.T) {
