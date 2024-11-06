@@ -7,7 +7,9 @@
 
 
 from PyQt6 import QtCore, QtGui, QtWidgets
+from PyQt6.QtWidgets import QLabel
 
+from logic import Logic
 
 class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
@@ -31,28 +33,41 @@ class Ui_MainWindow(object):
         self.tab_image_account.setStyleSheet("")
         self.tab_image_account.setObjectName("tab_image_account")
         icon = QtGui.QIcon()
-        icon.addPixmap(QtGui.QPixmap("icons/For Left bar/profile-anonymous2.png"), QtGui.QIcon.Mode.Normal, QtGui.QIcon.State.On)
+        icon.addPixmap(QtGui.QPixmap("UI/icons/For Left bar/profile-anonymous2.png"), QtGui.QIcon.Mode.Normal, QtGui.QIcon.State.On)
         self.tabWidget.addTab(self.tab_image_account, icon, "")
+# tab_home
         self.tab_home = QtWidgets.QWidget()
+        self.tab_home.isActiveWindow()
         self.tab_home.setObjectName("tab_home")
         icon1 = QtGui.QIcon()
-        icon1.addPixmap(QtGui.QPixmap("icons/For Left bar/Домой.png"), QtGui.QIcon.Mode.Normal, QtGui.QIcon.State.On)
+        icon1.addPixmap(QtGui.QPixmap("UI/icons/For Left bar/Домой.png"), QtGui.QIcon.Mode.Normal, QtGui.QIcon.State.On)
         self.tabWidget.addTab(self.tab_home, icon1, "")
+        self.tabWidget.currentChanged.connect(self.define_tab)
+
+    # GUI in tab
+        self.header_txt = QLabel("Курсы", MainWindow)
+        self.header_txt.setGeometry(100, 20, 100, 50)
+        self.header_txt.hide()
+# tab_my_courses
         self.tab_my_courses = QtWidgets.QWidget()
         self.tab_my_courses.setObjectName("tab_my_courses")
         icon2 = QtGui.QIcon()
-        icon2.addPixmap(QtGui.QPixmap("icons/For Left bar/Курс.png"), QtGui.QIcon.Mode.Normal, QtGui.QIcon.State.On)
+        icon2.addPixmap(QtGui.QPixmap("UI/icons/For Left bar/Курс.png"), QtGui.QIcon.Mode.Normal, QtGui.QIcon.State.On)
         self.tabWidget.addTab(self.tab_my_courses, icon2, "")
+
+# tab_create_cource
         self.tab_create_cource = QtWidgets.QWidget()
         self.tab_create_cource.setObjectName("tab_create_cource")
         icon3 = QtGui.QIcon()
-        icon3.addPixmap(QtGui.QPixmap("icons/For Left bar/Создание курса.png"), QtGui.QIcon.Mode.Normal, QtGui.QIcon.State.On)
+        icon3.addPixmap(QtGui.QPixmap("UI/icons/For Left bar/Создание курса.png"), QtGui.QIcon.Mode.Normal, QtGui.QIcon.State.On)
         self.tabWidget.addTab(self.tab_create_cource, icon3, "")
+
         self.tab_my_students = QtWidgets.QWidget()
         self.tab_my_students.setObjectName("tab_my_students")
         icon4 = QtGui.QIcon()
-        icon4.addPixmap(QtGui.QPixmap("icons/For Left bar/Учетные записи.png"), QtGui.QIcon.Mode.Normal, QtGui.QIcon.State.On)
+        icon4.addPixmap(QtGui.QPixmap("UI/icons/For Left bar/Учетные записи.png"), QtGui.QIcon.Mode.Normal, QtGui.QIcon.State.On)
         self.tabWidget.addTab(self.tab_my_students, icon4, "")
+
         MainWindow.setCentralWidget(self.centralwidget)
         self.menubar = QtWidgets.QMenuBar(parent=MainWindow)
         self.menubar.setGeometry(QtCore.QRect(0, 0, 1125, 21))
@@ -66,16 +81,25 @@ class Ui_MainWindow(object):
         self.tabWidget.setCurrentIndex(1)
         QtCore.QMetaObject.connectSlotsByName(MainWindow)
 
+    def define_tab(self, index):
+        self.clear_all_tabs_gui()
+        if index == 1:
+            self.display_home_widget()
+        elif index == 2:
+            print("This is other")
+
+    def display_home_widget(self):
+        self.header_txt.show()
+
+    def clear_all_tabs_gui(self):
+        self.header_txt.hide()
+
+        # self.combobox_filters = QComboBox()
+        # self.combobox_filters.addItems(["Все", "Популярные", "Новинки"])
+        # self.lineedit_search = QLineEdit()
+        # self.button_search = QPushButton("Поиск")
+        # self.table_view = QTableView()
+
     def retranslateUi(self, MainWindow):
         _translate = QtCore.QCoreApplication.translate
         MainWindow.setWindowTitle(_translate("MainWindow", "MainWindow"))
-
-
-if __name__ == "__main__":
-    import sys
-    app = QtWidgets.QApplication(sys.argv)
-    MainWindow = QtWidgets.QMainWindow()
-    ui = Ui_MainWindow()
-    ui.setupUi(MainWindow)
-    MainWindow.show()
-    sys.exit(app.exec())
