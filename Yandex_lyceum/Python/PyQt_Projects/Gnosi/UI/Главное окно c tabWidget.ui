@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1125</width>
-    <height>735</height>
+    <width>1093</width>
+    <height>592</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -17,106 +17,265 @@
    <property name="styleSheet">
     <string notr="true"/>
    </property>
-   <widget class="QTabWidget" name="tabWidget">
-    <property name="geometry">
-     <rect>
-      <x>0</x>
-      <y>0</y>
-      <width>1121</width>
-      <height>691</height>
-     </rect>
-    </property>
-    <property name="layoutDirection">
-     <enum>Qt::LeftToRight</enum>
-    </property>
-    <property name="styleSheet">
-     <string notr="true"/>
-    </property>
-    <property name="tabPosition">
-     <enum>QTabWidget::West</enum>
-    </property>
-    <property name="tabShape">
-     <enum>QTabWidget::Rounded</enum>
-    </property>
-    <property name="currentIndex">
-     <number>2</number>
-    </property>
-    <property name="iconSize">
-     <size>
-      <width>40</width>
-      <height>50</height>
-     </size>
-    </property>
-    <property name="elideMode">
-     <enum>Qt::ElideNone</enum>
-    </property>
-    <widget class="QWidget" name="tab_image_account">
-     <property name="layoutDirection">
-      <enum>Qt::LeftToRight</enum>
-     </property>
-     <property name="autoFillBackground">
-      <bool>false</bool>
-     </property>
-     <property name="styleSheet">
-      <string notr="true"/>
-     </property>
-     <attribute name="icon">
-      <iconset>
-       <normalon>icons/For Left bar/profile-anonymous2.png</normalon>
-      </iconset>
-     </attribute>
-     <attribute name="title">
-      <string/>
-     </attribute>
-    </widget>
-    <widget class="QWidget" name="tab_home">
-     <attribute name="icon">
-      <iconset>
-       <normalon>icons/For Left bar/Домой.png</normalon>
-      </iconset>
-     </attribute>
-     <attribute name="title">
-      <string/>
-     </attribute>
-    </widget>
-    <widget class="QWidget" name="tab_my_courses">
-     <attribute name="icon">
-      <iconset>
-       <normalon>icons/For Left bar/Курс.png</normalon>
-      </iconset>
-     </attribute>
-     <attribute name="title">
-      <string/>
-     </attribute>
-    </widget>
-    <widget class="QWidget" name="tab_create_cource">
-     <attribute name="icon">
-      <iconset>
-       <normalon>icons/For Left bar/Создание курса.png</normalon>
-      </iconset>
-     </attribute>
-     <attribute name="title">
-      <string/>
-     </attribute>
-    </widget>
-    <widget class="QWidget" name="tab_my_students">
-     <attribute name="icon">
-      <iconset>
-       <normalon>icons/For Left bar/Учетные записи.png</normalon>
-      </iconset>
-     </attribute>
-     <attribute name="title">
-      <string/>
-     </attribute>
-    </widget>
-   </widget>
+   <layout class="QHBoxLayout" name="horizontalLayout_5">
+    <item>
+     <widget class="QTabWidget" name="tabWidget">
+      <property name="layoutDirection">
+       <enum>Qt::LeftToRight</enum>
+      </property>
+      <property name="styleSheet">
+       <string notr="true"/>
+      </property>
+      <property name="tabPosition">
+       <enum>QTabWidget::West</enum>
+      </property>
+      <property name="tabShape">
+       <enum>QTabWidget::Rounded</enum>
+      </property>
+      <property name="currentIndex">
+       <number>1</number>
+      </property>
+      <property name="iconSize">
+       <size>
+        <width>40</width>
+        <height>50</height>
+       </size>
+      </property>
+      <property name="elideMode">
+       <enum>Qt::ElideNone</enum>
+      </property>
+      <widget class="QWidget" name="tab_image_account">
+       <property name="layoutDirection">
+        <enum>Qt::LeftToRight</enum>
+       </property>
+       <property name="autoFillBackground">
+        <bool>false</bool>
+       </property>
+       <property name="styleSheet">
+        <string notr="true"/>
+       </property>
+       <attribute name="icon">
+        <iconset>
+         <normalon>icons/For Left bar/profile-anonymous2.png</normalon>
+        </iconset>
+       </attribute>
+       <attribute name="title">
+        <string/>
+       </attribute>
+      </widget>
+      <widget class="QWidget" name="tab_home">
+       <attribute name="icon">
+        <iconset>
+         <normalon>icons/For Left bar/Домой.png</normalon>
+        </iconset>
+       </attribute>
+       <attribute name="title">
+        <string/>
+       </attribute>
+       <layout class="QHBoxLayout" name="horizontalLayout_3">
+        <item>
+         <widget class="QStackedWidget" name="stackedWidget">
+          <property name="currentIndex">
+           <number>0</number>
+          </property>
+          <widget class="QWidget" name="home_page">
+           <layout class="QHBoxLayout" name="horizontalLayout_4">
+            <item>
+             <layout class="QVBoxLayout" name="verticalLayout_2" stretch="1,1,6">
+              <property name="spacing">
+               <number>0</number>
+              </property>
+              <property name="sizeConstraint">
+               <enum>QLayout::SetMaximumSize</enum>
+              </property>
+              <item>
+               <widget class="QLabel" name="label">
+                <property name="minimumSize">
+                 <size>
+                  <width>150</width>
+                  <height>60</height>
+                 </size>
+                </property>
+                <property name="maximumSize">
+                 <size>
+                  <width>120</width>
+                  <height>60</height>
+                 </size>
+                </property>
+                <property name="font">
+                 <font>
+                  <pointsize>30</pointsize>
+                  <bold>false</bold>
+                 </font>
+                </property>
+                <property name="text">
+                 <string>Курсы</string>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <layout class="QHBoxLayout" name="horizontalLayout_2">
+                <property name="spacing">
+                 <number>0</number>
+                </property>
+                <property name="sizeConstraint">
+                 <enum>QLayout::SetMaximumSize</enum>
+                </property>
+                <property name="bottomMargin">
+                 <number>0</number>
+                </property>
+                <item>
+                 <widget class="QComboBox" name="comboBox">
+                  <property name="sizePolicy">
+                   <sizepolicy hsizetype="Preferred" vsizetype="Expanding">
+                    <horstretch>0</horstretch>
+                    <verstretch>0</verstretch>
+                   </sizepolicy>
+                  </property>
+                  <property name="minimumSize">
+                   <size>
+                    <width>120</width>
+                    <height>0</height>
+                   </size>
+                  </property>
+                  <property name="maximumSize">
+                   <size>
+                    <width>100</width>
+                    <height>25</height>
+                   </size>
+                  </property>
+                  <item>
+                   <property name="text">
+                    <string>По умолчанию</string>
+                   </property>
+                  </item>
+                  <item>
+                   <property name="text">
+                    <string>Новые</string>
+                   </property>
+                  </item>
+                  <item>
+                   <property name="text">
+                    <string>Прошлые</string>
+                   </property>
+                  </item>
+                  <item>
+                   <property name="text">
+                    <string>Популярные</string>
+                   </property>
+                  </item>
+                  <item>
+                   <property name="text">
+                    <string>Бесплатные</string>
+                   </property>
+                  </item>
+                 </widget>
+                </item>
+                <item>
+                 <widget class="QLineEdit" name="lineEdit">
+                  <property name="sizePolicy">
+                   <sizepolicy hsizetype="Preferred" vsizetype="Expanding">
+                    <horstretch>0</horstretch>
+                    <verstretch>0</verstretch>
+                   </sizepolicy>
+                  </property>
+                  <property name="maximumSize">
+                   <size>
+                    <width>600</width>
+                    <height>25</height>
+                   </size>
+                  </property>
+                 </widget>
+                </item>
+                <item>
+                 <widget class="QPushButton" name="pushButton">
+                  <property name="sizePolicy">
+                   <sizepolicy hsizetype="Preferred" vsizetype="Expanding">
+                    <horstretch>0</horstretch>
+                    <verstretch>0</verstretch>
+                   </sizepolicy>
+                  </property>
+                  <property name="maximumSize">
+                   <size>
+                    <width>80</width>
+                    <height>25</height>
+                   </size>
+                  </property>
+                  <property name="text">
+                   <string>Поиск</string>
+                  </property>
+                 </widget>
+                </item>
+               </layout>
+              </item>
+              <item>
+               <layout class="QGridLayout" name="gridLayout">
+                <property name="sizeConstraint">
+                 <enum>QLayout::SetMinimumSize</enum>
+                </property>
+                <property name="spacing">
+                 <number>0</number>
+                </property>
+               </layout>
+              </item>
+             </layout>
+            </item>
+           </layout>
+          </widget>
+          <widget class="QWidget" name="page_4">
+           <layout class="QHBoxLayout" name="horizontalLayout_6">
+            <item>
+             <layout class="QVBoxLayout" name="verticalLayout"/>
+            </item>
+           </layout>
+          </widget>
+          <widget class="QWidget" name="page"/>
+          <widget class="QWidget" name="my_courses_page"/>
+         </widget>
+        </item>
+       </layout>
+      </widget>
+      <widget class="QWidget" name="tab_my_courses">
+       <attribute name="icon">
+        <iconset>
+         <normalon>icons/For Left bar/Курс.png</normalon>
+        </iconset>
+       </attribute>
+       <attribute name="title">
+        <string/>
+       </attribute>
+       <layout class="QHBoxLayout" name="horizontalLayout"/>
+      </widget>
+      <widget class="QWidget" name="tab_create_cource">
+       <attribute name="icon">
+        <iconset>
+         <normalon>icons/For Left bar/Создание курса.png</normalon>
+        </iconset>
+       </attribute>
+       <attribute name="title">
+        <string/>
+       </attribute>
+      </widget>
+      <widget class="QWidget" name="tab_my_students">
+       <attribute name="icon">
+        <iconset>
+         <normalon>icons/For Left bar/Учетные записи.png</normalon>
+        </iconset>
+       </attribute>
+       <attribute name="title">
+        <string/>
+       </attribute>
+      </widget>
+     </widget>
+    </item>
+   </layout>
   </widget>
   <widget class="QMenuBar" name="menubar">
    <property name="geometry">
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>1125</width>
+     <width>1093</width>
      <height>21</height>
     </rect>
    </property>
