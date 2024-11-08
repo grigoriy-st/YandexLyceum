@@ -1,23 +1,42 @@
 package main
 
-import (
-	"fmt"
-	"math"
-)
+import "fmt"
 
-type Circle struct {
-	radius float64
+// Интерфейс Reader
+type Reader interface {
+	Read() string
 }
 
-func (c *Circle) Aria() float64 {
-	return math.Pi * c.radius * c.radius
+// Интерфейс Writer
+type Writer interface {
+	Write(data string)
 }
 
-func NewCircle(radius float64) *Circle {
-	return &Circle{radius: radius}
+// Интерфейс ReadWriter объединяет методы Reader и Writer
+type ReadWriter interface {
+	Reader
+	Writer
+}
+
+// Структура, которая реализует интерфейс ReadWriter
+type TextProcessor struct {
+	data string
+}
+
+func (tp *TextProcessor) Read() string {
+	return tp.data
+}
+
+func (tp *TextProcessor) Write(data string) {
+	tp.data = data
 }
 
 func main() {
-	f := NewCircle(3.15)
-	fmt.Print(f.Aria())
+	tp := &TextProcessor{}
+
+	// Используем интерфейс ReadWriter
+	var rw ReadWriter = tp
+
+	rw.Write("Hello, World!")
+	fmt.Println(rw.Read()) // Вывод: Hello, World!
 }
