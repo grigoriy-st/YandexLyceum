@@ -113,8 +113,10 @@ class Auth_Dialog(QDialog):
         self.verticalLayout_2.addLayout(self.verticalLayout)
         self.verticalLayout_3.addLayout(self.verticalLayout_2)
 
+    # Signals
         self.btn_enter.clicked.connect(self.entry_auth_data)
         self.btn_registration.clicked.connect(self.registration_new_ac)
+
         self.retranslateUi(Dialog)
         QtCore.QMetaObject.connectSlotsByName(Dialog)
 

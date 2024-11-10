@@ -5,6 +5,7 @@ from Main_window_UI import Ui_MainWindow
 from logic import Logic
 from Auth_dialog_window import Auth_Dialog
 from Reg_dialog_window import Reg_Dialog
+
 from PyQt6.QtGui import QIcon
 from PyQt6 import QtWidgets
 from PyQt6.QtWidgets import (
@@ -26,12 +27,11 @@ if __name__ == '__main__':
     app = QtWidgets.QApplication(sys.argv)
     MainWindow = QtWidgets.QMainWindow()
     auth_window = Auth_Dialog()
-    print(auth_window.exec())
-    print(QDialog.accepted)
+
     if auth_window.exec() == QDialog.accepted:
         print("hello")
-    if auth_window.exec() == 10:
-        print("hello its 2")
+    # elif auth_window.exec() == 10:
+    #     print("hello its 2")
 
     ui = Ui_MainWindow()
     ui.setupUi(MainWindow)
