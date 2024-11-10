@@ -3,8 +3,7 @@ import os
 # Все части программы
 from Main_window_UI import Ui_MainWindow
 from logic import Logic
-from Auth_window import Auth_form
-
+from Auth_dialog_window import Auth_Dialog
 from PyQt6.QtGui import QIcon
 from PyQt6 import QtWidgets
 from PyQt6.QtWidgets import (
@@ -25,7 +24,7 @@ class MainWindow(QMainWindow):
 if __name__ == '__main__':
     app = QtWidgets.QApplication(sys.argv)
     MainWindow = QtWidgets.QMainWindow()
-    auth_window = Auth_form()
+    auth_window = Auth_Dialog()
     if auth_window.exec() == QDialog.accepted:
         print("hello")
 

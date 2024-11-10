@@ -1,4 +1,4 @@
-# Form implementation generated from reading ui file 'Окно авторизации.ui'
+# Form implementation generated from reading ui file 'Auth_dialog_window.ui'
 #
 # Created by: PyQt6 UI code generator 6.7.1
 #
@@ -10,17 +10,23 @@ from PyQt6 import QtCore, QtGui, QtWidgets
 from PyQt6.QtWidgets import QMessageBox, QDialog
 
 
-class Auth_form(QDialog):
-    def setupUi(self, Form):
-        Form.setObjectName("Form")
-        Form.resize(345, 255)
-        self.verticalLayoutWidget = QtWidgets.QWidget(parent=Form)
-        self.verticalLayoutWidget.setGeometry(QtCore.QRect(20, 10, 308, 211))
-        self.verticalLayoutWidget.setObjectName("verticalLayoutWidget")
-        self.verticalLayout = QtWidgets.QVBoxLayout(self.verticalLayoutWidget)
-        self.verticalLayout.setContentsMargins(0, 0, 0, 0)
+class Auth_Dialog(QDialog):
+    def __init__(self):
+        super().__init__()
+        self.setupUi(self)
+
+    def setupUi(self, Dialog):
+
+        Dialog.setObjectName("Dialog")
+        Dialog.resize(300, 270)
+        Dialog.setMaximumSize(QtCore.QSize(300, 300))
+        self.verticalLayout_3 = QtWidgets.QVBoxLayout(Dialog)
+        self.verticalLayout_3.setObjectName("verticalLayout_3")
+        self.verticalLayout_2 = QtWidgets.QVBoxLayout()
+        self.verticalLayout_2.setObjectName("verticalLayout_2")
+        self.verticalLayout = QtWidgets.QVBoxLayout()
         self.verticalLayout.setObjectName("verticalLayout")
-        self.label = QtWidgets.QLabel(parent=self.verticalLayoutWidget)
+        self.label = QtWidgets.QLabel(parent=Dialog)
         sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Policy.Expanding, QtWidgets.QSizePolicy.Policy.Preferred)
         sizePolicy.setHorizontalStretch(0)
         sizePolicy.setVerticalStretch(0)
@@ -34,41 +40,47 @@ class Auth_form(QDialog):
         self.label.setAlignment(QtCore.Qt.AlignmentFlag.AlignCenter)
         self.label.setObjectName("label")
         self.verticalLayout.addWidget(self.label)
+        spacerItem = QtWidgets.QSpacerItem(20, 40, QtWidgets.QSizePolicy.Policy.Minimum, QtWidgets.QSizePolicy.Policy.Maximum)
+        self.verticalLayout.addItem(spacerItem)
         self.horizontalLayout = QtWidgets.QHBoxLayout()
         self.horizontalLayout.setContentsMargins(40, -1, 40, -1)
         self.horizontalLayout.setSpacing(0)
         self.horizontalLayout.setObjectName("horizontalLayout")
-        self.lbl_login = QtWidgets.QLabel(parent=self.verticalLayoutWidget)
+        self.lbl_login = QtWidgets.QLabel(parent=Dialog)
         self.lbl_login.setMaximumSize(QtCore.QSize(70, 40))
         font = QtGui.QFont()
         font.setPointSize(14)
         self.lbl_login.setFont(font)
         self.lbl_login.setObjectName("lbl_login")
         self.horizontalLayout.addWidget(self.lbl_login)
-        self.lineE_login = QtWidgets.QLineEdit(parent=self.verticalLayoutWidget)
+        self.lineE_login = QtWidgets.QLineEdit(parent=Dialog)
         self.lineE_login.setMaximumSize(QtCore.QSize(150, 16777215))
         self.lineE_login.setObjectName("lineE_login")
         self.horizontalLayout.addWidget(self.lineE_login)
         self.verticalLayout.addLayout(self.horizontalLayout)
+        spacerItem1 = QtWidgets.QSpacerItem(20, 10, QtWidgets.QSizePolicy.Policy.Minimum, QtWidgets.QSizePolicy.Policy.Maximum)
+        self.verticalLayout.addItem(spacerItem1)
         self.horizontalLayout_2 = QtWidgets.QHBoxLayout()
         self.horizontalLayout_2.setContentsMargins(30, -1, 35, -1)
         self.horizontalLayout_2.setSpacing(0)
         self.horizontalLayout_2.setObjectName("horizontalLayout_2")
-        self.lbl_password = QtWidgets.QLabel(parent=self.verticalLayoutWidget)
+        self.lbl_password = QtWidgets.QLabel(parent=Dialog)
         self.lbl_password.setMaximumSize(QtCore.QSize(70, 40))
         font = QtGui.QFont()
         font.setPointSize(14)
         self.lbl_password.setFont(font)
         self.lbl_password.setObjectName("lbl_password")
         self.horizontalLayout_2.addWidget(self.lbl_password)
-        self.lineE_password = QtWidgets.QLineEdit(parent=self.verticalLayoutWidget)
+        self.lineE_password = QtWidgets.QLineEdit(parent=Dialog)
         self.lineE_password.setMaximumSize(QtCore.QSize(150, 16777215))
-        self.lineE_password.setObjectName("lineE_pasword")
+        self.lineE_password.setObjectName("lineE_password")
         self.horizontalLayout_2.addWidget(self.lineE_password)
         self.verticalLayout.addLayout(self.horizontalLayout_2)
+        spacerItem2 = QtWidgets.QSpacerItem(20, 10, QtWidgets.QSizePolicy.Policy.Minimum, QtWidgets.QSizePolicy.Policy.Maximum)
+        self.verticalLayout.addItem(spacerItem2)
         self.horizontalLayout_3 = QtWidgets.QHBoxLayout()
         self.horizontalLayout_3.setObjectName("horizontalLayout_3")
-        self.btn_enter = QtWidgets.QPushButton(parent=self.verticalLayoutWidget)
+        self.btn_enter = QtWidgets.QPushButton(parent=Dialog)
         sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Policy.MinimumExpanding, QtWidgets.QSizePolicy.Policy.Fixed)
         sizePolicy.setHorizontalStretch(0)
         sizePolicy.setVerticalStretch(0)
@@ -84,26 +96,33 @@ class Auth_form(QDialog):
         self.btn_enter.setObjectName("btn_enter")
         self.horizontalLayout_3.addWidget(self.btn_enter)
         self.verticalLayout.addLayout(self.horizontalLayout_3)
-        self.btn_registration = QtWidgets.QPushButton(parent=Form)
-        self.btn_registration.setGeometry(QtCore.QRect(20, 230, 75, 20))
+        self.btn_registration = QtWidgets.QPushButton(parent=Dialog)
+        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Policy.Maximum, QtWidgets.QSizePolicy.Policy.Fixed)
+        sizePolicy.setHorizontalStretch(0)
+        sizePolicy.setVerticalStretch(0)
+        sizePolicy.setHeightForWidth(self.btn_registration.sizePolicy().hasHeightForWidth())
+        self.btn_registration.setSizePolicy(sizePolicy)
         self.btn_registration.setMaximumSize(QtCore.QSize(16777215, 20))
+        self.btn_registration.setLayoutDirection(QtCore.Qt.LayoutDirection.LeftToRight)
         self.btn_registration.setFlat(True)
         self.btn_registration.setObjectName("btn_registration")
+        self.verticalLayout.addWidget(self.btn_registration)
+        self.verticalLayout_2.addLayout(self.verticalLayout)
+        self.verticalLayout_3.addLayout(self.verticalLayout_2)
 
         self.btn_enter.clicked.connect(self.entry_auth_data)
 
+        self.retranslateUi(Dialog)
+        QtCore.QMetaObject.connectSlotsByName(Dialog)
 
-        self.retranslateUi(Form)
-        QtCore.QMetaObject.connectSlotsByName(Form)
-
-    def retranslateUi(self, Form):
+    def retranslateUi(self, Dialog):
         _translate = QtCore.QCoreApplication.translate
-        Form.setWindowTitle(_translate("Form", "Form"))
-        self.label.setText(_translate("Form", "Авторизация"))
-        self.lbl_login.setText(_translate("Form", "Логин:"))
-        self.lbl_password.setText(_translate("Form", "Пароль:"))
-        self.btn_enter.setText(_translate("Form", "Войти"))
-        self.btn_registration.setText(_translate("Form", "Регистрация"))
+        Dialog.setWindowTitle(_translate("Dialog", "Dialog"))
+        self.label.setText(_translate("Dialog", "Авторизация"))
+        self.lbl_login.setText(_translate("Dialog", "Логин:"))
+        self.lbl_password.setText(_translate("Dialog", "Пароль:"))
+        self.btn_enter.setText(_translate("Dialog", "Войти"))
+        self.btn_registration.setText(_translate("Dialog", "Регистрация"))
 
     def entry_auth_data(self):
         login = self.lineE_login.text()
@@ -113,6 +132,7 @@ class Auth_form(QDialog):
         else:
             self.accept()
 
+
     def show_error_message(self, title, message):
         dlg = QMessageBox()
         dlg.setWindowTitle("Ошибка!")
@@ -121,15 +141,3 @@ class Auth_form(QDialog):
 
         if button == QMessageBox.StandardButton.Ok:
             print("OK!")
-
-if __name__ == "__main__":
-    import sys
-    app = QtWidgets.QApplication(sys.argv)
-    Form = QtWidgets.QWidget()
-    ui = Auth_form()
-    ui.setupUi(Form)
-    Form.show()
-
-    if ui.exec() == QDialog.accepted:  # Проверяем, был ли диалог принят
-        print("Данные успешно прошли")
-    sys.exit(app.exec())
