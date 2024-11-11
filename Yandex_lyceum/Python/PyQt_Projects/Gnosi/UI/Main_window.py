@@ -13,7 +13,6 @@ class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
         MainWindow.setObjectName("MainWindow")
         MainWindow.resize(1183, 820)
-
         self.centralwidget = QtWidgets.QWidget(parent=MainWindow)
         self.centralwidget.setStyleSheet("")
         self.centralwidget.setObjectName("centralwidget")
@@ -50,11 +49,9 @@ class Ui_MainWindow(object):
         self.horizontalLayout_7.setSizeConstraint(QtWidgets.QLayout.SizeConstraint.SetDefaultConstraint)
         self.horizontalLayout_7.setObjectName("horizontalLayout_7")
         self.label_8 = QtWidgets.QLabel(parent=self.tab_image_account)
-        self.label_8.setAlignment(
-            QtCore.Qt.AlignmentFlag.AlignRight | QtCore.Qt.AlignmentFlag.AlignTrailing | QtCore.Qt.AlignmentFlag.AlignVCenter)
+        self.label_8.setAlignment(QtCore.Qt.AlignmentFlag.AlignRight|QtCore.Qt.AlignmentFlag.AlignTrailing|QtCore.Qt.AlignmentFlag.AlignVCenter)
         self.label_8.setObjectName("label_8")
         self.horizontalLayout_7.addWidget(self.label_8)
-    # LE_profile_name
         self.LE_profile_name = QtWidgets.QLineEdit(parent=self.tab_image_account)
         sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Policy.Minimum, QtWidgets.QSizePolicy.Policy.Fixed)
         sizePolicy.setHorizontalStretch(0)
@@ -72,12 +69,9 @@ class Ui_MainWindow(object):
         self.horizontalLayout_4.setContentsMargins(-1, 0, -1, -1)
         self.horizontalLayout_4.setObjectName("horizontalLayout_4")
         self.label_9 = QtWidgets.QLabel(parent=self.tab_image_account)
-        self.label_9.setAlignment(
-            QtCore.Qt.AlignmentFlag.AlignRight | QtCore.Qt.AlignmentFlag.AlignTrailing | QtCore.Qt.AlignmentFlag.AlignVCenter)
+        self.label_9.setAlignment(QtCore.Qt.AlignmentFlag.AlignRight|QtCore.Qt.AlignmentFlag.AlignTrailing|QtCore.Qt.AlignmentFlag.AlignVCenter)
         self.label_9.setObjectName("label_9")
         self.horizontalLayout_4.addWidget(self.label_9)
-
-    # LE_profile_type
         self.LE_profile_type = QtWidgets.QLineEdit(parent=self.tab_image_account)
         sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Policy.Minimum, QtWidgets.QSizePolicy.Policy.Fixed)
         sizePolicy.setHorizontalStretch(0)
@@ -88,17 +82,14 @@ class Ui_MainWindow(object):
         self.LE_profile_type.setReadOnly(True)
         self.LE_profile_type.setObjectName("LE_profile_type")
         self.horizontalLayout_4.addWidget(self.LE_profile_type)
-
         self.verticalLayout_9.addLayout(self.horizontalLayout_4)
         self.verticalLayout_8.addLayout(self.verticalLayout_9)
-        spacerItem = QtWidgets.QSpacerItem(20, 500, QtWidgets.QSizePolicy.Policy.Minimum,
-                                           QtWidgets.QSizePolicy.Policy.Expanding)
+        spacerItem = QtWidgets.QSpacerItem(20, 500, QtWidgets.QSizePolicy.Policy.Minimum, QtWidgets.QSizePolicy.Policy.Expanding)
         self.verticalLayout_8.addItem(spacerItem)
         self.verticalLayout_8.setStretch(0, 1)
         self.verticalLayout_7.addLayout(self.verticalLayout_8)
         icon = QtGui.QIcon()
-        icon.addPixmap(QtGui.QPixmap("UI/icons/For Left bar/profile-anonymous2.png"), QtGui.QIcon.Mode.Normal,
-                       QtGui.QIcon.State.On)
+        icon.addPixmap(QtGui.QPixmap("icons/For Left bar/profile-anonymous2.png"), QtGui.QIcon.Mode.Normal, QtGui.QIcon.State.On)
         self.tabWidget.addTab(self.tab_image_account, icon, "")
         self.tab_home = QtWidgets.QWidget()
         self.tab_home.setObjectName("tab_home")
@@ -147,7 +138,7 @@ class Ui_MainWindow(object):
         self.verticalLayout.setStretch(2, 8)
         self.horizontalLayout_3.addLayout(self.verticalLayout)
         icon1 = QtGui.QIcon()
-        icon1.addPixmap(QtGui.QPixmap("UI/icons/For Left bar/Домой.png"), QtGui.QIcon.Mode.Normal, QtGui.QIcon.State.On)
+        icon1.addPixmap(QtGui.QPixmap("icons/For Left bar/Домой.png"), QtGui.QIcon.Mode.Normal, QtGui.QIcon.State.On)
         self.tabWidget.addTab(self.tab_home, icon1, "")
         self.tab_my_courses = QtWidgets.QWidget()
         self.tab_my_courses.setObjectName("tab_my_courses")
@@ -155,8 +146,7 @@ class Ui_MainWindow(object):
         self.horizontalLayout.setObjectName("horizontalLayout")
         self.verticalLayout_2 = QtWidgets.QVBoxLayout()
         self.verticalLayout_2.setObjectName("verticalLayout_2")
-        spacerItem1 = QtWidgets.QSpacerItem(20, 10, QtWidgets.QSizePolicy.Policy.Minimum,
-                                            QtWidgets.QSizePolicy.Policy.Minimum)
+        spacerItem1 = QtWidgets.QSpacerItem(20, 10, QtWidgets.QSizePolicy.Policy.Minimum, QtWidgets.QSizePolicy.Policy.Minimum)
         self.verticalLayout_2.addItem(spacerItem1)
         self.label_2 = QtWidgets.QLabel(parent=self.tab_my_courses)
         font = QtGui.QFont()
@@ -179,7 +169,7 @@ class Ui_MainWindow(object):
         self.verticalLayout_2.setStretch(2, 10)
         self.horizontalLayout.addLayout(self.verticalLayout_2)
         icon2 = QtGui.QIcon()
-        icon2.addPixmap(QtGui.QPixmap("UI/icons/For Left bar/Курс.png"), QtGui.QIcon.Mode.Normal, QtGui.QIcon.State.On)
+        icon2.addPixmap(QtGui.QPixmap("icons/For Left bar/Курс.png"), QtGui.QIcon.Mode.Normal, QtGui.QIcon.State.On)
         self.tabWidget.addTab(self.tab_my_courses, icon2, "")
         self.tab_create_cource = QtWidgets.QWidget()
         self.tab_create_cource.setObjectName("tab_create_cource")
@@ -187,8 +177,7 @@ class Ui_MainWindow(object):
         self.verticalLayout_6.setObjectName("verticalLayout_6")
         self.VL_tab_create_cource = QtWidgets.QVBoxLayout()
         self.VL_tab_create_cource.setObjectName("VL_tab_create_cource")
-        spacerItem2 = QtWidgets.QSpacerItem(0, 20, QtWidgets.QSizePolicy.Policy.Minimum,
-                                            QtWidgets.QSizePolicy.Policy.Minimum)
+        spacerItem2 = QtWidgets.QSpacerItem(0, 20, QtWidgets.QSizePolicy.Policy.Minimum, QtWidgets.QSizePolicy.Policy.Minimum)
         self.VL_tab_create_cource.addItem(spacerItem2)
         self.label_3 = QtWidgets.QLabel(parent=self.tab_create_cource)
         font = QtGui.QFont()
@@ -269,8 +258,7 @@ class Ui_MainWindow(object):
         self.HL_right_bottom_part.setSizeConstraint(QtWidgets.QLayout.SizeConstraint.SetDefaultConstraint)
         self.HL_right_bottom_part.setSpacing(0)
         self.HL_right_bottom_part.setObjectName("HL_right_bottom_part")
-        spacerItem3 = QtWidgets.QSpacerItem(20, 40, QtWidgets.QSizePolicy.Policy.Minimum,
-                                            QtWidgets.QSizePolicy.Policy.Maximum)
+        spacerItem3 = QtWidgets.QSpacerItem(20, 40, QtWidgets.QSizePolicy.Policy.Minimum, QtWidgets.QSizePolicy.Policy.Maximum)
         self.HL_right_bottom_part.addItem(spacerItem3)
         self.label_5 = QtWidgets.QLabel(parent=self.tab_create_cource)
         self.label_5.setMaximumSize(QtCore.QSize(16777215, 25))
@@ -284,8 +272,7 @@ class Ui_MainWindow(object):
         self.PTE_course_name.setMaximumSize(QtCore.QSize(16777215, 50))
         self.PTE_course_name.setObjectName("PTE_course_name")
         self.HL_right_bottom_part.addWidget(self.PTE_course_name)
-        spacerItem4 = QtWidgets.QSpacerItem(20, 50, QtWidgets.QSizePolicy.Policy.Minimum,
-                                            QtWidgets.QSizePolicy.Policy.Maximum)
+        spacerItem4 = QtWidgets.QSpacerItem(20, 50, QtWidgets.QSizePolicy.Policy.Minimum, QtWidgets.QSizePolicy.Policy.Maximum)
         self.HL_right_bottom_part.addItem(spacerItem4)
         self.label_6 = QtWidgets.QLabel(parent=self.tab_create_cource)
         self.label_6.setMaximumSize(QtCore.QSize(16777215, 25))
@@ -305,8 +292,7 @@ class Ui_MainWindow(object):
         self.PTE_description_course.setMaximumSize(QtCore.QSize(16777215, 16777215))
         self.PTE_description_course.setObjectName("PTE_description_course")
         self.HL_right_bottom_part.addWidget(self.PTE_description_course)
-        spacerItem5 = QtWidgets.QSpacerItem(20, 40, QtWidgets.QSizePolicy.Policy.Minimum,
-                                            QtWidgets.QSizePolicy.Policy.Maximum)
+        spacerItem5 = QtWidgets.QSpacerItem(20, 40, QtWidgets.QSizePolicy.Policy.Minimum, QtWidgets.QSizePolicy.Policy.Maximum)
         self.HL_right_bottom_part.addItem(spacerItem5)
         self.btn_create_course = QtWidgets.QPushButton(parent=self.tab_create_cource)
         sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Policy.Minimum, QtWidgets.QSizePolicy.Policy.Minimum)
@@ -322,22 +308,19 @@ class Ui_MainWindow(object):
         self.btn_create_course.setDefault(False)
         self.btn_create_course.setObjectName("btn_create_course")
         self.HL_right_bottom_part.addWidget(self.btn_create_course)
-        spacerItem6 = QtWidgets.QSpacerItem(20, 40, QtWidgets.QSizePolicy.Policy.Minimum,
-                                            QtWidgets.QSizePolicy.Policy.Maximum)
+        spacerItem6 = QtWidgets.QSpacerItem(20, 40, QtWidgets.QSizePolicy.Policy.Minimum, QtWidgets.QSizePolicy.Policy.Maximum)
         self.HL_right_bottom_part.addItem(spacerItem6)
         self.HL_bottom_part.addLayout(self.HL_right_bottom_part)
         self.HL_bottom_part.setStretch(0, 5)
         self.VL_tab_create_cource.addLayout(self.HL_bottom_part)
         self.verticalLayout_6.addLayout(self.VL_tab_create_cource)
         icon3 = QtGui.QIcon()
-        icon3.addPixmap(QtGui.QPixmap("UI/icons/For Left bar/Создание курса.png"), QtGui.QIcon.Mode.Normal,
-                        QtGui.QIcon.State.On)
+        icon3.addPixmap(QtGui.QPixmap("icons/For Left bar/Создание курса.png"), QtGui.QIcon.Mode.Normal, QtGui.QIcon.State.On)
         self.tabWidget.addTab(self.tab_create_cource, icon3, "")
         self.tab_my_students = QtWidgets.QWidget()
         self.tab_my_students.setObjectName("tab_my_students")
         icon4 = QtGui.QIcon()
-        icon4.addPixmap(QtGui.QPixmap("UI/icons/For Left bar/Учетные записи.png"), QtGui.QIcon.Mode.Normal,
-                        QtGui.QIcon.State.On)
+        icon4.addPixmap(QtGui.QPixmap("icons/For Left bar/Учетные записи.png"), QtGui.QIcon.Mode.Normal, QtGui.QIcon.State.On)
         self.tabWidget.addTab(self.tab_my_students, icon4, "")
         self.horizontalLayout_5.addWidget(self.tabWidget)
         MainWindow.setCentralWidget(self.centralwidget)
