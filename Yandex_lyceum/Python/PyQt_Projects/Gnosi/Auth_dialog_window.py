@@ -25,6 +25,7 @@ class Auth_Dialog(QDialog):
         Dialog.resize(300, 270)
         Dialog.setMaximumSize(QtCore.QSize(300, 300))
         self.auth_success = False
+        self.type_ac = None
 
         self.verticalLayout_3 = QtWidgets.QVBoxLayout(Dialog)
         self.verticalLayout_3.setObjectName("verticalLayout_3")
@@ -148,7 +149,15 @@ class Auth_Dialog(QDialog):
 
         con = sqlite3.connect("test_db.sqlite")
         cur = con.cursor()
-        user_data = dict(cur.execute(f'''
+        self.type_ac = cur.execute(f'''
+                        select
+                            accounttype.title
+                        from users inner join accounttype on users.AccountTypeID = accounttype.AccountTypeID
+                        where 
+                            users.login = "{login}" and users.password = "{password}"
+                    ''').fetchall()[0][0]
+
+        users_data = dict(cur.execute(f'''
                         select
                             users.login,
                             users.password
@@ -157,21 +166,21 @@ class Auth_Dialog(QDialog):
                             users.login = "{login}" and users.password = "{password}"
                     ''').fetchall())
 
-        if login in user_data.keys() and password == user_data[login]:
+        if login in users_data.keys() and password == users_data[login]:
             con.close()
             self.auth_success = True
             super().accept()
 
-        elif login not in user_data.keys():
+        elif login not in users_data.keys():
             self.show_error_message("Ошибка", "Неверный логин")
             return
 
-        elif login in user_data.keys():
-            if password != user_data[login]:
+        elif login in users_data.keys():
+            if password != users_data[login]:
                 self.show_error_message("Ошибка", "Неверный пароль")
                 return
-        elif login in user_data.keys():
-            if password == user_data[login]:
+        elif login in users_data.keys():
+            if password == users_data[login]:
                 self.show_error_message("Ошибка", "Такой пользователь уже есть.")
                 return
 

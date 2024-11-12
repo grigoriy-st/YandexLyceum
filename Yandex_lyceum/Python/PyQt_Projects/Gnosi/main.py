@@ -20,6 +20,10 @@ class MainWindow(QMainWindow):
 
         self.resize(800, 500)
         self.setWindowTitle("Gnosi")
+        self.setupUI()
+
+    def setupUI(self):
+        ...
 
 
 
@@ -36,7 +40,7 @@ if __name__ == '__main__':
         ui = Ui_MainWindow()
         ui.setupUi(MainWindow)
         ui.LE_profile_name.setText(auth_window.lineE_login.text())
-        # ui.LE_profile_type.setText(auth_window.l)
+        ui.LE_profile_type.setText(auth_window.type_ac)
         MainWindow.show()
 
     sys.exit(app.exec())
