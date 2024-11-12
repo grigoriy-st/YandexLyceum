@@ -32,15 +32,14 @@ if __name__ == '__main__':
     MainWindow = QtWidgets.QMainWindow()
     auth_window = Auth_Dialog()
     if auth_window.exec() == QDialog.accepted:
-
         print("hello")
-    # elif auth_window.exec() == 10:
-    #     print("hello its 2")
+
     if auth_window.auth_success:
         ui = Ui_MainWindow()
         ui.setupUi(MainWindow)
         ui.LE_profile_name.setText(auth_window.lineE_login.text())
         ui.LE_profile_type.setText(auth_window.type_ac)
+
         MainWindow.show()
 
     sys.exit(app.exec())
