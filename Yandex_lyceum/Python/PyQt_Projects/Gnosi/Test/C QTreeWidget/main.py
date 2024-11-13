@@ -42,6 +42,7 @@ class CourseApp(QMainWindow):
 
     def add_lesson(self):
         selected_item = self.tree_widget.currentItem()
+        print(selected_item)
         if selected_item is None or selected_item.parent() is None:
             QMessageBox.warning(self, "Warning", "Please select a module to add a lesson.")
             return
