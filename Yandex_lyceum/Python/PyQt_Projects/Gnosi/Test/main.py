@@ -1,37 +1,45 @@
 import sys
-from PyQt5.QtWidgets import QApplication, QTreeWidget, QTreeWidgetItem, QMessageBox, QMainWindow
+from PyQt5.QtWidgets import QApplication, QMainWindow, QPushButton, QVBoxLayout, QWidget, QMessageBox
 
 class MainWindow(QMainWindow):
     def __init__(self):
         super().__init__()
+        self.setWindowTitle("Основное окно")
+        self.setGeometry(100, 100, 300, 200)
 
-        # Создаем QTreeWidget
-        self.tree_widget = QTreeWidget()
-        self.setCentralWidget(self.tree_widget)
+        # Создаем кнопку для открытия всплывающего окна
+        self.button = QPushButton("Открыть меню", self)
+        self.button.clicked.connect(self.show_popup)
 
-        # Устанавливаем заголовок
-        self.tree_widget.setHeaderLabel("Items")
+        # Устанавливаем макет
+        layout = QVBoxLayout()
+        layout.addWidget(self.button)
 
-        # Добавляем элементы в QTreeWidget
-        parent_item = QTreeWidgetItem(self.tree_widget, ["Parent Item"])
-        child_item1 = QTreeWidgetItem(parent_item, ["Child Item 1"])
-        child_item2 = QTreeWidgetItem(parent_item, ["Child Item 2"])
+        container = QWidget()
+        container.setLayout(layout)
+        self.setCentralWidget(container)
 
-        # Подключаем сигнал itemClicked к слоту
-        self.tree_widget.itemClicked.connect(self.on_item_clicked)
+    def show_popup(self):
+        # Создаем всплывающее окно с кнопками
+        msg_box = QMessageBox(self)
+        msg_box.setWindowTitle("Выберите действие")
+        msg_box.setText("Выберите одно из действий:")
 
-    def on_item_clicked(self, item, column):
-        # Проверяем, что кликнули на потомка
-        if item.parent() is not None:
-            # Открываем окно с информацией о выбранном элементе
-            self.show_message_box(item.text(0))
+        # Добавляем кнопки
+        create_theory_button = msg_box.addButton("Создать теорию", QMessageBox.ActionRole)
+        create_test_button = msg_box.addButton("Создать тест", QMessageBox.ActionRole)
+        upload_file_button = msg_box.addButton("Загрузить файл", QMessageBox.ActionRole)
 
-    def show_message_box(self, item_name):
-        # Создаем и показываем окно сообщения
-        msg_box = QMessageBox()
-        msg_box.setWindowTitle("Item Clicked")
-        msg_box.setText(f"You clicked on: {item_name}")
+        # Показываем сообщение и ждем нажатия кнопки
         msg_box.exec_()
+
+        # Проверяем, какая кнопка была нажата
+        if msg_box.clickedButton() == create_theory_button:
+            QMessageBox.information(self, "Информация", "Вы выбрали 'Создать теорию'")
+        elif msg_box.clickedButton() == create_test_button:
+            QMessageBox.information(self, "Информация", "Вы выбрали 'Создать тест'")
+        elif msg_box.clickedButton() == upload_file_button:
+            QMessageBox.information(self, "Информация", "Вы выбрали 'Загрузить файл'")
 
 if __name__ == "__main__":
     app = QApplication(sys.argv)

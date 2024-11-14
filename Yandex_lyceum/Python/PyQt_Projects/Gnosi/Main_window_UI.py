@@ -9,6 +9,7 @@
 from PyQt6 import QtCore, QtGui, QtWidgets
 from PyQt6.QtWidgets import QInputDialog, QTreeWidgetItem, QMessageBox
 from reference import Reference_Dialog
+from form_for_create_lesson_object import Сhoose_when_creating_course
 from logic import Logic
 
 class Ui_MainWindow(object):
@@ -432,13 +433,14 @@ class Ui_MainWindow(object):
         ...
 
     def show_reference(self):
-        self.ui1 = Reference_Dialog()
-        self.ui1.exec()
+        w_ref = Reference_Dialog()
+        w_ref.exec()
 
     def open_widnow_for_create_lesson(self, item, column):
         if item.parent() is not None:
             print("Открыто окно для создания теории по уроку")
-            QMessageBox.warning(self.tabWidget, "Warning", "Please select an item to move.")
+            w_to_choose_when_creating_course = Сhoose_when_creating_course()
+            w_to_choose_when_creating_course.exec()
 
 if __name__ == "__main__":
     import sys
