@@ -9,7 +9,7 @@
 from PyQt6 import QtCore, QtGui, QtWidgets
 from PyQt6.QtWidgets import QInputDialog, QTreeWidgetItem, QMessageBox
 from reference import Reference_Dialog
-from form_for_create_lesson_object import Сhoose_when_creating_course
+from lesson_management import Window_lesson_management
 from logic import Logic
 
 class Ui_MainWindow(object):
@@ -222,7 +222,7 @@ class Ui_MainWindow(object):
         font.setPointSize(15)
         self.treeWidget.setFont(font)
         self.treeWidget.setObjectName("treeWidget")
-        self.treeWidget.itemClicked.connect(self.open_widnow_for_create_lesson)
+        self.treeWidget.itemClicked.connect(self.open_lesson_management_window)
         self.HL_left_bottom_part.addWidget(self.treeWidget)
 
         self.horizontalLayout_8 = QtWidgets.QHBoxLayout()
@@ -427,19 +427,49 @@ class Ui_MainWindow(object):
             module_item.addChild(lesson_item)
 
     def move_up(self):
-        ...
+        selected_item = self.treeWidget.currentItem()
+        if selected_item is None:
+            QMessageBox.warning(self.treeWidget, "Ошибка", "Пожалуйста, выберите объект для перемещения")
+            return
+
+        parent_item = selected_item.parent()
+        if parent_item is None:
+            index = self.treeWidget.indexOfTopLevelItem(selected_item)
+            if index > 0:
+                self.treeWidget.insertTopLevelItem(index - 1, self.treeWidget.takeTopLevelItem(index))
+                self.treeWidget.setCurrentItem(selected_item)
+        else:
+            index = parent_item.indexOfChild(selected_item)
+            if index > 0:
+                parent_item.insertChild(index - 1, parent_item.takeChild(index))
+                self.treeWidget.setCurrentItem(selected_item)
 
     def move_down(self):
-        ...
+        selected_item = self.treeWidget.currentItem()
+        if selected_item is None:
+            QMessageBox.warning(self.treeWidget, "Warning", "Please select an item to move.")
+            return
+
+        parent_item = selected_item.parent()
+        if parent_item is None:
+            index = self.treeWidget.indexOfTopLevelItem(selected_item)
+            if index < self.treeWidget.topLevelItemCount() - 1:
+                self.treeWidget.insertTopLevelItem(index + 1, self.treeWidget.takeTopLevelItem(index))
+                self.treeWidget.setCurrentItem(selected_item)
+        else:
+            index = parent_item.indexOfChild(selected_item)
+            if index < parent_item.childCount() - 1:
+                parent_item.insertChild(index + 1, parent_item.takeChild(index))
+                self.treeWidget.setCurrentItem(selected_item)
 
     def show_reference(self):
         w_ref = Reference_Dialog()
         w_ref.exec()
 
-    def open_widnow_for_create_lesson(self, item, column):
+    def open_lesson_management_window(self, item, column):
         if item.parent() is not None:
             print("Открыто окно для создания теории по уроку")
-            w_to_choose_when_creating_course = Сhoose_when_creating_course()
+            w_to_choose_when_creating_course = Window_lesson_management(self.treeWidget)
             w_to_choose_when_creating_course.exec()
 
 if __name__ == "__main__":

@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>387</width>
-    <height>93</height>
+    <width>485</width>
+    <height>104</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -34,6 +34,13 @@
       <widget class="QPushButton" name="btn_upload_file">
        <property name="text">
         <string>Загрузить готовый файл</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QPushButton" name="pushButton">
+       <property name="text">
+        <string>Удалить урок</string>
        </property>
       </widget>
      </item>
