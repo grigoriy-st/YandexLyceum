@@ -36,22 +36,23 @@ class CourseApp(QMainWindow):
         self.setCentralWidget(container)
 
     def add_module(self):
-        module_name, ok = QInputDialog.getText(self, "Add Module", "Enter module name:")
+        module_name, ok = QInputDialog.getText(self, "Создать модуль", "Введите название модуля:")
         if ok and module_name:
-            QTreeWidgetItem(self.tree_widget, [module_name])
+            # Добавляем модуль в QTreeWidget
+            module_item = QTreeWidgetItem(self.tree_widget, [module_name])
+            self.tree_widget.addTopLevelItem(module_item)
 
     def add_lesson(self):
-        selected_item = self.tree_widget.currentItem()
-        print(selected_item)
-        if selected_item is None or selected_item.parent() is None:
-            QMessageBox.warning(self, "Warning", "Please select a module to add a lesson.")
+        selected_items = self.tree_widget.selectedItems()
+        if not selected_items:
+            # Если модуль не выбран, показываем сообщение об ошибке
+            QMessageBox.warning(self, "Ошибка", "Сначала выберите модуль, чтобы создать урок.")
             return
 
-        lesson_name, ok = QInputDialog.getText(self, "Add Lesson", "Enter lesson name:")
-        if ok and lesson_name:
-            QTreeWidgetItem(selected_item, [lesson_name])
+        lesson_name, ok = QInputDialog.getText(self, "Создать урок", "Введите название урока:")
 
-    def move_up(self):
+
+def move_up(self):
         selected_item = self.tree_widget.currentItem()
         if selected_item is None:
             QMessageBox.warning(self, "Warning", "Please select an item to move.")

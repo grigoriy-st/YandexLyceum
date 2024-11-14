@@ -220,12 +220,7 @@ class Ui_MainWindow(object):
         font.setPointSize(15)
         self.treeWidget.setFont(font)
         self.treeWidget.setObjectName("treeWidget")
-        item_0 = QtWidgets.QTreeWidgetItem(self.treeWidget)
-        item_1 = QtWidgets.QTreeWidgetItem(item_0)
-        item_1 = QtWidgets.QTreeWidgetItem(item_0)
-        item_0 = QtWidgets.QTreeWidgetItem(self.treeWidget)
-        item_1 = QtWidgets.QTreeWidgetItem(item_0)
-        item_0 = QtWidgets.QTreeWidgetItem(self.treeWidget)
+
         self.HL_left_bottom_part.addWidget(self.treeWidget)
 
         self.horizontalLayout_8 = QtWidgets.QHBoxLayout()
@@ -390,12 +385,7 @@ class Ui_MainWindow(object):
         self.treeWidget.headerItem().setText(0, _translate("MainWindow", "Обзор"))
         __sortingEnabled = self.treeWidget.isSortingEnabled()
         self.treeWidget.setSortingEnabled(False)
-        # self.treeWidget.topLevelItem(0).setText(0, _translate("MainWindow", "1. Первый модуль"))
-        # self.treeWidget.topLevelItem(0).child(0).setText(0, _translate("MainWindow", "1.1 Урок"))
-        # self.treeWidget.topLevelItem(0).child(1).setText(0, _translate("MainWindow", "1.2 Урок"))
-        # self.treeWidget.topLevelItem(1).setText(0, _translate("MainWindow", "2. Второй модуль"))
-        # self.treeWidget.topLevelItem(1).child(0).setText(0, _translate("MainWindow", "2.3 Урок"))
-        # self.treeWidget.topLevelItem(2).setText(0, _translate("MainWindow", "3. Третий модуль"))
+
         self.treeWidget.setSortingEnabled(__sortingEnabled)
         self.pbt_create_module.setText(_translate("MainWindow", "Создать модуль"))
         self.pbt_create_lesson.setText(_translate("MainWindow", "Создать урок"))
@@ -411,22 +401,26 @@ class Ui_MainWindow(object):
         ...
 
     def create_module(self):
-        module_name, ok = QInputDialog.getText(self.tab_create_cource, "Добавить модуль", "Название модуля: ")
+        module_name, ok = QInputDialog.getText(self.treeWidget, "Создать модуль", "Введите название модуля:")
         if ok and module_name:
-            QTreeWidgetItem(self.treeWidget, [module_name])
-        print("CREATE MODULE")
+            # Добавляем модуль в QTreeWidget
+            module_item = QTreeWidgetItem(self.treeWidget, [module_name])
+            self.treeWidget.addTopLevelItem(module_item)
 
     def create_lesson(self):
-        selected_item = self.treeWidget.currentItem()
-
-        if selected_item is None or selected_item.parent() is None:
-            QMessageBox.warning(self.tab_create_cource, "Ошибка", "Пожалуйста, выберите модуль")
+        selected_items = self.treeWidget.selectedItems()
+        if not selected_items:
+            # Если модуль не выбран, показываем сообщение об ошибке
+            QMessageBox.warning(self.treeWidget, "Ошибка", "Сначала выберите модуль, чтобы создать урок.")
             return
 
-        lesson_name, ok = QInputDialog.getText(self.treeWidget, "Add Lesson", "Enter lesson name:")
+        lesson_name, ok = QInputDialog.getText(self.treeWidget, "Создать урок", "Введите название урока:")
         if ok and lesson_name:
-            QTreeWidgetItem(selected_item, [lesson_name])
-        print("CREATE LESSON")
+            # Получаем выбранный модуль
+            module_item = selected_items[0]
+            # Добавляем урок как дочерний элемент к выбранному модулю
+            lesson_item = QTreeWidgetItem(module_item, [lesson_name])
+            module_item.addChild(lesson_item)
 
     def move_up(self):
         ...
