@@ -13,6 +13,7 @@ class CourseApp(QMainWindow):
 
         self.tree_widget = QTreeWidget()
         self.tree_widget.setHeaderLabel("Course Structure")
+        self.tree_widget.itemClicked.connect(self.open_window_for_create_lesson)
 
         self.add_module_button = QPushButton("Add Module")
         self.add_lesson_button = QPushButton("Add Lesson")
@@ -51,8 +52,21 @@ class CourseApp(QMainWindow):
 
         lesson_name, ok = QInputDialog.getText(self, "Создать урок", "Введите название урока:")
 
+        if ok and lesson_name:
+            # Получаем выбранный модуль
+            selected_items = self.tree_widget.selectedItems()
+            if selected_items:
+                self.module_item = selected_items[0]
+                # Добавляем урок как дочерний элемент к выбранному модулю
+                lesson_item = QTreeWidgetItem(self.module_item, [lesson_name])
 
-def move_up(self):
+                self.module_item.addChild(lesson_item)
+
+    def open_window_for_create_lesson(self, item, column):
+        if item.parent() is not None:
+            print(10)
+
+    def move_up(self):
         selected_item = self.tree_widget.currentItem()
         if selected_item is None:
             QMessageBox.warning(self, "Warning", "Please select an item to move.")

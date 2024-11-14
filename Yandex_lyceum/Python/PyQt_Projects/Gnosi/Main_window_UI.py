@@ -8,6 +8,7 @@
 
 from PyQt6 import QtCore, QtGui, QtWidgets
 from PyQt6.QtWidgets import QInputDialog, QTreeWidgetItem, QMessageBox
+from reference import Reference_Dialog
 from logic import Logic
 
 class Ui_MainWindow(object):
@@ -220,7 +221,7 @@ class Ui_MainWindow(object):
         font.setPointSize(15)
         self.treeWidget.setFont(font)
         self.treeWidget.setObjectName("treeWidget")
-
+        self.treeWidget.itemClicked.connect(self.open_widnow_for_create_lesson)
         self.HL_left_bottom_part.addWidget(self.treeWidget)
 
         self.horizontalLayout_8 = QtWidgets.QHBoxLayout()
@@ -268,6 +269,8 @@ class Ui_MainWindow(object):
 
         self.horizontalLayout_8.addWidget(self.pbt_move_down)
         self.pbt_reference = QtWidgets.QPushButton(parent=self.tab_create_cource)
+        self.pbt_reference.clicked.connect(self.show_reference)
+
         sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Policy.Maximum, QtWidgets.QSizePolicy.Policy.Fixed)
         sizePolicy.setHorizontalStretch(0)
         sizePolicy.setVerticalStretch(0)
@@ -427,6 +430,15 @@ class Ui_MainWindow(object):
 
     def move_down(self):
         ...
+
+    def show_reference(self):
+        self.ui1 = Reference_Dialog()
+        self.ui1.exec()
+
+    def open_widnow_for_create_lesson(self, item, column):
+        if item.parent() is not None:
+            print("Открыто окно для создания теории по уроку")
+            QMessageBox.warning(self.tabWidget, "Warning", "Please select an item to move.")
 
 if __name__ == "__main__":
     import sys
