@@ -2,7 +2,7 @@
 
 from PyQt6 import QtCore, QtGui, QtWidgets
 from PyQt6.QtWidgets import QInputDialog, QTreeWidgetItem, QMessageBox
-
+from PyQt6.QtCore import Qt
 
 from logic import Logic
 
@@ -217,7 +217,11 @@ class Ui_MainWindow(object):
         self.treeWidget.setFont(font)
         self.treeWidget.setObjectName("treeWidget")
         self.treeWidget.itemClicked.connect(self.open_lesson_management_window)
+
         self.HL_left_bottom_part.addWidget(self.treeWidget)
+
+        self.treeWidget.setContextMenuPolicy(Qt.ContextMenuPolicy.CustomContextMenu)
+        self.treeWidget.customContextMenuRequested.connect(self.show_context_menu)
 
         self.horizontalLayout_8 = QtWidgets.QHBoxLayout()
         self.horizontalLayout_8.setContentsMargins(-1, 0, -1, -1)
@@ -416,6 +420,9 @@ class Ui_MainWindow(object):
 
     def open_lesson_management_window(self, item, column):
         self.logic.open_lesson_management_window(item, column)
+
+    def show_context_menu(self, item):
+        self.logic.show_context_menu(item)
 
 if __name__ == "__main__":
     import sys

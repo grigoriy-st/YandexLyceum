@@ -1,6 +1,7 @@
 # logic.py
 
-from PyQt6.QtWidgets import QTreeWidget, QTreeWidgetItem, QInputDialog, QMessageBox
+from PyQt6.QtWidgets import (QTreeWidget, QTreeWidgetItem,
+                             QInputDialog, QMessageBox, QMenu)
 from lesson_management import Window_lesson_management
 from reference import Reference_Dialog
 
@@ -75,3 +76,48 @@ class Logic:
     def show_reference(self):
         w_ref = Reference_Dialog()
         w_ref.exec()
+
+    def show_context_menu(self, pos):
+        item = self.treeWidget.itemAt(pos)
+
+        menu = QMenu(self.treeWidget)
+        if item is not None:
+            # Добавляем действия, доступные для всех элементов
+            menu.addAction('Переименовать')
+            menu.addAction('Удалить элемент')
+            # Добавляем действия, доступные только для дочерних элементов
+            if item.parent() is not None:  # Это дочерний элемент
+                menu.addAction('Создать теорию')
+                menu.addAction('Загрузить готовый материал')
+            # Отображаем контекстное меню и получаем выбранный элемент
+            action = menu.exec(self.treeWidget.viewport().mapToGlobal(pos))
+            # Обрабатываем выбранный элемент
+            if action:
+                if action.text() == 'Переименовать':
+                    self.rename_item(item)
+                elif action.text() == 'Удалить элемент':
+                    self.delete_item(item)
+                elif action.text() == 'Создать теорию':
+                    self.create_theory(item)
+                elif action.text() == 'Загрузить готовый материал':
+                    self.load_material(item)
+
+    def rename_item(self, item):
+        new_name, ok = QInputDialog.getText(None, 'Переименовать', 'Введите новое имя:', text=item.text(0))
+        if ok and new_name:
+            item.setText(0, new_name)
+
+    def delete_item(self, item):
+        reply = QMessageBox.question(None, 'Удалить элемент', 'Вы уверены, что хотите удалить этот элемент?',
+                                     QMessageBox.Yes | QMessageBox.No, QMessageBox.No)
+        if reply == QMessageBox.Yes:
+            if item.parent() is None:
+                index = item.treeWidget().indexOfTopLevelItem(item)
+                item.treeWidget().takeTopLevelItem(index)
+            else:
+                item.parent().removeChild(item)
+
+    def create_theory(self, item):
+        QMessageBox.information(None, 'Создать теорию', f'Создание теории для {item.text(0)}')
+    def load_material(self, item):
+        QMessageBox.information(None, 'Загрузить материал', f'Загрузка материала для {item.text(0)}')
