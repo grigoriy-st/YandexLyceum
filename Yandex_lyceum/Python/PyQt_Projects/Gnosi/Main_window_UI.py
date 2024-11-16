@@ -16,6 +16,59 @@ class Ui_MainWindow(object):
         self.centralwidget.setObjectName("centralwidget")
         self.horizontalLayout_5 = QtWidgets.QHBoxLayout(self.centralwidget)
         self.horizontalLayout_5.setObjectName("horizontalLayout_5")
+
+        self.create_tab_widget()
+        self.create_tab_profile_info()
+        self.create_tab_home()
+        self.create_tab_my_courses()
+        self.create_tab_for_create_courses()
+        self.create_tab_management_account()
+
+        self.horizontalLayout_5.addWidget(self.tabWidget)
+        MainWindow.setCentralWidget(self.centralwidget)
+        self.menubar = QtWidgets.QMenuBar(parent=MainWindow)
+        self.menubar.setGeometry(QtCore.QRect(0, 0, 1183, 21))
+        self.menubar.setObjectName("menubar")
+        MainWindow.setMenuBar(self.menubar)
+        self.statusbar = QtWidgets.QStatusBar(parent=MainWindow)
+        self.statusbar.setObjectName("statusbar")
+        MainWindow.setStatusBar(self.statusbar)
+
+        self.retranslateUi(MainWindow)
+
+        QtCore.QMetaObject.connectSlotsByName(MainWindow)
+
+    def retranslateUi(self, MainWindow):
+        _translate = QtCore.QCoreApplication.translate
+        MainWindow.setWindowTitle(_translate("MainWindow", "MainWindow"))
+        self.label_7.setText(_translate("MainWindow", "Мой профиль"))
+        self.label_8.setText(_translate("MainWindow", "Имя:"))
+        self.label_9.setText(_translate("MainWindow", "Тип учётной записи:"))
+        self.label.setText(_translate("MainWindow", "Курсы"))
+        self.CB_change_filter.setItemText(0, _translate("MainWindow", "По умолчанию"))
+        self.CB_change_filter.setItemText(1, _translate("MainWindow", "Новые"))
+        self.CB_change_filter.setItemText(2, _translate("MainWindow", "Старые"))
+        self.btn_search_courses.setText(_translate("MainWindow", "Поиск"))
+        self.btn_search_courses.setShortcut(_translate("MainWindow", "Return"))
+        self.label_2.setText(_translate("MainWindow", "Мои курсы"))
+        self.label_4.setText(_translate("MainWindow", "Программма курса"))
+        self.treeWidget.headerItem().setText(0, _translate("MainWindow", "Обзор"))
+        __sortingEnabled = self.treeWidget.isSortingEnabled()
+        self.treeWidget.setSortingEnabled(False)
+        self.logic = Logic(self.treeWidget)
+
+        self.treeWidget.setSortingEnabled(__sortingEnabled)
+        self.pbt_create_module.setText(_translate("MainWindow", "Создать модуль"))
+        self.pbt_create_lesson.setText(_translate("MainWindow", "Создать урок"))
+        self.pbt_move_up.setText(_translate("MainWindow", "Переместить выше"))
+        self.pbt_move_down.setText(_translate("MainWindow", "Переместить ниже"))
+        self.pbt_reference.setText(_translate("MainWindow", "Справка"))
+        self.label_5.setText(_translate("MainWindow", "Название курса"))
+        self.label_6.setText(_translate("MainWindow", "Описание"))
+        self.btn_create_course.setText(_translate("MainWindow", "Создать курс"))
+        self.label_3.setText(_translate("MainWindow", "Создание курса"))
+
+    def create_tab_widget(self):
         self.tabWidget = QtWidgets.QTabWidget(parent=self.centralwidget)
         self.tabWidget.setLayoutDirection(QtCore.Qt.LayoutDirection.LeftToRight)
         self.tabWidget.setStyleSheet("")
@@ -24,6 +77,8 @@ class Ui_MainWindow(object):
         self.tabWidget.setIconSize(QtCore.QSize(40, 50))
         self.tabWidget.setElideMode(QtCore.Qt.TextElideMode.ElideNone)
         self.tabWidget.setObjectName("tabWidget")
+
+    def create_tab_profile_info(self):
         self.tab_image_account = QtWidgets.QWidget()
         self.tab_image_account.setLayoutDirection(QtCore.Qt.LayoutDirection.LeftToRight)
         self.tab_image_account.setAutoFillBackground(False)
@@ -98,6 +153,8 @@ class Ui_MainWindow(object):
         icon.addPixmap(QtGui.QPixmap("UI/icons/For Left bar/profile-anonymous2.png"), QtGui.QIcon.Mode.Normal,
                        QtGui.QIcon.State.On)
         self.tabWidget.addTab(self.tab_image_account, icon, "")
+
+    def create_tab_home(self):
         self.tab_home = QtWidgets.QWidget()
         self.tab_home.setObjectName("tab_home")
         self.horizontalLayout_3 = QtWidgets.QHBoxLayout(self.tab_home)
@@ -149,6 +206,8 @@ class Ui_MainWindow(object):
         icon1 = QtGui.QIcon()
         icon1.addPixmap(QtGui.QPixmap("UI/icons/For Left bar/Домой.png"), QtGui.QIcon.Mode.Normal, QtGui.QIcon.State.On)
         self.tabWidget.addTab(self.tab_home, icon1, "")
+
+    def create_tab_my_courses(self):
         self.tab_my_courses = QtWidgets.QWidget()
         self.tab_my_courses.setObjectName("tab_my_courses")
         self.horizontalLayout = QtWidgets.QHBoxLayout(self.tab_my_courses)
@@ -182,7 +241,8 @@ class Ui_MainWindow(object):
         icon2 = QtGui.QIcon()
         icon2.addPixmap(QtGui.QPixmap("UI/icons/For Left bar/Курс.png"), QtGui.QIcon.Mode.Normal, QtGui.QIcon.State.On)
         self.tabWidget.addTab(self.tab_my_courses, icon2, "")
-        print("WORK")
+
+    def create_tab_for_create_courses(self):
         self.tab_create_cource = QtWidgets.QWidget()
         self.tab_create_cource.setObjectName("tab_create_cource")
         self.verticalLayout_6 = QtWidgets.QVBoxLayout(self.tab_create_cource)
@@ -193,7 +253,6 @@ class Ui_MainWindow(object):
                                             QtWidgets.QSizePolicy.Policy.Minimum)
         self.VL_tab_create_cource.addItem(spacerItem2)
         self.label_3 = QtWidgets.QLabel(parent=self.tab_create_cource)
-
 
         font = QtGui.QFont()
         font.setPointSize(30)
@@ -245,7 +304,7 @@ class Ui_MainWindow(object):
         self.pbt_create_lesson.setSizePolicy(sizePolicy)
         self.pbt_create_lesson.setObjectName("pbt_create_lesson")
         self.pbt_create_lesson.clicked.connect(self.create_lesson)
-        
+
         self.horizontalLayout_8.addWidget(self.pbt_create_lesson)
         self.pbt_move_up = QtWidgets.QPushButton(parent=self.tab_create_cource)
         sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Policy.Maximum, QtWidgets.QSizePolicy.Policy.Fixed)
@@ -350,55 +409,14 @@ class Ui_MainWindow(object):
         icon3.addPixmap(QtGui.QPixmap("UI/icons/For Left bar/Создание курса.png"), QtGui.QIcon.Mode.Normal,
                         QtGui.QIcon.State.On)
         self.tabWidget.addTab(self.tab_create_cource, icon3, "")
+
+    def create_tab_management_account(self):
         self.tab_my_students = QtWidgets.QWidget()
         self.tab_my_students.setObjectName("tab_my_students")
         icon4 = QtGui.QIcon()
         icon4.addPixmap(QtGui.QPixmap("UI/icons/For Left bar/Учетные записи.png"), QtGui.QIcon.Mode.Normal,
                         QtGui.QIcon.State.On)
         self.tabWidget.addTab(self.tab_my_students, icon4, "")
-        self.horizontalLayout_5.addWidget(self.tabWidget)
-        MainWindow.setCentralWidget(self.centralwidget)
-        self.menubar = QtWidgets.QMenuBar(parent=MainWindow)
-        self.menubar.setGeometry(QtCore.QRect(0, 0, 1183, 21))
-        self.menubar.setObjectName("menubar")
-        MainWindow.setMenuBar(self.menubar)
-        self.statusbar = QtWidgets.QStatusBar(parent=MainWindow)
-        self.statusbar.setObjectName("statusbar")
-        MainWindow.setStatusBar(self.statusbar)
-
-        self.retranslateUi(MainWindow)
-
-        QtCore.QMetaObject.connectSlotsByName(MainWindow)
-
-    def retranslateUi(self, MainWindow):
-        _translate = QtCore.QCoreApplication.translate
-        MainWindow.setWindowTitle(_translate("MainWindow", "MainWindow"))
-        self.label_7.setText(_translate("MainWindow", "Мой профиль"))
-        self.label_8.setText(_translate("MainWindow", "Имя:"))
-        self.label_9.setText(_translate("MainWindow", "Тип учётной записи:"))
-        self.label.setText(_translate("MainWindow", "Курсы"))
-        self.CB_change_filter.setItemText(0, _translate("MainWindow", "По умолчанию"))
-        self.CB_change_filter.setItemText(1, _translate("MainWindow", "Новые"))
-        self.CB_change_filter.setItemText(2, _translate("MainWindow", "Старые"))
-        self.btn_search_courses.setText(_translate("MainWindow", "Поиск"))
-        self.btn_search_courses.setShortcut(_translate("MainWindow", "Return"))
-        self.label_2.setText(_translate("MainWindow", "Мои курсы"))
-        self.label_4.setText(_translate("MainWindow", "Программма курса"))
-        self.treeWidget.headerItem().setText(0, _translate("MainWindow", "Обзор"))
-        __sortingEnabled = self.treeWidget.isSortingEnabled()
-        self.treeWidget.setSortingEnabled(False)
-        self.logic = Logic(self.treeWidget)
-
-        self.treeWidget.setSortingEnabled(__sortingEnabled)
-        self.pbt_create_module.setText(_translate("MainWindow", "Создать модуль"))
-        self.pbt_create_lesson.setText(_translate("MainWindow", "Создать урок"))
-        self.pbt_move_up.setText(_translate("MainWindow", "Переместить выше"))
-        self.pbt_move_down.setText(_translate("MainWindow", "Переместить ниже"))
-        self.pbt_reference.setText(_translate("MainWindow", "Справка"))
-        self.label_5.setText(_translate("MainWindow", "Название курса"))
-        self.label_6.setText(_translate("MainWindow", "Описание"))
-        self.btn_create_course.setText(_translate("MainWindow", "Создать курс"))
-        self.label_3.setText(_translate("MainWindow", "Создание курса"))
 
     def create_course(self):
         ...
