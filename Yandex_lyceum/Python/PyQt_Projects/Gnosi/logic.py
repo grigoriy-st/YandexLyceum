@@ -1,10 +1,10 @@
 # logic.py
 
 from PyQt6.QtWidgets import (QTreeWidget, QTreeWidgetItem,
-                             QInputDialog, QMessageBox, QMenu)
+                             QInputDialog, QMessageBox, QMenu, QDialog)
 from lesson_management import Window_lesson_management
 from reference import Reference_Dialog
-
+from w_create_theory import Window_for_create_theory
 class Logic:
     def __init__(self, treeWidget):
         self.treeWidget = treeWidget
@@ -119,5 +119,13 @@ class Logic:
 
     def create_theory(self, item):
         QMessageBox.information(None, 'Создать теорию', f'Создание теории для {item.text(0)}')
+        ui = Window_for_create_theory()
+        if ui.exec() == 1:
+            print("HELLO")
+            lesson_name, lesson_text = ui.get_article_info()
+            print(lesson_name, lesson_text)
+            _ = QTreeWidgetItem(item, [lesson_name])
+
+
     def load_material(self, item):
         QMessageBox.information(None, 'Загрузить материал', f'Загрузка материала для {item.text(0)}')

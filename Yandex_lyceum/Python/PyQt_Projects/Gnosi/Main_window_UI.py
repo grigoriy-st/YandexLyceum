@@ -44,6 +44,7 @@ class Ui_MainWindow(object):
         self.label_7.setText(_translate("MainWindow", "Мой профиль"))
         self.label_8.setText(_translate("MainWindow", "Имя:"))
         self.label_9.setText(_translate("MainWindow", "Тип учётной записи:"))
+        self.label_11.setText(_translate("MainWindow", "UID:"))
         self.label.setText(_translate("MainWindow", "Курсы"))
         self.CB_change_filter.setItemText(0, _translate("MainWindow", "По умолчанию"))
         self.CB_change_filter.setItemText(1, _translate("MainWindow", "Новые"))
@@ -106,7 +107,6 @@ class Ui_MainWindow(object):
             QtCore.Qt.AlignmentFlag.AlignRight | QtCore.Qt.AlignmentFlag.AlignTrailing | QtCore.Qt.AlignmentFlag.AlignVCenter)
         self.label_8.setObjectName("label_8")
         self.horizontalLayout_7.addWidget(self.label_8)
-        # LE_profile_name
         self.LE_profile_name = QtWidgets.QLineEdit(parent=self.tab_image_account)
         sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Policy.Minimum, QtWidgets.QSizePolicy.Policy.Fixed)
         sizePolicy.setHorizontalStretch(0)
@@ -114,6 +114,7 @@ class Ui_MainWindow(object):
         sizePolicy.setHeightForWidth(self.LE_profile_name.sizePolicy().hasHeightForWidth())
         self.LE_profile_name.setSizePolicy(sizePolicy)
         self.LE_profile_name.setMinimumSize(QtCore.QSize(200, 0))
+        self.LE_profile_name.setMaximumSize(QtCore.QSize(250, 16777215))
         self.LE_profile_name.setInputMask("")
         self.LE_profile_name.setReadOnly(True)
         self.LE_profile_name.setObjectName("LE_profile_name")
@@ -129,7 +130,6 @@ class Ui_MainWindow(object):
         self.label_9.setObjectName("label_9")
         self.horizontalLayout_4.addWidget(self.label_9)
 
-        # LE_profile_type
         self.LE_profile_type = QtWidgets.QLineEdit(parent=self.tab_image_account)
         sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Policy.Minimum, QtWidgets.QSizePolicy.Policy.Fixed)
         sizePolicy.setHorizontalStretch(0)
@@ -137,22 +137,50 @@ class Ui_MainWindow(object):
         sizePolicy.setHeightForWidth(self.LE_profile_type.sizePolicy().hasHeightForWidth())
         self.LE_profile_type.setSizePolicy(sizePolicy)
         self.LE_profile_type.setMinimumSize(QtCore.QSize(200, 0))
+        self.LE_profile_type.setMaximumSize(QtCore.QSize(250, 16777215))
         self.LE_profile_type.setReadOnly(True)
         self.LE_profile_type.setObjectName("LE_profile_type")
         self.horizontalLayout_4.addWidget(self.LE_profile_type)
-
         self.verticalLayout_9.addLayout(self.horizontalLayout_4)
+        self.horizontalLayout_9 = QtWidgets.QHBoxLayout()
+        self.horizontalLayout_9.setContentsMargins(-1, 0, -1, -1)
+        self.horizontalLayout_9.setObjectName("horizontalLayout_9")
+        self.label_11 = QtWidgets.QLabel(parent=self.tab_image_account)
+        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Policy.Preferred,
+                                           QtWidgets.QSizePolicy.Policy.Preferred)
+        sizePolicy.setHorizontalStretch(0)
+        sizePolicy.setVerticalStretch(0)
+        sizePolicy.setHeightForWidth(self.label_11.sizePolicy().hasHeightForWidth())
+        self.label_11.setSizePolicy(sizePolicy)
+        self.label_11.setAlignment(
+            QtCore.Qt.AlignmentFlag.AlignRight | QtCore.Qt.AlignmentFlag.AlignTrailing | QtCore.Qt.AlignmentFlag.AlignVCenter)
+        self.label_11.setObjectName("label_11")
+
+        self.horizontalLayout_9.addWidget(self.label_11)
+        self.LE_profileID = QtWidgets.QLineEdit(parent=self.tab_image_account)
+        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Policy.Minimum, QtWidgets.QSizePolicy.Policy.Fixed)
+        sizePolicy.setHorizontalStretch(0)
+        sizePolicy.setVerticalStretch(0)
+        sizePolicy.setHeightForWidth(self.LE_profileID.sizePolicy().hasHeightForWidth())
+        self.LE_profileID.setSizePolicy(sizePolicy)
+        self.LE_profileID.setMinimumSize(QtCore.QSize(200, 0))
+        self.LE_profileID.setMaximumSize(QtCore.QSize(250, 16777215))
+        self.LE_profileID.setObjectName("LE_profileID")
+        self.LE_profileID.setReadOnly(True)
+        self.horizontalLayout_9.addWidget(self.LE_profileID)
+        self.verticalLayout_9.addLayout(self.horizontalLayout_9)
         self.verticalLayout_8.addLayout(self.verticalLayout_9)
         spacerItem = QtWidgets.QSpacerItem(20, 500, QtWidgets.QSizePolicy.Policy.Minimum,
                                            QtWidgets.QSizePolicy.Policy.Expanding)
         self.verticalLayout_8.addItem(spacerItem)
         self.verticalLayout_8.setStretch(0, 1)
         self.verticalLayout_7.addLayout(self.verticalLayout_8)
-
         icon = QtGui.QIcon()
         icon.addPixmap(QtGui.QPixmap("UI/icons/For Left bar/profile-anonymous2.png"), QtGui.QIcon.Mode.Normal,
                        QtGui.QIcon.State.On)
         self.tabWidget.addTab(self.tab_image_account, icon, "")
+
+
 
     def create_tab_home(self):
         self.tab_home = QtWidgets.QWidget()

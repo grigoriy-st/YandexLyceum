@@ -1,28 +1,44 @@
 import sys
-from PyQt5.QtWidgets import QApplication, QMainWindow, QLabel, QPushButton, QDialog
-from login_dialog import LoginDialog  # Импортируем LoginDialog из другого файла
+from PyQt5.QtWidgets import QApplication, QTreeWidget, QTreeWidgetItem, QVBoxLayout, QWidget, QPushButton
 
-class MainWindow(QMainWindow):
+
+class TreeWidgetExample(QWidget):
     def __init__(self):
         super().__init__()
-        self.setWindowTitle("Main Window")
-        self.setGeometry(100, 100, 300, 200)
 
-        self.label = QLabel("No user logged in", self)
-        self.label.setGeometry(50, 50, 200, 50)
+        # Создаем QTreeWidget
+        self.tree_widget = QTreeWidget()
+        self.tree_widget.setHeaderLabels(['Column 1', 'Column 2'])
 
-        self.login_button = QPushButton("Login", self)
-        self.login_button.setGeometry(50, 120, 200, 40)
-        self.login_button.clicked.connect(self.open_login_dialog)
+        # Добавляем корневой элемент
+        self.root_item = QTreeWidgetItem(self.tree_widget, ['Root Item', 'Root Data'])
 
-    def open_login_dialog(self):
-        dialog = LoginDialog()
-        if dialog.exec_() == QDialog.Accepted:
-            username, account_type = dialog.get_login_data()
-            self.label.setText(f"Logged in as: {username} ({account_type})")
+        # Добавляем дочерний элемент к корневому элементу
+        self.child_item1 = QTreeWidgetItem(self.root_item, ['Child Item 1', 'Child Data 1'])
+        self.child_item2 = QTreeWidgetItem(self.root_item, ['Child Item 2', 'Child Data 2'])
 
-if __name__ == "__main__":
+        # Кнопка для добавления потомка к потомку
+        self.add_button = QPushButton("Добавить потомка к Child Item 1")
+        self.add_button.clicked.connect(self.add_child_to_item1)
+
+        # Устанавливаем layout
+        layout = QVBoxLayout()
+        layout.addWidget(self.tree_widget)
+        layout.addWidget(self.add_button)
+        self.setLayout(layout)
+
+        self.setWindowTitle("QTreeWidget Example")
+        self.resize(400, 300)
+
+    def add_child_to_item1(self):
+        # Создаем нового потомка для child_item1
+        new_child_item = QTreeWidgetItem(self.child_item1, ['Grandchild Item', 'Grandchild Data'])
+        # Можно также установить дополнительные свойства для нового элемента, если необходимо
+        new_child_item.setText(1, 'Updated Grandchild Data')
+
+
+if __name__ == '__main__':
     app = QApplication(sys.argv)
-    main_window = MainWindow()
-    main_window.show()
+    window = TreeWidgetExample()
+    window.show()
     sys.exit(app.exec_())
