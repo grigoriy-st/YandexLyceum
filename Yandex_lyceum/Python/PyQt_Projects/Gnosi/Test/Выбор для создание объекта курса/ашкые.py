@@ -19,9 +19,11 @@ class FileDialogExample(QWidget):
 
     def open_file_dialog(self):
         # Открываем диалог выбора файла
-        file_name, _ = QFileDialog.getOpenFileName(self, "Выберите файл", "", "Все файлы (*)")
-        if file_name:
-            QMessageBox.information(self, "Информация", f"Вы выбрали файл: {file_name}")
+        options = QFileDialog.Option.DontUseNativeDialog
+        fileName, _ = QFileDialog.getOpenFileName(self, 'Выберите файл', '', 'All Files (*)', options=options)
+
+        if fileName:
+            QMessageBox.information(self, "Информация", f"Вы выбрали файл: {fileName}")
 
 
 if __name__ == "__main__":

@@ -1,9 +1,12 @@
 # logic.py
 import os
 import random
+import shutil
+from readline import get_history_item
 
+from Cryptodome.SelfTest.Cipher.test_OFB import file_name
 from PyQt6.QtWidgets import (QTreeWidget, QTreeWidgetItem,
-                             QInputDialog, QMessageBox, QMenu, QDialog)
+                             QInputDialog, QMessageBox, QMenu, QDialog, QFileDialog)
 from lesson_management import Window_lesson_management
 from reference import Reference_Dialog
 from w_create_theory import Window_for_create_theory
@@ -11,7 +14,7 @@ class Logic:
     def __init__(self, treeWidget):
         self.treeWidget = treeWidget
         self.temp_course_name = None
-
+        os.chdir("Courses")
 
     def create_module(self):
         module_name, ok = QInputDialog.getText(self.treeWidget, "Создать модуль", "Введите название модуля:")
@@ -19,16 +22,19 @@ class Logic:
             # Добавляем модуль в QTreeWidget
             module_item = QTreeWidgetItem(self.treeWidget, [module_name])
             self.treeWidget.addTopLevelItem(module_item)
-            os.chdir("Courses")
-            self.temp_course_name = f'Unsaved_{random.randint(0, 10)}'
-            while not os.path.exists(self.temp_course_name):
+            print(os.listdir('.'))
+
+            if not self.temp_course_name:
                 self.temp_course_name = f'Unsaved_{random.randint(0, 10)}'
-                os.mkdir(self.temp_course_name)
-            os.chdir(self.temp_course_name)
+                while not os.path.exists(self.temp_course_name):
+                    self.temp_course_name = f'Unsaved_{random.randint(0, 10)}'
+                    os.mkdir(self.temp_course_name)
+                os.chdir(self.temp_course_name)
             os.mkdir(module_name)
 
     def create_lesson(self):
         selected_items = self.treeWidget.selectedItems()
+        print("Ты вместе с: ", '  '.join(os.listdir('.')))
         if not selected_items:
             # Если модуль не выбран, показываем сообщение об ошибке
             QMessageBox.warning(self.treeWidget, "Ошибка", "Сначала выберите модуль, чтобы создать урок.")
@@ -41,11 +47,12 @@ class Logic:
             module_name = module_item.text(0)
             print(module_name)
             # Добавляем урок как дочерний элемент к выбранному модулю
-            lesson_item = QTreeWidgetItem(module_item, [lesson_name])
-            module_item.addChild(lesson_item)
+            lesson = QTreeWidgetItem(module_item, [lesson_name])
+            module_item.addChild(lesson)
 
-            os.chdir(f"Courses/{self.temp_course_name}/{module_name}")
+            os.chdir(module_name)
             os.mkdir(lesson_name)
+            os.chdir('..')
 
     def move_up(self):
         selected_item = self.treeWidget.currentItem()
@@ -141,15 +148,53 @@ class Logic:
 
     def create_theory(self, item):
         ui = Window_for_create_theory()
+        print("ТЫ хочаешь создать теорию в :", os.listdir('.'))
         if ui.exec() == 1:
+            lesson_item_name, lesson_text = ui.get_article_info()
 
-            lesson_name, lesson_text = ui.get_article_info()
-            print(lesson_name, lesson_text)
-            _ = QTreeWidgetItem(item, [lesson_name])
+            selected_items = self.treeWidget.selectedItems()
+            fs_lvl1, fs_lvl2 = self.get_item_hierarchy(item) # поиск элементов выше по иерархии
+            lesson_item = selected_items[0]
+            lesson_name = lesson_item.text(0)
 
-            with open(lesson_name, "w", encoding="utf-8") as f:
+            # print(lesson_name, lesson_text)
+            lesson = QTreeWidgetItem(item, [lesson_item_name])
+            lesson_item.addChild(lesson)
+
+            with open(f"{fs_lvl1}/{lesson_name}/{lesson_item_name}", "w", encoding="utf-8") as f:
                 f.write(lesson_text)
 
 
     def load_material(self, item):
-        QMessageBox.information(None, 'Загрузить материал', f'Загрузка материала для {item.text(0)}')
+        file_path, _ = QFileDialog.getOpenFileName(self.treeWidget, "Выберите файл", "", "Все файлы (*)")
+        if file_path:
+            QMessageBox. information(self.treeWidget, "Информация", f"Вы выбрали файл: {file_path}")
+        file_name = str(file_path).split('/')[-1]
+        destination_path = "/".join(self.get_item_hierarchy(item))
+        print("-->", destination_path)
+        print(os.getcwd())
+        try:
+            # Копируем файл
+            shutil.copy(file_path, f"{destination_path}")
+            print(f'Файл скопирован в: {destination_path}')
+            lesson = QTreeWidgetItem(item, [file_name])
+        except Exception as e:
+            print("Ошибка!", e)
+
+
+    def get_item_hierarchy(self, item):
+        hierarchy = []
+        current_item = item
+        # Сбор информации о родителях
+        while current_item:
+            hierarchy.insert(0, current_item.text(0))  # Добавляем текст элемента в начало списка
+            current_item = current_item.parent()
+        return hierarchy
+
+    def get_selected_items_hierarchy(self):
+        selected_items = self.treeWidget.selectedItems()
+        for item in selected_items:
+            hierarchy = self.get_item_hierarchy(item)
+
+            print(" -> ".join(hierarchy))
+
