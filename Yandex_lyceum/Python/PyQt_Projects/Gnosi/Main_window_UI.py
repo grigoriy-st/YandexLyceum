@@ -303,7 +303,6 @@ class Ui_MainWindow(object):
         font.setPointSize(15)
         self.treeWidget.setFont(font)
         self.treeWidget.setObjectName("treeWidget")
-        self.treeWidget.itemClicked.connect(self.open_lesson_management_window)
 
         self.HL_left_bottom_part.addWidget(self.treeWidget)
 
@@ -464,8 +463,6 @@ class Ui_MainWindow(object):
     def show_reference(self):
         self.logic.show_reference()
 
-    def open_lesson_management_window(self, item, column):
-        self.logic.open_lesson_management_window(item, column)
 
     def show_context_menu(self, item):
         self.logic.show_context_menu(item)

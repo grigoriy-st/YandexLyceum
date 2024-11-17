@@ -33,7 +33,8 @@ if __name__ == '__main__':
     app = QtWidgets.QApplication(sys.argv)
     MainWindow = QtWidgets.QMainWindow()
     auth_window = Auth_Dialog()
-    if auth_window.exec() == QDialog.accepted:
+
+    if auth_window.exec() == 1:
         print("hello")
 
     if auth_window.auth_success:
@@ -41,6 +42,7 @@ if __name__ == '__main__':
         ui.setupUi(MainWindow)
         ui.LE_profile_name.setText(auth_window.lineE_login.text())
         ui.LE_profile_type.setText(auth_window.type_ac)
+        ui.LE_profileID.setText(auth_window.UID)
         if auth_window.type_ac != "Преподаватель":
             ui.tab_create_cource.setDisabled(True)
         MainWindow.show()

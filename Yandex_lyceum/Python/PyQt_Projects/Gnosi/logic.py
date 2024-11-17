@@ -1,4 +1,6 @@
 # logic.py
+import os
+import random
 
 from PyQt6.QtWidgets import (QTreeWidget, QTreeWidgetItem,
                              QInputDialog, QMessageBox, QMenu, QDialog)
@@ -8,12 +10,8 @@ from w_create_theory import Window_for_create_theory
 class Logic:
     def __init__(self, treeWidget):
         self.treeWidget = treeWidget
+        self.temp_course_name = None
 
-    def open_lesson_management_window(self, item, column):
-        if item.parent() is not None:
-            print("Открыто окно для создания теории по уроку")
-            w_to_choose_when_creating_course = Window_lesson_management(self.treeWidget)
-            w_to_choose_when_creating_course.exec()
 
     def create_module(self):
         module_name, ok = QInputDialog.getText(self.treeWidget, "Создать модуль", "Введите название модуля:")
@@ -21,6 +19,13 @@ class Logic:
             # Добавляем модуль в QTreeWidget
             module_item = QTreeWidgetItem(self.treeWidget, [module_name])
             self.treeWidget.addTopLevelItem(module_item)
+            os.chdir("Courses")
+            self.temp_course_name = f'Unsaved_{random.randint(0, 10)}'
+            while not os.path.exists(self.temp_course_name):
+                self.temp_course_name = f'Unsaved_{random.randint(0, 10)}'
+                os.mkdir(self.temp_course_name)
+            os.chdir(self.temp_course_name)
+            os.mkdir(module_name)
 
     def create_lesson(self):
         selected_items = self.treeWidget.selectedItems()
@@ -33,9 +38,14 @@ class Logic:
         if ok and lesson_name:
             # Получаем выбранный модуль
             module_item = selected_items[0]
+            module_name = module_item.text(0)
+            print(module_name)
             # Добавляем урок как дочерний элемент к выбранному модулю
             lesson_item = QTreeWidgetItem(module_item, [lesson_name])
             module_item.addChild(lesson_item)
+
+            os.chdir(f"Courses/{self.temp_course_name}/{module_name}")
+            os.mkdir(lesson_name)
 
     def move_up(self):
         selected_item = self.treeWidget.currentItem()
@@ -81,16 +91,27 @@ class Logic:
         item = self.treeWidget.itemAt(pos)
 
         menu = QMenu(self.treeWidget)
+
         if item is not None:
             # Добавляем действия, доступные для всех элементов
             menu.addAction('Переименовать')
             menu.addAction('Удалить элемент')
-            # Добавляем действия, доступные только для дочерних элементов
-            if item.parent() is not None:  # Это дочерний элемент
+
+            # Проверяем уровень вложенности
+            level = 0
+            parent = item.parent()
+            while parent is not None:
+                level += 1
+                parent = parent.parent()
+
+            # Добавляем действия, доступные только для дочерних элементов второго уровня
+            if level == 1:  # Это дочерний элемент второго уровня
                 menu.addAction('Создать теорию')
                 menu.addAction('Загрузить готовый материал')
+
             # Отображаем контекстное меню и получаем выбранный элемент
             action = menu.exec(self.treeWidget.viewport().mapToGlobal(pos))
+
             # Обрабатываем выбранный элемент
             if action:
                 if action.text() == 'Переименовать':
@@ -109,8 +130,9 @@ class Logic:
 
     def delete_item(self, item):
         reply = QMessageBox.question(None, 'Удалить элемент', 'Вы уверены, что хотите удалить этот элемент?',
-                                     QMessageBox.Yes | QMessageBox.No, QMessageBox.No)
-        if reply == QMessageBox.Yes:
+                                     QMessageBox.StandardButton.Yes |
+                                     QMessageBox.StandardButton.No, QMessageBox.StandardButton.No)
+        if reply == QMessageBox.StandardButton.Yes:
             if item.parent() is None:
                 index = item.treeWidget().indexOfTopLevelItem(item)
                 item.treeWidget().takeTopLevelItem(index)
@@ -118,13 +140,15 @@ class Logic:
                 item.parent().removeChild(item)
 
     def create_theory(self, item):
-        QMessageBox.information(None, 'Создать теорию', f'Создание теории для {item.text(0)}')
         ui = Window_for_create_theory()
         if ui.exec() == 1:
-            print("HELLO")
+
             lesson_name, lesson_text = ui.get_article_info()
             print(lesson_name, lesson_text)
             _ = QTreeWidgetItem(item, [lesson_name])
+
+            with open(lesson_name, "w", encoding="utf-8") as f:
+                f.write(lesson_text)
 
 
     def load_material(self, item):

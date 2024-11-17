@@ -26,6 +26,7 @@ class Auth_Dialog(QDialog):
         Dialog.setMaximumSize(QtCore.QSize(300, 300))
         self.auth_success = False
         self.type_ac = None
+        self.UID = None
 
         self.verticalLayout_3 = QtWidgets.QVBoxLayout(Dialog)
         self.verticalLayout_3.setObjectName("verticalLayout_3")
@@ -157,18 +158,20 @@ class Auth_Dialog(QDialog):
                             users.login = "{login}" and users.password = "{password}"
                     ''').fetchall()[0][0]
 
-        users_data = dict(cur.execute(f'''
+        users_data = list(cur.execute(f'''
                         select
+                            users.userid,
                             users.login,
                             users.password
                         from users
                         where 
                             users.login = "{login}" and users.password = "{password}"
-                    ''').fetchall())
+                    ''').fetchall())[0]
 
-        if login in users_data.keys() and password == users_data[login]:
+        if login == users_data[1] and password == users_data[2]:
             con.close()
             self.auth_success = True
+            self.UID = str(users_data[0])
             super().accept()
 
         elif login not in users_data.keys():
@@ -202,3 +205,10 @@ class Auth_Dialog(QDialog):
         self.register_window = Reg_Dialog()  # Создаем экземпляр окна регистрации
 
         self.register_window.exec()
+
+if __name__ == '__main__':
+    import sys
+    app = QApplication(sys.argv)
+    window = Auth_Dialog()
+    window.show()
+    sys.exit(app.exec())
