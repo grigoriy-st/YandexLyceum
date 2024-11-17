@@ -446,7 +446,9 @@ class Ui_MainWindow(object):
         self.tabWidget.addTab(self.tab_my_students, icon4, "")
 
     def create_course(self):
-        ...
+        course_name = self.PTE_course_name.toPlainText()
+        course_description = self.PTE_description_course.toPlainText()
+        self.logic.create_course(course_name, course_description)
 
     def create_module(self):
         self.logic.create_module()

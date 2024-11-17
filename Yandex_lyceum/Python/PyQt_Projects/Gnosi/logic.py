@@ -2,6 +2,8 @@
 import os
 import random
 import shutil
+import sqlite3
+import datetime
 from readline import get_history_item
 
 from Cryptodome.SelfTest.Cipher.test_OFB import file_name
@@ -182,7 +184,7 @@ class Logic:
             print("Ошибка!", e)
 
 
-    def get_item_hierarchy(self, item):
+    def get_item_hierarchy(self, item) -> list:
         hierarchy = []
         current_item = item
         # Сбор информации о родителях
@@ -198,3 +200,28 @@ class Logic:
 
             print(" -> ".join(hierarchy))
 
+    def create_course(self, course_name, course_description):
+        con = sqlite3.connect("test_db.sqlite")
+        cur = con.cursor()
+
+        courseID = ...
+        title = course_name
+        userid = ...
+        description = course_description
+        complexity = ...
+        createdDate = datetime.now().strftime("%Y-%m-%d")
+
+        _ = cur.execute(
+            f'''
+            insert into courses
+            ({courseID}, {title}, {userid}, {description}, {complexity}, {createdDate})
+            values
+            (1, "hello", 2, " world", 2, "!")
+            '''
+        )
+
+    def create_json_course_path(self):
+        ...
+
+    def generate_courseID(self) -> int:
+        ...
