@@ -200,28 +200,56 @@ class Logic:
 
             print(" -> ".join(hierarchy))
 
-    def create_course(self, course_name, course_description):
+    def create_course(self, course_params):
+        courseID = self.generate_courseID()
+        title = course_params['course_name']
+        userid = course_params['uid']
+        description = course_params['course_description']
+        complexity = ["Базовый", "Сложный", "Продвинутый"].index(course_params['complexity']) + 1
+        createdDate = datetime.datetime.now().strftime("%Y-%m-%d")
+        print("БЫЛ:", os.getcwd())
+        os.chdir("../")
+        print("ПЕРЕНЁССя:", os.getcwd())
+        print("DATA:", courseID, title, userid, description, complexity, createdDate)
         con = sqlite3.connect("test_db.sqlite")
         cur = con.cursor()
-
-        courseID = ...
-        title = course_name
-        userid = ...
-        description = course_description
-        complexity = ...
-        createdDate = datetime.now().strftime("%Y-%m-%d")
-
         _ = cur.execute(
             f'''
-            insert into courses
-            ({courseID}, {title}, {userid}, {description}, {complexity}, {createdDate})
+            insert into Courses
+            (CourseID, Title, UserID, Description, Complexity, CreatedDate)
             values
-            (1, "hello", 2, " world", 2, "!")
+            ({courseID}, '{title}', {userid}, '{description}', {complexity}, '{createdDate}')
             '''
         )
+        con.commit()
+        con.close()
+
+        os.chdir("Courses")
 
     def create_json_course_path(self):
         ...
 
     def generate_courseID(self) -> int:
-        ...
+        # генерация courseID
+        # выход из директории Courses
+        print("БЫЛ:", os.getcwd())
+        # cur_path = os.getcwd()
+        # last_path = cur_path.split('/')[-2:]
+        os.chdir("../")
+        print("ПЕРЕНЁССя:", os.getcwd())
+        con = sqlite3.connect("test_db.sqlite")
+        cur = con.cursor()
+        all_id = cur.execute(
+            '''
+            select courseid
+            from Courses
+            '''
+        ).fetchall()
+        all_id = [item[0] for item in all_id]
+        all_id = list(map(int, all_id))
+        con.close()
+        os.chdir("Courses")
+        gen_courseID = random.randint(1, 1000)
+        while gen_courseID in all_id:
+            gen_courseID = random.randint(1, 1000)
+        return gen_courseID

@@ -1,6 +1,7 @@
 # Main_Window_UI.py
 
 from PyQt6 import QtCore, QtGui, QtWidgets
+
 from PyQt6.QtWidgets import QInputDialog, QTreeWidgetItem, QMessageBox
 from PyQt6.QtCore import Qt
 
@@ -59,9 +60,9 @@ class Ui_MainWindow(object):
         self.logic = Logic(self.treeWidget)
 
         self.treeWidget.setSortingEnabled(__sortingEnabled)
-        self.pbt_create_module.setText(_translate("MainWindow", "Создать модуль"))
-        self.pbt_create_lesson.setText(_translate("MainWindow", "Создать урок"))
-        self.pbt_move_up.setText(_translate("MainWindow", "Переместить выше"))
+        self.btn_create_module.setText(_translate("MainWindow", "Создать модуль"))
+        self.btn_create_lesson.setText(_translate("MainWindow", "Создать урок"))
+        self.btn_move_up.setText(_translate("MainWindow", "Переместить выше"))
         self.pbt_move_down.setText(_translate("MainWindow", "Переместить ниже"))
         self.pbt_reference.setText(_translate("MainWindow", "Справка"))
         self.label_5.setText(_translate("MainWindow", "Название курса"))
@@ -312,37 +313,37 @@ class Ui_MainWindow(object):
         self.horizontalLayout_8 = QtWidgets.QHBoxLayout()
         self.horizontalLayout_8.setContentsMargins(-1, 0, -1, -1)
         self.horizontalLayout_8.setObjectName("horizontalLayout_8")
-        self.pbt_create_module = QtWidgets.QPushButton(parent=self.tab_create_cource)
+        self.btn_create_module = QtWidgets.QPushButton(parent=self.tab_create_cource)
         sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Policy.Maximum, QtWidgets.QSizePolicy.Policy.Fixed)
         sizePolicy.setHorizontalStretch(0)
         sizePolicy.setVerticalStretch(0)
-        sizePolicy.setHeightForWidth(self.pbt_create_module.sizePolicy().hasHeightForWidth())
-        self.pbt_create_module.setSizePolicy(sizePolicy)
-        self.pbt_create_module.setMinimumSize(QtCore.QSize(0, 0))
-        self.pbt_create_module.setObjectName("pbt_create_module")
-        self.horizontalLayout_8.addWidget(self.pbt_create_module)
-        self.pbt_create_module.clicked.connect(self.create_module)
+        sizePolicy.setHeightForWidth(self.btn_create_module.sizePolicy().hasHeightForWidth())
+        self.btn_create_module.setSizePolicy(sizePolicy)
+        self.btn_create_module.setMinimumSize(QtCore.QSize(0, 0))
+        self.btn_create_module.setObjectName("btn_create_module")
+        self.horizontalLayout_8.addWidget(self.btn_create_module)
+        self.btn_create_module.clicked.connect(self.create_module)
 
-        self.pbt_create_lesson = QtWidgets.QPushButton(parent=self.tab_create_cource)
+        self.btn_create_lesson = QtWidgets.QPushButton(parent=self.tab_create_cource)
         sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Policy.Maximum, QtWidgets.QSizePolicy.Policy.Fixed)
         sizePolicy.setHorizontalStretch(0)
         sizePolicy.setVerticalStretch(0)
-        sizePolicy.setHeightForWidth(self.pbt_create_lesson.sizePolicy().hasHeightForWidth())
-        self.pbt_create_lesson.setSizePolicy(sizePolicy)
-        self.pbt_create_lesson.setObjectName("pbt_create_lesson")
-        self.pbt_create_lesson.clicked.connect(self.create_lesson)
-
-        self.horizontalLayout_8.addWidget(self.pbt_create_lesson)
-        self.pbt_move_up = QtWidgets.QPushButton(parent=self.tab_create_cource)
+        sizePolicy.setHeightForWidth(self.btn_create_lesson.sizePolicy().hasHeightForWidth())
+        self.btn_create_lesson.setSizePolicy(sizePolicy)
+        self.btn_create_lesson.setObjectName("btn_create_lesson")
+        self.horizontalLayout_8.addWidget(self.btn_create_lesson)
+        self.btn_create_lesson.clicked.connect(self.create_lesson)
+    # btn_move_up
+        self.btn_move_up = QtWidgets.QPushButton(parent=self.tab_create_cource)
         sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Policy.Maximum, QtWidgets.QSizePolicy.Policy.Fixed)
         sizePolicy.setHorizontalStretch(0)
         sizePolicy.setVerticalStretch(0)
-        sizePolicy.setHeightForWidth(self.pbt_move_up.sizePolicy().hasHeightForWidth())
-        self.pbt_move_up.setSizePolicy(sizePolicy)
-        self.pbt_move_up.setObjectName("pbt_move_up")
-        self.horizontalLayout_8.addWidget(self.pbt_move_up)
-        self.pbt_move_up.clicked.connect(self.move_up)
-
+        sizePolicy.setHeightForWidth(self.btn_move_up.sizePolicy().hasHeightForWidth())
+        self.btn_move_up.setSizePolicy(sizePolicy)
+        self.btn_move_up.setObjectName("btn_move_up")
+        self.horizontalLayout_8.addWidget(self.btn_move_up)
+        self.btn_move_up.clicked.connect(self.move_up)
+    # pbt_move_down
         self.pbt_move_down = QtWidgets.QPushButton(parent=self.tab_create_cource)
         sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Policy.Maximum, QtWidgets.QSizePolicy.Policy.Fixed)
         sizePolicy.setHorizontalStretch(0)
@@ -350,12 +351,11 @@ class Ui_MainWindow(object):
         sizePolicy.setHeightForWidth(self.pbt_move_down.sizePolicy().hasHeightForWidth())
         self.pbt_move_down.setSizePolicy(sizePolicy)
         self.pbt_move_down.setObjectName("pbt_move_down")
+        self.horizontalLayout_8.addWidget(self.pbt_move_down)
         self.pbt_move_down.clicked.connect(self.move_down)
 
-        self.horizontalLayout_8.addWidget(self.pbt_move_down)
         self.pbt_reference = QtWidgets.QPushButton(parent=self.tab_create_cource)
         self.pbt_reference.clicked.connect(self.show_reference)
-
         sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Policy.Maximum, QtWidgets.QSizePolicy.Policy.Fixed)
         sizePolicy.setHorizontalStretch(0)
         sizePolicy.setVerticalStretch(0)
@@ -364,6 +364,7 @@ class Ui_MainWindow(object):
         self.pbt_reference.setFlat(True)
         self.pbt_reference.setObjectName("pbt_reference")
         self.horizontalLayout_8.addWidget(self.pbt_reference)
+
         self.HL_left_bottom_part.addLayout(self.horizontalLayout_8)
         self.HL_bottom_part.addLayout(self.HL_left_bottom_part)
         self.HL_right_bottom_part = QtWidgets.QVBoxLayout()
@@ -406,6 +407,22 @@ class Ui_MainWindow(object):
         self.PTE_description_course.setMaximumSize(QtCore.QSize(16777215, 16777215))
         self.PTE_description_course.setObjectName("PTE_description_course")
         self.HL_right_bottom_part.addWidget(self.PTE_description_course)
+
+        self.label_10 = QtWidgets.QLabel(parent=self.tab_create_cource)
+        self.label_10.setText("Уровень сложности")
+        font = QtGui.QFont()
+        font.setPointSize(15)
+        self.label_10.setFont(font)
+        self.label_10.setAlignment(QtCore.Qt.AlignmentFlag.AlignCenter)
+        self.label_10.setObjectName("label_10")
+        self.HL_right_bottom_part.addWidget(self.label_10)
+        self.cB_choose_complexity = QtWidgets.QComboBox(parent=self.tab_create_cource)
+        self.cB_choose_complexity.setObjectName("cB_choose_complexity")
+        self.cB_choose_complexity.addItem("Базовый")
+        self.cB_choose_complexity.addItem("Средний")
+        self.cB_choose_complexity.addItem("Продвинутый")
+        self.HL_right_bottom_part.addWidget(self.cB_choose_complexity)
+
         spacerItem5 = QtWidgets.QSpacerItem(20, 40, QtWidgets.QSizePolicy.Policy.Minimum,
                                             QtWidgets.QSizePolicy.Policy.Maximum)
         self.HL_right_bottom_part.addItem(spacerItem5)
@@ -428,6 +445,8 @@ class Ui_MainWindow(object):
         spacerItem6 = QtWidgets.QSpacerItem(20, 40, QtWidgets.QSizePolicy.Policy.Minimum,
                                             QtWidgets.QSizePolicy.Policy.Maximum)
         self.HL_right_bottom_part.addItem(spacerItem6)
+        self.HL_right_bottom_part.setStretch(5, 5)
+        self.HL_right_bottom_part.setStretch(6, 1)
         self.HL_bottom_part.addLayout(self.HL_right_bottom_part)
         self.HL_bottom_part.setStretch(0, 5)
         self.VL_tab_create_cource.addLayout(self.HL_bottom_part)
@@ -446,9 +465,14 @@ class Ui_MainWindow(object):
         self.tabWidget.addTab(self.tab_my_students, icon4, "")
 
     def create_course(self):
-        course_name = self.PTE_course_name.toPlainText()
-        course_description = self.PTE_description_course.toPlainText()
-        self.logic.create_course(course_name, course_description)
+        course_params = {
+            'uid': int(self.LE_profileID.text()),
+            'course_name': self.PTE_course_name.toPlainText(),
+            'course_description': self.PTE_description_course.toPlainText(),
+            'complexity': self.cB_choose_complexity.currentText(),
+        }
+
+        self.logic.create_course(course_params)
 
     def create_module(self):
         self.logic.create_module()
