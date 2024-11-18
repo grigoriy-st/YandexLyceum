@@ -235,6 +235,8 @@ class Ui_MainWindow(object):
         icon1 = QtGui.QIcon()
         icon1.addPixmap(QtGui.QPixmap("UI/icons/For Left bar/Домой.png"), QtGui.QIcon.Mode.Normal, QtGui.QIcon.State.On)
         self.tabWidget.addTab(self.tab_home, icon1, "")
+        self.logic.show_courses_in_courses_tab(self.TW_courses)
+
 
     def create_tab_my_courses(self):
         self.tab_my_courses = QtWidgets.QWidget()
@@ -473,6 +475,7 @@ class Ui_MainWindow(object):
         }
 
         self.logic.create_course(course_params)
+        self.clearing_the_course_creation_window()
 
     def create_module(self):
         self.logic.create_module()
@@ -492,6 +495,11 @@ class Ui_MainWindow(object):
 
     def show_context_menu(self, item):
         self.logic.show_context_menu(item)
+
+    def clearing_the_course_creation_window(self):
+        self.logic.clearing_the_course_creation_window(self.PTE_course_name, self.PTE_description_course)
+
+
 
 if __name__ == "__main__":
     import sys

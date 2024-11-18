@@ -4,6 +4,7 @@ import random
 import shutil
 import sqlite3
 import datetime
+from os import getcwd
 from readline import get_history_item
 
 from Cryptodome.SelfTest.Cipher.test_OFB import file_name
@@ -12,11 +13,35 @@ from PyQt6.QtWidgets import (QTreeWidget, QTreeWidgetItem,
 from lesson_management import Window_lesson_management
 from reference import Reference_Dialog
 from w_create_theory import Window_for_create_theory
+
+DB_NAME = "test_db.sqlite"
+
+
 class Logic:
     def __init__(self, treeWidget):
         self.treeWidget = treeWidget
         self.temp_course_name = None
         os.chdir("Courses")
+
+    def show_courses_in_courses_tab(self, table):
+        con = sqlite3.connect(DB_NAME)
+        cur = con.cursor()
+        courses_list = cur.execute(
+            '''
+            select 
+                courses.Title,
+                users.Login,
+                courses.Description,
+                courses.CreatedDate
+            from 
+                courses inner join users on courses.userid = users.UserID
+
+            '''
+        )
+        for index, course in enumerate(courses_list):
+            course_name, course_author, course_description, course_created_date = course
+            '''Дописать логику добавление курса в таблицу курсов'''
+        ...
 
     def create_module(self):
         module_name, ok = QInputDialog.getText(self.treeWidget, "Создать модуль", "Введите название модуля:")
@@ -102,9 +127,8 @@ class Logic:
         menu = QMenu(self.treeWidget)
 
         if item is not None:
-            # Добавляем действия, доступные для всех элементов
-            menu.addAction('Переименовать')
-            menu.addAction('Удалить элемент')
+
+
 
             # Проверяем уровень вложенности
             level = 0
@@ -117,13 +141,19 @@ class Logic:
             if level == 1:  # Это дочерний элемент второго уровня
                 menu.addAction('Создать теорию')
                 menu.addAction('Загрузить готовый материал')
-
+            if level == 0:
+                menu.addAction('Создать урок')
+            # Добавляем действия, доступные для всех элементов
+            menu.addAction('Переименовать')
+            menu.addAction('Удалить элемент')
             # Отображаем контекстное меню и получаем выбранный элемент
             action = menu.exec(self.treeWidget.viewport().mapToGlobal(pos))
 
             # Обрабатываем выбранный элемент
             if action:
-                if action.text() == 'Переименовать':
+                if action.text() == 'Создать урок':
+                    self.create_lesson()
+                elif action.text() == 'Переименовать':
                     self.rename_item(item)
                 elif action.text() == 'Удалить элемент':
                     self.delete_item(item)
@@ -138,6 +168,7 @@ class Logic:
             item.setText(0, new_name)
 
     def delete_item(self, item):
+        """Удаление элемента из QTreeWidget и из папки с курсом"""
         reply = QMessageBox.question(None, 'Удалить элемент', 'Вы уверены, что хотите удалить этот элемент?',
                                      QMessageBox.StandardButton.Yes |
                                      QMessageBox.StandardButton.No, QMessageBox.StandardButton.No)
@@ -149,6 +180,7 @@ class Logic:
                 item.parent().removeChild(item)
 
     def create_theory(self, item):
+        """Создание теории"""
         ui = Window_for_create_theory()
         print("ТЫ хочаешь создать теорию в :", os.listdir('.'))
         if ui.exec() == 1:
@@ -168,6 +200,7 @@ class Logic:
 
 
     def load_material(self, item):
+        """Загрузка готового документа"""
         file_path, _ = QFileDialog.getOpenFileName(self.treeWidget, "Выберите файл", "", "Все файлы (*)")
         if file_path:
             QMessageBox. information(self.treeWidget, "Информация", f"Вы выбрали файл: {file_path}")
@@ -185,6 +218,7 @@ class Logic:
 
 
     def get_item_hierarchy(self, item) -> list:
+        """Получение обхектов иерархии"""
         hierarchy = []
         current_item = item
         # Сбор информации о родителях
@@ -194,6 +228,7 @@ class Logic:
         return hierarchy
 
     def get_selected_items_hierarchy(self):
+        '''Отображение иерархии'''
         selected_items = self.treeWidget.selectedItems()
         for item in selected_items:
             hierarchy = self.get_item_hierarchy(item)
@@ -201,6 +236,7 @@ class Logic:
             print(" -> ".join(hierarchy))
 
     def create_course(self, course_params):
+        '''Создание курса и занесение его в бд'''
         courseID = self.generate_courseID()
         title = course_params['course_name']
         userid = course_params['uid']
@@ -208,10 +244,11 @@ class Logic:
         complexity = ["Базовый", "Сложный", "Продвинутый"].index(course_params['complexity']) + 1
         createdDate = datetime.datetime.now().strftime("%Y-%m-%d")
         print("БЫЛ:", os.getcwd())
-        os.chdir("../")
+        history_of_movements = self.move_to_gnosi_folder()
         print("ПЕРЕНЁССя:", os.getcwd())
-        print("DATA:", courseID, title, userid, description, complexity, createdDate)
-        con = sqlite3.connect("test_db.sqlite")
+        # print("DATA:", courseID, title, userid, description, complexity, createdDate)
+
+        con = sqlite3.connect(DB_NAME)
         cur = con.cursor()
         _ = cur.execute(
             f'''
@@ -223,8 +260,9 @@ class Logic:
         )
         con.commit()
         con.close()
-
         os.chdir("Courses")
+        os.rename(self.temp_course_name, title)
+
 
     def create_json_course_path(self):
         ...
@@ -233,11 +271,9 @@ class Logic:
         # генерация courseID
         # выход из директории Courses
         print("БЫЛ:", os.getcwd())
-        # cur_path = os.getcwd()
-        # last_path = cur_path.split('/')[-2:]
-        os.chdir("../")
+        history_of_movements = self.move_to_gnosi_folder()
         print("ПЕРЕНЁССя:", os.getcwd())
-        con = sqlite3.connect("test_db.sqlite")
+        con = sqlite3.connect(DB_NAME)
         cur = con.cursor()
         all_id = cur.execute(
             '''
@@ -252,4 +288,22 @@ class Logic:
         gen_courseID = random.randint(1, 1000)
         while gen_courseID in all_id:
             gen_courseID = random.randint(1, 1000)
+        print("____ТЫ здесь", os.getcwd())
+        os.chdir(history_of_movements)
         return gen_courseID
+
+    def move_to_gnosi_folder(self):
+        history = []
+        cur_dir = os.path.basename(os.getcwd())
+        while DB_NAME not in os.listdir('.'):
+            print("Now in", os.getcwd())
+
+            history.insert(0, os.path.basename(os.getcwd()))
+            os.chdir("..")
+
+        return '/'.join(history[1:])
+
+    def clearing_the_course_creation_window(self, course_name, course_description):
+        self.treeWidget.clear()
+        course_name.setPlainText("")
+        course_description.setPlainText("")
