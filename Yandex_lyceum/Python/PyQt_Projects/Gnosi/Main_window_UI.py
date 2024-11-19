@@ -1,13 +1,17 @@
 # Main_Window_UI.py
-
+from PyQt5.QtWidgets import QShortcut
 from PyQt6 import QtCore, QtGui, QtWidgets
 
 from PyQt6.QtWidgets import QInputDialog, QTreeWidgetItem, QMessageBox
 from PyQt6.QtCore import Qt
+from PyQt6.QtGui import QKeySequence
 
 from logic import Logic
 
 class Ui_MainWindow(object):
+    def __init__(self):
+        self.treeWidget = None
+
     def setupUi(self, MainWindow):
         MainWindow.setObjectName("MainWindow")
         MainWindow.resize(1183, 820)
@@ -25,6 +29,8 @@ class Ui_MainWindow(object):
         self.create_tab_for_create_courses()
         self.create_tab_management_account()
 
+        self.logic = Logic(self.treeWidget)
+
         self.horizontalLayout_5.addWidget(self.tabWidget)
         MainWindow.setCentralWidget(self.centralwidget)
         self.menubar = QtWidgets.QMenuBar(parent=MainWindow)
@@ -41,6 +47,7 @@ class Ui_MainWindow(object):
 
     def retranslateUi(self, MainWindow):
         _translate = QtCore.QCoreApplication.translate
+
         MainWindow.setWindowTitle(_translate("MainWindow", "MainWindow"))
         self.label_7.setText(_translate("MainWindow", "Мой профиль"))
         self.label_8.setText(_translate("MainWindow", "Имя:"))
@@ -57,7 +64,7 @@ class Ui_MainWindow(object):
         self.treeWidget.headerItem().setText(0, _translate("MainWindow", "Обзор"))
         __sortingEnabled = self.treeWidget.isSortingEnabled()
         self.treeWidget.setSortingEnabled(False)
-        self.logic = Logic(self.treeWidget)
+
 
         self.treeWidget.setSortingEnabled(__sortingEnabled)
         self.btn_create_module.setText(_translate("MainWindow", "Создать модуль"))
@@ -69,6 +76,8 @@ class Ui_MainWindow(object):
         self.label_6.setText(_translate("MainWindow", "Описание"))
         self.btn_create_course.setText(_translate("MainWindow", "Создать курс"))
         self.label_3.setText(_translate("MainWindow", "Создание курса"))
+
+
 
     def create_tab_widget(self):
         self.tabWidget = QtWidgets.QTabWidget(parent=self.centralwidget)
@@ -235,7 +244,7 @@ class Ui_MainWindow(object):
         icon1 = QtGui.QIcon()
         icon1.addPixmap(QtGui.QPixmap("UI/icons/For Left bar/Домой.png"), QtGui.QIcon.Mode.Normal, QtGui.QIcon.State.On)
         self.tabWidget.addTab(self.tab_home, icon1, "")
-        self.logic.show_courses_in_courses_tab(self.TW_courses)
+        # self.logic.show_courses_in_courses_tab(self.TW_courses)
 
 
     def create_tab_my_courses(self):

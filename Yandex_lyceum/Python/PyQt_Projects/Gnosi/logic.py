@@ -4,7 +4,8 @@ import random
 import shutil
 import sqlite3
 import datetime
-from os import getcwd
+import json
+
 from readline import get_history_item
 
 from Cryptodome.SelfTest.Cipher.test_OFB import file_name
@@ -13,14 +14,17 @@ from PyQt6.QtWidgets import (QTreeWidget, QTreeWidgetItem,
 from lesson_management import Window_lesson_management
 from reference import Reference_Dialog
 from w_create_theory import Window_for_create_theory
+from db_ops import Db
 
 DB_NAME = "test_db.sqlite"
 
 
 class Logic:
     def __init__(self, treeWidget):
+        # super().__init__()
         self.treeWidget = treeWidget
         self.temp_course_name = None
+        self.courseID = None
         os.chdir("Courses")
 
     def show_courses_in_courses_tab(self, table):
@@ -58,6 +62,10 @@ class Logic:
                     os.mkdir(self.temp_course_name)
                 os.chdir(self.temp_course_name)
             os.mkdir(module_name)
+
+        # self.courseID = self.generate_courseID()
+
+
 
     def create_lesson(self):
         selected_items = self.treeWidget.selectedItems()
@@ -241,7 +249,7 @@ class Logic:
         title = course_params['course_name']
         userid = course_params['uid']
         description = course_params['course_description']
-        complexity = ["Базовый", "Сложный", "Продвинутый"].index(course_params['complexity']) + 1
+        complexity = ["Базовый", "Средний", "Продвинутый"].index(course_params['complexity']) + 1
         createdDate = datetime.datetime.now().strftime("%Y-%m-%d")
         print("БЫЛ:", os.getcwd())
         history_of_movements = self.move_to_gnosi_folder()
@@ -262,10 +270,21 @@ class Logic:
         con.close()
         os.chdir("Courses")
         os.rename(self.temp_course_name, title)
+        self.export_to_json()
 
+    def export_to_json(self):
+        data = self.tree_to_dict(self.treeWidget.invisibleRootItem())
+        json_data = json.dumps(data, indent=4)
+        print(json_data)  # Выводим в консоль, можно записать в файл
 
-    def create_json_course_path(self):
-        ...
+    def tree_to_dict(self, item):
+        result = {"name": item.text(0), "children": []}
+        for index in range(item.childCount()):
+            child_item = item.child(index)
+            result["children"].append(self.tree_to_dict(child_item))
+
+        return result
+
 
     def generate_courseID(self) -> int:
         # генерация courseID
