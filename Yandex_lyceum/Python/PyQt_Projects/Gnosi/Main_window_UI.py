@@ -2,15 +2,17 @@
 from PyQt5.QtWidgets import QShortcut
 from PyQt6 import QtCore, QtGui, QtWidgets
 
-from PyQt6.QtWidgets import QInputDialog, QTreeWidgetItem, QMessageBox
+from PyQt6.QtWidgets import QInputDialog, QTreeWidgetItem, QMessageBox, QWidget
 from PyQt6.QtCore import Qt
 from PyQt6.QtGui import QKeySequence
-
 from logic import Logic
+
 
 class Ui_MainWindow(object):
     def __init__(self):
+        self.UID = None
         self.treeWidget = None
+        self.logic = Logic()
 
     def setupUi(self, MainWindow):
         MainWindow.setObjectName("MainWindow")
@@ -29,7 +31,6 @@ class Ui_MainWindow(object):
         self.create_tab_for_create_courses()
         self.create_tab_management_account()
 
-        self.logic = Logic(self.treeWidget)
 
         self.horizontalLayout_5.addWidget(self.tabWidget)
         MainWindow.setCentralWidget(self.centralwidget)
@@ -50,9 +51,11 @@ class Ui_MainWindow(object):
 
         MainWindow.setWindowTitle(_translate("MainWindow", "MainWindow"))
         self.label_7.setText(_translate("MainWindow", "Мой профиль"))
-        self.label_8.setText(_translate("MainWindow", "Имя:"))
+        self.label_8.setText(_translate("MainWindow", "Логин:"))
         self.label_9.setText(_translate("MainWindow", "Тип учётной записи:"))
         self.label_11.setText(_translate("MainWindow", "UID:"))
+        self.label_12.setText(_translate("MainWindow", "Имя:"))
+
         self.label.setText(_translate("MainWindow", "Курсы"))
         self.CB_change_filter.setItemText(0, _translate("MainWindow", "По умолчанию"))
         self.CB_change_filter.setItemText(1, _translate("MainWindow", "Новые"))
@@ -95,20 +98,52 @@ class Ui_MainWindow(object):
         self.tab_image_account.setAutoFillBackground(False)
         self.tab_image_account.setStyleSheet("")
         self.tab_image_account.setObjectName("tab_image_account")
+
         self.verticalLayout_7 = QtWidgets.QVBoxLayout(self.tab_image_account)
         self.verticalLayout_7.setObjectName("verticalLayout_7")
         self.verticalLayout_8 = QtWidgets.QVBoxLayout()
         self.verticalLayout_8.setObjectName("verticalLayout_8")
+
         self.label_7 = QtWidgets.QLabel(parent=self.tab_image_account)
         font = QtGui.QFont()
         font.setPointSize(30)
         self.label_7.setFont(font)
         self.label_7.setObjectName("label_7")
+
         self.verticalLayout_8.addWidget(self.label_7)
         self.verticalLayout_9 = QtWidgets.QVBoxLayout()
         self.verticalLayout_9.setContentsMargins(350, 50, 350, -1)
         self.verticalLayout_9.setSpacing(10)
         self.verticalLayout_9.setObjectName("verticalLayout_9")
+        self.horizontalLayout_10 = QtWidgets.QHBoxLayout()
+        self.horizontalLayout_10.setContentsMargins(-1, 0, -1, -1)
+        self.horizontalLayout_10.setObjectName("horizontalLayout_10")
+
+        self.label_12 = QtWidgets.QLabel(parent=self.tab_image_account)
+        self.label_12.setAlignment(
+            QtCore.Qt.AlignmentFlag.AlignRight | QtCore.Qt.AlignmentFlag.AlignTrailing | QtCore.Qt.AlignmentFlag.AlignVCenter)
+        self.label_12.setObjectName("label_12")
+        self.horizontalLayout_10.addWidget(self.label_12)
+        self.LE_name = QtWidgets.QLineEdit(parent=self.tab_image_account)
+
+        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Policy.Minimum, QtWidgets.QSizePolicy.Policy.Fixed)
+        sizePolicy.setHorizontalStretch(0)
+        sizePolicy.setVerticalStretch(0)
+        sizePolicy.setHeightForWidth(self.LE_name.sizePolicy().hasHeightForWidth())
+
+        self.LE_name.setSizePolicy(sizePolicy)
+        self.LE_name.setMinimumSize(QtCore.QSize(200, 0))
+        self.LE_name.setMaximumSize(QtCore.QSize(250, 16777215))
+        self.LE_name.setReadOnly(False)
+        self.LE_name.setObjectName("LE_name")
+
+        self.horizontalLayout_10.addWidget(self.LE_name)
+        self.btn_change_name = QtWidgets.QPushButton(parent=self.tab_image_account)
+        self.btn_change_name.setObjectName("btn_change_name")
+        self.horizontalLayout_10.addWidget(self.btn_change_name)
+        self.btn_change_name.clicked.connect(self.edit_user_name)
+
+        self.verticalLayout_9.addLayout(self.horizontalLayout_10)
         self.horizontalLayout_7 = QtWidgets.QHBoxLayout()
         self.horizontalLayout_7.setSizeConstraint(QtWidgets.QLayout.SizeConstraint.SetDefaultConstraint)
         self.horizontalLayout_7.setObjectName("horizontalLayout_7")
@@ -117,18 +152,20 @@ class Ui_MainWindow(object):
             QtCore.Qt.AlignmentFlag.AlignRight | QtCore.Qt.AlignmentFlag.AlignTrailing | QtCore.Qt.AlignmentFlag.AlignVCenter)
         self.label_8.setObjectName("label_8")
         self.horizontalLayout_7.addWidget(self.label_8)
-        self.LE_profile_name = QtWidgets.QLineEdit(parent=self.tab_image_account)
+        self.LE_profile_login = QtWidgets.QLineEdit(parent=self.tab_image_account)
         sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Policy.Minimum, QtWidgets.QSizePolicy.Policy.Fixed)
         sizePolicy.setHorizontalStretch(0)
         sizePolicy.setVerticalStretch(0)
-        sizePolicy.setHeightForWidth(self.LE_profile_name.sizePolicy().hasHeightForWidth())
-        self.LE_profile_name.setSizePolicy(sizePolicy)
-        self.LE_profile_name.setMinimumSize(QtCore.QSize(200, 0))
-        self.LE_profile_name.setMaximumSize(QtCore.QSize(250, 16777215))
-        self.LE_profile_name.setInputMask("")
-        self.LE_profile_name.setReadOnly(True)
-        self.LE_profile_name.setObjectName("LE_profile_name")
-        self.horizontalLayout_7.addWidget(self.LE_profile_name)
+        sizePolicy.setHeightForWidth(self.LE_profile_login.sizePolicy().hasHeightForWidth())
+
+        self.LE_profile_login.setSizePolicy(sizePolicy)
+        self.LE_profile_login.setMinimumSize(QtCore.QSize(200, 0))
+        self.LE_profile_login.setMaximumSize(QtCore.QSize(250, 16777215))
+        self.LE_profile_login.setInputMask("")
+        self.LE_profile_login.setReadOnly(True)
+        self.LE_profile_login.setObjectName("LE_profile_login")
+
+        self.horizontalLayout_7.addWidget(self.LE_profile_login)
         self.verticalLayout_9.addLayout(self.horizontalLayout_7)
         self.horizontalLayout_4 = QtWidgets.QHBoxLayout()
         self.horizontalLayout_4.setSizeConstraint(QtWidgets.QLayout.SizeConstraint.SetDefaultConstraint)
@@ -165,7 +202,6 @@ class Ui_MainWindow(object):
         self.label_11.setAlignment(
             QtCore.Qt.AlignmentFlag.AlignRight | QtCore.Qt.AlignmentFlag.AlignTrailing | QtCore.Qt.AlignmentFlag.AlignVCenter)
         self.label_11.setObjectName("label_11")
-
         self.horizontalLayout_9.addWidget(self.label_11)
         self.LE_profileID = QtWidgets.QLineEdit(parent=self.tab_image_account)
         sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Policy.Minimum, QtWidgets.QSizePolicy.Policy.Fixed)
@@ -176,7 +212,6 @@ class Ui_MainWindow(object):
         self.LE_profileID.setMinimumSize(QtCore.QSize(200, 0))
         self.LE_profileID.setMaximumSize(QtCore.QSize(250, 16777215))
         self.LE_profileID.setObjectName("LE_profileID")
-        self.LE_profileID.setReadOnly(True)
         self.horizontalLayout_9.addWidget(self.LE_profileID)
         self.verticalLayout_9.addLayout(self.horizontalLayout_9)
         self.verticalLayout_8.addLayout(self.verticalLayout_9)
@@ -188,11 +223,16 @@ class Ui_MainWindow(object):
         icon = QtGui.QIcon()
         icon.addPixmap(QtGui.QPixmap("UI/icons/For Left bar/profile-anonymous2.png"), QtGui.QIcon.Mode.Normal,
                        QtGui.QIcon.State.On)
+
         self.tabWidget.addTab(self.tab_image_account, icon, "")
 
 
 
+
+
+
     def create_tab_home(self):
+        print(self.UID)
         self.tab_home = QtWidgets.QWidget()
         self.tab_home.setObjectName("tab_home")
         self.horizontalLayout_3 = QtWidgets.QHBoxLayout(self.tab_home)
@@ -228,14 +268,17 @@ class Ui_MainWindow(object):
         self.horizontalLayout_6 = QtWidgets.QHBoxLayout()
         self.horizontalLayout_6.setContentsMargins(-1, 0, -1, -1)
         self.horizontalLayout_6.setObjectName("horizontalLayout_6")
-        self.TW_courses = QtWidgets.QTableWidget(parent=self.tab_home)
-        self.TW_courses.setMaximumSize(QtCore.QSize(1010, 16777215))
-        self.TW_courses.setLayoutDirection(QtCore.Qt.LayoutDirection.LeftToRight)
-        self.TW_courses.setColumnCount(4)
-        self.TW_courses.setObjectName("TW_courses")
-        self.TW_courses.setRowCount(0)
-        self.TW_courses.horizontalHeader().setDefaultSectionSize(252)
-        self.horizontalLayout_6.addWidget(self.TW_courses)
+        self.TW_all_courses = QtWidgets.QTableWidget(parent=self.tab_home)
+        self.TW_all_courses.setMaximumSize(QtCore.QSize(1010, 16777215))
+        self.TW_all_courses.setLayoutDirection(QtCore.Qt.LayoutDirection.LeftToRight)
+        self.TW_all_courses.setColumnCount(4)
+        headers = ['Название', 'Автор', 'Описание', 'Опубликован']
+        self.TW_all_courses.setHorizontalHeaderLabels(headers)
+        self.TW_all_courses.setObjectName("TW_all_courses")
+        self.TW_all_courses.setRowCount(0)
+        self.TW_all_courses.horizontalHeader().setDefaultSectionSize(252)
+
+        self.horizontalLayout_6.addWidget(self.TW_all_courses)
         self.verticalLayout.addLayout(self.horizontalLayout_6)
         self.verticalLayout.setStretch(0, 1)
         self.verticalLayout.setStretch(1, 1)
@@ -244,10 +287,20 @@ class Ui_MainWindow(object):
         icon1 = QtGui.QIcon()
         icon1.addPixmap(QtGui.QPixmap("UI/icons/For Left bar/Домой.png"), QtGui.QIcon.Mode.Normal, QtGui.QIcon.State.On)
         self.tabWidget.addTab(self.tab_home, icon1, "")
-        # self.logic.show_courses_in_courses_tab(self.TW_courses)
+        self.show_courses_in_courses_tab()
 
+    def edit_user_name(self):
+        print("&" * 10)
+        new_name = self.LE_name.text()
+        uid = self.UID
+        if uid and new_name:
+            self.logic.edit_user_name(uid, self.LE_name, new_name)
+
+    def printik(self):
+        print("Эта ебана кнопка работает")
 
     def create_tab_my_courses(self):
+
         self.tab_my_courses = QtWidgets.QWidget()
         self.tab_my_courses.setObjectName("tab_my_courses")
         self.horizontalLayout = QtWidgets.QHBoxLayout(self.tab_my_courses)
@@ -272,11 +325,14 @@ class Ui_MainWindow(object):
         self.TW_my_courses.setRowCount(0)
         self.TW_my_courses.horizontalHeader().setVisible(True)
         self.TW_my_courses.horizontalHeader().setDefaultSectionSize(245)
+        headers = ['Название', 'Автор', 'Описание', 'Опубликован']
+        self.TW_my_courses.setHorizontalHeaderLabels(headers)
         self.verticalLayout_3.addWidget(self.TW_my_courses)
         self.verticalLayout_2.addLayout(self.verticalLayout_3)
         self.verticalLayout_2.setStretch(1, 1)
         self.verticalLayout_2.setStretch(2, 10)
         self.horizontalLayout.addLayout(self.verticalLayout_2)
+        self.show_courses_in_my_courses_tab()
 
         icon2 = QtGui.QIcon()
         icon2.addPixmap(QtGui.QPixmap("UI/icons/For Left bar/Курс.png"), QtGui.QIcon.Mode.Normal, QtGui.QIcon.State.On)
@@ -309,7 +365,7 @@ class Ui_MainWindow(object):
         self.label_4.setFont(font)
         self.label_4.setObjectName("label_4")
         self.HL_left_bottom_part.addWidget(self.label_4)
-        # treeWidget
+    # treeWidget
         self.treeWidget = QtWidgets.QTreeWidget(parent=self.tab_create_cource)
         font = QtGui.QFont()
         font.setPointSize(15)
@@ -329,12 +385,13 @@ class Ui_MainWindow(object):
         sizePolicy.setHorizontalStretch(0)
         sizePolicy.setVerticalStretch(0)
         sizePolicy.setHeightForWidth(self.btn_create_module.sizePolicy().hasHeightForWidth())
+    # btn_create_module
         self.btn_create_module.setSizePolicy(sizePolicy)
         self.btn_create_module.setMinimumSize(QtCore.QSize(0, 0))
         self.btn_create_module.setObjectName("btn_create_module")
         self.horizontalLayout_8.addWidget(self.btn_create_module)
         self.btn_create_module.clicked.connect(self.create_module)
-
+    # btn_create_lesson
         self.btn_create_lesson = QtWidgets.QPushButton(parent=self.tab_create_cource)
         sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Policy.Maximum, QtWidgets.QSizePolicy.Policy.Fixed)
         sizePolicy.setHorizontalStretch(0)
@@ -364,7 +421,7 @@ class Ui_MainWindow(object):
         self.pbt_move_down.setObjectName("pbt_move_down")
         self.horizontalLayout_8.addWidget(self.pbt_move_down)
         self.pbt_move_down.clicked.connect(self.move_down)
-
+    # pbt_reference
         self.pbt_reference = QtWidgets.QPushButton(parent=self.tab_create_cource)
         self.pbt_reference.clicked.connect(self.show_reference)
         sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Policy.Maximum, QtWidgets.QSizePolicy.Policy.Fixed)
@@ -475,6 +532,8 @@ class Ui_MainWindow(object):
                         QtGui.QIcon.State.On)
         self.tabWidget.addTab(self.tab_my_students, icon4, "")
 
+
+
     def create_course(self):
         course_params = {
             'uid': int(self.LE_profileID.text()),
@@ -487,7 +546,7 @@ class Ui_MainWindow(object):
         self.clearing_the_course_creation_window()
 
     def create_module(self):
-        self.logic.create_module()
+        self.logic.create_module(self.treeWidget)
 
     def create_lesson(self):
         self.logic.create_lesson()
@@ -501,6 +560,14 @@ class Ui_MainWindow(object):
     def show_reference(self):
         self.logic.show_reference()
 
+    def show_courses_in_courses_tab(self):
+        self.logic.show_courses_in_courses_tab(self.TW_all_courses)
+
+    def show_courses_in_my_courses_tab(self):
+        print("Зашёл в show_courses_in_my_courses_tab")
+        uid = self.UID
+        if uid:
+            self.logic.show_courses_in_my_courses_tab(uid, self.TW_my_courses)
 
     def show_context_menu(self, item):
         self.logic.show_context_menu(item)
@@ -509,12 +576,16 @@ class Ui_MainWindow(object):
         self.logic.clearing_the_course_creation_window(self.PTE_course_name, self.PTE_description_course)
 
 
+    # def fill_profile_data(self):
+    #     self.logic.
 
-if __name__ == "__main__":
-    import sys
-    app = QtWidgets.QApplication(sys.argv)
-    MainWindow = QtWidgets.QMainWindow()
-    ui = Ui_MainWindow()
-    ui.setupUi(MainWindow)
-    MainWindow.show()
-    sys.exit(app.exec())
+
+
+# if __name__ == "__main__":
+#     import sys
+#     app = QtWidgets.QApplication(sys.argv)
+#     MainWindow = QtWidgets.QMainWindow()
+#     ui = Ui_MainWindow()
+#     ui.setupUi(MainWindow)
+#     MainWindow.show()
+#     sys.exit(app.exec())

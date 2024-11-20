@@ -5,9 +5,9 @@ from uaclient.api.u.pro.services.disable.v1 import disable
 
 # Все части программы
 from Main_window_UI import Ui_MainWindow
-# from logic import Logic
+
 from Auth_dialog_window import Auth_Dialog
-from Reg_dialog_window import Reg_Dialog
+
 
 from PyQt6 import QtWidgets
 from PyQt6.QtWidgets import (
@@ -19,19 +19,21 @@ from PyQt6.QtWidgets import (
 class MainWindow(QMainWindow):
     def __init__(self):
         super().__init__()
-
+        self.main_window = Ui_MainWindow()
         self.resize(800, 500)
         self.setWindowTitle("Gnosi")
         self.setupUI()
 
     def setupUI(self):
         ...
-
+    def run(self):
+        ...
 
 
 if __name__ == '__main__':
     app = QtWidgets.QApplication(sys.argv)
-    MainWindow = QtWidgets.QMainWindow()
+    MainWindow = MainWindow()
+    MainWindow.run()
     auth_window = Auth_Dialog()
 
     if auth_window.exec() == 1:
@@ -40,11 +42,12 @@ if __name__ == '__main__':
     if auth_window.auth_success:
         ui = Ui_MainWindow()
         ui.setupUi(MainWindow)
-        ui.LE_profile_name.setText(auth_window.lineE_login.text())
+        print("---------", auth_window.UID)
+        ui.UID = auth_window.UID
+        ui.LE_profile_login.setText(auth_window.lineE_login.text())
         ui.LE_profile_type.setText(auth_window.type_ac)
         ui.LE_profileID.setText(auth_window.UID)
         if auth_window.type_ac != "Преподаватель":
             ui.tab_create_cource.setDisabled(True)
         MainWindow.show()
-
     sys.exit(app.exec())

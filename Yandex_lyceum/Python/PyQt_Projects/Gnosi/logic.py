@@ -5,27 +5,24 @@ import shutil
 import sqlite3
 import datetime
 import json
+import traceback
 
-from readline import get_history_item
-
-from Cryptodome.SelfTest.Cipher.test_OFB import file_name
 from PyQt6.QtWidgets import (QTreeWidget, QTreeWidgetItem,
-                             QInputDialog, QMessageBox, QMenu, QDialog, QFileDialog)
-from lesson_management import Window_lesson_management
+                             QInputDialog, QMessageBox, QMenu, QDialog, QFileDialog, QTableWidget, QTableWidgetItem)
+
 from reference import Reference_Dialog
 from w_create_theory import Window_for_create_theory
-from db_ops import Db
+
 
 DB_NAME = "test_db.sqlite"
 
 
-class Logic:
-    def __init__(self, treeWidget):
-        # super().__init__()
-        self.treeWidget = treeWidget
+class Logic():
+    def __init__(self):
+        super().__init__()
         self.temp_course_name = None
         self.courseID = None
-        os.chdir("Courses")
+
 
     def show_courses_in_courses_tab(self, table):
         con = sqlite3.connect(DB_NAME)
@@ -41,18 +38,58 @@ class Logic:
                 courses inner join users on courses.userid = users.UserID
 
             '''
-        )
+        ).fetchall()
+        con.close()
+
+        table.setRowCount(len(courses_list))
         for index, course in enumerate(courses_list):
             course_name, course_author, course_description, course_created_date = course
-            '''Дописать логику добавление курса в таблицу курсов'''
+            table.setItem(index, 0, QTableWidgetItem(course_name))
+            table.setItem(index, 1, QTableWidgetItem(course_author))
+            table.setItem(index, 2, QTableWidgetItem(course_description))
+            table.setItem(index, 3, QTableWidgetItem(course_created_date))
         ...
 
-    def create_module(self):
-        module_name, ok = QInputDialog.getText(self.treeWidget, "Создать модуль", "Введите название модуля:")
+    def show_courses_in_my_courses_tab(self, uid, table):
+        print(uid)
+        print(os.getcwd())
+        con = sqlite3.connect(DB_NAME)
+        cur = con.cursor()
+
+        courses_list = cur.execute(
+                f'''
+                select 
+                    courses.Title,
+                    users.Name,
+                    courses.Description,
+                    courses.CreatedDate
+                from 
+                    courses inner join users on courses.userid = users.UserID
+                where
+                    courses.userid = {uid}
+                '''
+        ).fetchall()
+
+        table.setRowCount(len(courses_list))
+        for index, course in enumerate(courses_list):
+            course_name, course_author, course_description, course_created_date = course
+            table.setItem(index, 0, QTableWidgetItem(course_name))
+            table.setItem(index, 1, QTableWidgetItem(course_author))
+            table.setItem(index, 2, QTableWidgetItem(course_description))
+            table.setItem(index, 3, QTableWidgetItem(course_created_date))
+
+
+        con.close()
+
+
+
+
+    def create_module(self, tree_widget):
+        module_name, ok = QInputDialog.getText(tree_widget, "Создать модуль", "Введите название модуля:")
         if ok and module_name:
             # Добавляем модуль в QTreeWidget
-            module_item = QTreeWidgetItem(self.treeWidget, [module_name])
-            self.treeWidget.addTopLevelItem(module_item)
+            module_item = QTreeWidgetItem(tree_widget, [module_name])
+            tree_widget.addTopLevelItem(module_item)
             print(os.listdir('.'))
 
             if not self.temp_course_name:
@@ -64,7 +101,6 @@ class Logic:
             os.mkdir(module_name)
 
         # self.courseID = self.generate_courseID()
-
 
 
     def create_lesson(self):
@@ -326,3 +362,40 @@ class Logic:
         self.treeWidget.clear()
         course_name.setPlainText("")
         course_description.setPlainText("")
+
+    def edit_user_name(self, uid,  le_name, new_name):
+        # print("Зашёл в edit_user_name")
+        le_name.setText(new_name)
+        con = sqlite3.connect(DB_NAME)
+        cur = con.cursor()
+        _ = cur.execute(
+            f'''
+            update users
+            set
+                name = "{new_name}"
+            where
+                users.userid = {uid}
+            '''
+        )
+        con.commit()
+        cur.close()
+        self.show_message("Уведомление",
+                          f"Вы успешно изменили имя на {new_name}!",
+                          "Information")
+
+    @staticmethod
+    def show_message(title, text_msg, icon_type="Critical"):
+        # Создаем окно сообщения
+
+        msg = QMessageBox()
+        match icon_type:
+            case "Critical":
+                msg.setIcon(QMessageBox.Icon.Critical)  # Устанавливаем иконку ошибки
+            case "Information":
+                msg.setIcon(QMessageBox.Icon.Information)
+        msg.setText(title)
+        msg.setInformativeText(text_msg)
+        msg.setWindowTitle("Уведомление")
+        msg.setStandardButtons(QMessageBox.StandardButton.Ok)
+        # Показываем окно сообщения
+        msg.exec()
