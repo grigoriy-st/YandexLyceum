@@ -37,10 +37,13 @@ class CourseStructureW(QDialog):
         self.horizontalLayout.addWidget(self.btn_start_course)
         self.verticalLayout.addLayout(self.horizontalLayout)
         self.horizontalLayout_2.addLayout(self.verticalLayout)
-
+        self.btn_start_course.clicked.connect(self.close_window)
 
         self.retranslateUi(Dialog)
         QtCore.QMetaObject.connectSlotsByName(Dialog)
+
+    def close_window(self):
+        self.done(1)
 
     def retranslateUi(self, Dialog):
         _translate = QtCore.QCoreApplication.translate

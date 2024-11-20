@@ -600,7 +600,9 @@ class Ui_MainWindow(object):
         ...
 
     def on_cell_clicked(self, row, col):
-        self.logic.on_cell_clicked(self.TW_all_courses, row, col)
+        return_code = self.logic.on_cell_clicked(self.TW_all_courses, self.TW_my_courses, row, col)
+        if return_code:
+            self.logic.add_course_to_my_courses(self.TW_my_courses, return_code)
 
 
 # if __name__ == "__main__":

@@ -191,9 +191,9 @@ class Logic():
                 item = table.item(row, col)
                 item.setFlags(item.flags() & ~Qt.ItemFlag.ItemIsEditable)
 
-    def on_cell_clicked(self, table,  row, column):
-        course_id = table.item(row, 0).text()
-        course_name = table.item(row, 1).text()
+    def on_cell_clicked(self, tw_all_courses, tw_my_courses, row, column):
+        course_id = tw_all_courses.item(row, 0).text()
+        course_name = tw_all_courses.item(row, 1).text()
 
         self.move_to_gnosi_folder()
         os.chdir(COURSES_DIR)
@@ -202,13 +202,45 @@ class Logic():
             os.chdir(course_name)
             courseStructureW = CourseStructureW()
             self.fill_treeWidget_in_course_structure_w(courseStructureW.TW_course_structure, course_name)
-            # courseStructureW.btn_start_course
-            courseStructureW.exec()
+            return_code = courseStructureW.exec()
+            if return_code == 1:
+                self.show_message("Успешно!",
+                                  f"Курс \"{course_name}\" добавлен во вкладку \"Мои курсы\"",
+                                  "Information")
+                return course_id
         else:
             self.show_message("Ошибка",
                               f"В папке курсов нет курса \"{course_name}\"")
 
         self.move_to_gnosi_folder()
+
+
+    def add_course_to_my_courses(self, tw_my_courses, course_id):
+        self.move_to_gnosi_folder()
+        con = sqlite3.connect(DB_NAME)
+        cur = con.cursor()
+        course_data = cur.execute(
+            f'''
+            select
+                courses.Title, users.Name, courses.Description, courses.CreatedDate
+            from
+                courses inner join users on users.UserID = courses.UserID
+            where
+                courses.CourseID = 123
+            '''
+        ).fetchall()[0]
+        row_quantity = tw_my_courses.rowCount()
+        course_name = course_data[0]
+        course_author = course_data[1]
+        course_description = course_data[2]
+        course_created_date = course_data[3]
+        tw_my_courses.setItem(tw_my_courses, row_quantity, 0, QTableWidgetItem(str(course_id)))
+        tw_my_courses.setItem(tw_my_courses, row_quantity, 0, QTableWidgetItem(course_name))
+        tw_my_courses.setItem(tw_my_courses, row_quantity, 0, QTableWidgetItem(course_author))
+        tw_my_courses.setItem(tw_my_courses, row_quantity, 0, QTableWidgetItem(course_description))
+        tw_my_courses.setItem(tw_my_courses, row_quantity, 0, QTableWidgetItem(course_created_date))
+
+
 
     def show_context_menu(self, tree_widget, pos):
         item = tree_widget.itemAt(pos)
