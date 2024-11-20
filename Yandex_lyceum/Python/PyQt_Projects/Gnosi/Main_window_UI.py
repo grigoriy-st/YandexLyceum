@@ -80,8 +80,6 @@ class Ui_MainWindow(object):
         self.btn_create_course.setText(_translate("MainWindow", "Создать курс"))
         self.label_3.setText(_translate("MainWindow", "Создание курса"))
 
-
-
     def create_tab_widget(self):
         self.tabWidget = QtWidgets.QTabWidget(parent=self.centralwidget)
         self.tabWidget.setLayoutDirection(QtCore.Qt.LayoutDirection.LeftToRight)
@@ -280,10 +278,12 @@ class Ui_MainWindow(object):
         self.TW_all_courses = QtWidgets.QTableWidget(parent=self.tab_home)
         self.TW_all_courses.setMaximumSize(QtCore.QSize(1010, 16777215))
         self.TW_all_courses.setLayoutDirection(QtCore.Qt.LayoutDirection.LeftToRight)
-        self.TW_all_courses.setColumnCount(4)
-        headers = ['Название', 'Автор', 'Описание', 'Опубликован']
+        self.TW_all_courses.setColumnCount(5)
+        headers = ['ID Курса', 'Название', 'Автор', 'Описание', 'Опубликован']
         self.TW_all_courses.setHorizontalHeaderLabels(headers)
-        self.TW_all_courses.horizontalHeader().setDefaultSectionSize(248)
+        self.TW_all_courses.horizontalHeader().setDefaultSectionSize(272)
+        self.TW_all_courses.setColumnWidth(0, 70)
+        self.TW_all_courses.setColumnWidth(4, 110)
         self.TW_all_courses.setObjectName("TW_all_courses")
         self.TW_all_courses.setRowCount(0)
         self.TW_all_courses.cellClicked.connect(self.on_cell_clicked)
@@ -298,9 +298,6 @@ class Ui_MainWindow(object):
         icon1.addPixmap(QtGui.QPixmap("UI/icons/For Left bar/Домой.png"), QtGui.QIcon.Mode.Normal, QtGui.QIcon.State.On)
         self.tabWidget.addTab(self.tab_home, icon1, "")
         self.show_courses_in_courses_tab()
-
-
-
 
     def create_tab_my_courses(self):
 
@@ -329,7 +326,13 @@ class Ui_MainWindow(object):
         self.TW_my_courses.setRowCount(0)
         self.TW_my_courses.horizontalHeader().setVisible(True)
         self.TW_my_courses.horizontalHeader().setDefaultSectionSize(245)
-        headers = ['Название', 'Автор', 'Описание', 'Опубликован']
+
+        headers = ['ID Курса', 'Название', 'Автор', 'Описание', 'Опубликован']
+        self.TW_my_courses.setHorizontalHeaderLabels(headers)
+        self.TW_my_courses.horizontalHeader().setDefaultSectionSize(272)
+        self.TW_my_courses.setColumnWidth(0, 70)
+        self.TW_my_courses.setColumnWidth(4, 110)
+
         self.TW_my_courses.setHorizontalHeaderLabels(headers)
         self.verticalLayout_3.addWidget(self.TW_my_courses)
         self.verticalLayout_2.addLayout(self.verticalLayout_3)
@@ -536,6 +539,7 @@ class Ui_MainWindow(object):
                         QtGui.QIcon.State.On)
         self.tabWidget.addTab(self.tab_my_students, icon4, "")
 
+# Функции для управления содержанием курса в конструкторе
     def create_course(self):
         course_params = {
             'uid': int(self.LE_profileID.text()),

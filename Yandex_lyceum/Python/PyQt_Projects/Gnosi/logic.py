@@ -15,7 +15,8 @@ from w_create_theory import Window_for_create_theory
 from course_structure import CourseStructureW
 
 DB_NAME = "test_db.sqlite"
-
+BASE_DIR = ''
+COURSES_DIR = 'Courses'
 
 class Logic():
     def __init__(self):
@@ -125,7 +126,8 @@ class Logic():
         cur = con.cursor()
         courses_list = cur.execute(
             '''
-            select 
+            select
+                courses.courseid,
                 courses.Title,
                 users.Name,
                 courses.Description,
@@ -136,14 +138,17 @@ class Logic():
             '''
         ).fetchall()
         con.close()
+
         row_quantity = len(courses_list)
         table.setRowCount(row_quantity)
+
         for index, course in enumerate(courses_list):
-            course_name, course_author, course_description, course_created_date = course
-            table.setItem(index, 0, QTableWidgetItem(course_name))
-            table.setItem(index, 1, QTableWidgetItem(course_author))
-            table.setItem(index, 2, QTableWidgetItem(course_description))
-            table.setItem(index, 3, QTableWidgetItem(course_created_date))
+            courseID, course_name, course_author, course_description, course_created_date = course
+            table.setItem(index, 0, QTableWidgetItem(str(courseID)))
+            table.setItem(index, 1, QTableWidgetItem(course_name))
+            table.setItem(index, 2, QTableWidgetItem(course_author))
+            table.setItem(index, 3, QTableWidgetItem(course_description))
+            table.setItem(index, 4, QTableWidgetItem(course_created_date))
 
         self.protect_table_from_changes(table, row_quantity)
 
@@ -180,10 +185,30 @@ class Logic():
 
     def protect_table_from_changes(self, table, row_quantity):
         '''Убирает возможность редактирования ячеек таблиц'''
+
         for row in range(row_quantity):
-            for col in range(4):
+            for col in range(5):
                 item = table.item(row, col)
                 item.setFlags(item.flags() & ~Qt.ItemFlag.ItemIsEditable)
+
+    def on_cell_clicked(self, table,  row, column):
+        course_id = table.item(row, 0).text()
+        course_name = table.item(row, 1).text()
+
+        self.move_to_gnosi_folder()
+        os.chdir(COURSES_DIR)
+
+        if course_name in os.listdir('.'):
+            os.chdir(course_name)
+            courseStructureW = CourseStructureW()
+            self.fill_treeWidget_in_course_structure_w(courseStructureW.TW_course_structure, course_name)
+            # courseStructureW.btn_start_course
+            courseStructureW.exec()
+        else:
+            self.show_message("Ошибка",
+                              f"В папке курсов нет курса \"{course_name}\"")
+
+        self.move_to_gnosi_folder()
 
     def show_context_menu(self, tree_widget, pos):
         item = tree_widget.itemAt(pos)
@@ -308,36 +333,67 @@ class Logic():
 
         os.rename(self.temp_course_name, title)
         self.temp_course_name = title
-        self.export_to_json(tree_widget)
+        self.save_tree_to_json(tree_widget, self.temp_course_name)
 
-    def export_to_json(self, tree_widget):
-        course_name = self.temp_course_name
-        data = self.tree_to_dict(tree_widget.invisibleRootItem())
-        json_data = json.dumps(data, indent=4)
-        os.chdir(course_name)
+# Преобразования с JSON
+    def tree_to_dict(self, tree_widget):
+        """Преобразует QTreeWidget в словарь."""
+        tree_dict = {}
 
-        with open(f"{course_name}.json", "w", encoding="utf-8") as json_file:
-            json_file.write(json_data)
+        for index in range(tree_widget.topLevelItemCount()):
+            item = tree_widget.topLevelItem(index)
+            tree_dict[item.text(0)] = self.item_to_dict(item)
 
+        return tree_dict
 
-    def tree_to_dict(self, item):
-        result = {"name": item.text(0), "children": []}
+    def item_to_dict(self, item):
+        """Рекурсивно преобразует элемент QTreeWidgetItem в словарь"""
+        item_dict = {}
+
         for index in range(item.childCount()):
             child_item = item.child(index)
-            result["children"].append(self.tree_to_dict(child_item))
+            item_dict[child_item.text(0)] = self.item_to_dict(child_item)
 
-        return result
+        return item_dict
 
-    def on_cell_clicked(self, table,  row, column):
-        course_name = table.item(row, 0).text()
-        course_author = table.item(row, 1).text()
-        course_date = table.item(row, 2).text()
-        courseStructureW = CourseStructureW()
-        self.fill_treeWidget_in_courseStructureW(courseStructureW.TW_course_structure)
-        courseStructureW.exec()
+    def save_tree_to_json(self, tree_widget, course_name):
+        """Сохраняет данные QTreeWidget в json-файл"""
+        tree_data = self.tree_to_dict(tree_widget)
+        self.move_to_gnosi_folder()
+        os.chdir(COURSES_DIR)
+        os.chdir(course_name)
+        with open(f'{course_name}.json', 'w') as json_file:
+            json.dump(tree_data, json_file, indent=4)
 
-    def fill_treeWidget_in_courseStructureW(self, tree_widget):
-        ...
+
+
+
+    def fill_treeWidget_in_course_structure_w(self, tree_widget, course_name):
+        json_file_name = course_name + '.json'
+        self.load_json_to_tree_widget(tree_widget, json_file_name)
+
+    def load_json_to_tree_widget(self, tree_widget, json_file):
+        """Загружает данные из JSON-файла в QTreeWidget"""
+
+        with open(json_file, 'r', encoding='utf-8') as file:
+            data = json.load(file)
+            # Стек для хранения элементов
+            stack = [(tree_widget.invisibleRootItem(), data)]
+            while stack:
+                parent, current_data = stack.pop()
+                if isinstance(current_data, dict):
+                    for key, value in current_data.items():
+                        item = QTreeWidgetItem(parent, [key])
+                        stack.append((item, value))  # Добавляем новый элемент и его данные в стек
+                elif isinstance(current_data, list):
+                    for index, value in enumerate(current_data):
+                        item = QTreeWidgetItem(parent, [f"Item {index}"])
+                        stack.append((item, value))  # Добавляем новый элемент и его данные в стек
+                else:
+                    # Если это не dict и не list, добавляем значение как текст
+                    QTreeWidgetItem(parent, [str(current_data)])
+
+
 
     def generate_courseID(self) -> int:
         # генерация courseID
