@@ -35,18 +35,20 @@ if __name__ == '__main__':
     MainWindow = MainWindow()
     MainWindow.run()
     auth_window = Auth_Dialog()
-
-    if auth_window.exec() == 1:
-        print("hello")
+    auth_window.exec()
 
     if auth_window.auth_success:
         ui = Ui_MainWindow()
         ui.setupUi(MainWindow)
-        print("---------", auth_window.UID)
+
+        # Заполнение информации о вошедшем пользователе
         ui.UID = auth_window.UID
         ui.LE_profile_login.setText(auth_window.lineE_login.text())
         ui.LE_profile_type.setText(auth_window.type_ac)
         ui.LE_profileID.setText(auth_window.UID)
+        ui.LE_name.setText(auth_window.name)
+
+        # блокировка функции созданию курсов для студентов
         if auth_window.type_ac != "Преподаватель":
             ui.tab_create_cource.setDisabled(True)
         MainWindow.show()

@@ -177,11 +177,10 @@ class Auth_Dialog(QDialog):
                             users.login = "{login}" and users.password = "{password}"
                     ''').fetchall())[0]
         con.close()
-        print(users_data)
-        if login == users_data[2] and password == users_data[3]:
-            print("In to UID", str(users_data[0]))
-            self.UID = str(users_data[0])
 
+        if login == users_data[2] and password == users_data[3]:
+
+            self.UID = str(users_data[0])
             self.name = str(users_data[1])
             self.auth_success = True
             super().accept()

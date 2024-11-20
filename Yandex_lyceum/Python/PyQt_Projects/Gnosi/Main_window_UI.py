@@ -121,7 +121,9 @@ class Ui_MainWindow(object):
 
         self.label_12 = QtWidgets.QLabel(parent=self.tab_image_account)
         self.label_12.setAlignment(
-            QtCore.Qt.AlignmentFlag.AlignRight | QtCore.Qt.AlignmentFlag.AlignTrailing | QtCore.Qt.AlignmentFlag.AlignVCenter)
+            QtCore.Qt.AlignmentFlag.AlignRight |
+            QtCore.Qt.AlignmentFlag.AlignTrailing |
+            QtCore.Qt.AlignmentFlag.AlignVCenter)
         self.label_12.setObjectName("label_12")
         self.horizontalLayout_10.addWidget(self.label_12)
         self.LE_name = QtWidgets.QLineEdit(parent=self.tab_image_account)
@@ -139,7 +141,13 @@ class Ui_MainWindow(object):
 
         self.horizontalLayout_10.addWidget(self.LE_name)
         self.btn_change_name = QtWidgets.QPushButton(parent=self.tab_image_account)
+        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Policy.Maximum, QtWidgets.QSizePolicy.Policy.Fixed)
+        sizePolicy.setHorizontalStretch(0)
+        sizePolicy.setVerticalStretch(0)
+        sizePolicy.setHeightForWidth(self.btn_change_name.sizePolicy().hasHeightForWidth())
+        self.btn_change_name.setSizePolicy(sizePolicy)
         self.btn_change_name.setObjectName("btn_change_name")
+        self.btn_change_name.setText("Изменить имя")
         self.horizontalLayout_10.addWidget(self.btn_change_name)
         self.btn_change_name.clicked.connect(self.edit_user_name)
 
@@ -149,7 +157,9 @@ class Ui_MainWindow(object):
         self.horizontalLayout_7.setObjectName("horizontalLayout_7")
         self.label_8 = QtWidgets.QLabel(parent=self.tab_image_account)
         self.label_8.setAlignment(
-            QtCore.Qt.AlignmentFlag.AlignRight | QtCore.Qt.AlignmentFlag.AlignTrailing | QtCore.Qt.AlignmentFlag.AlignVCenter)
+            QtCore.Qt.AlignmentFlag.AlignRight |
+            QtCore.Qt.AlignmentFlag.AlignTrailing |
+            QtCore.Qt.AlignmentFlag.AlignVCenter)
         self.label_8.setObjectName("label_8")
         self.horizontalLayout_7.addWidget(self.label_8)
         self.LE_profile_login = QtWidgets.QLineEdit(parent=self.tab_image_account)
@@ -173,7 +183,9 @@ class Ui_MainWindow(object):
         self.horizontalLayout_4.setObjectName("horizontalLayout_4")
         self.label_9 = QtWidgets.QLabel(parent=self.tab_image_account)
         self.label_9.setAlignment(
-            QtCore.Qt.AlignmentFlag.AlignRight | QtCore.Qt.AlignmentFlag.AlignTrailing | QtCore.Qt.AlignmentFlag.AlignVCenter)
+            QtCore.Qt.AlignmentFlag.AlignRight |
+            QtCore.Qt.AlignmentFlag.AlignTrailing |
+            QtCore.Qt.AlignmentFlag.AlignVCenter)
         self.label_9.setObjectName("label_9")
         self.horizontalLayout_4.addWidget(self.label_9)
 
@@ -200,7 +212,9 @@ class Ui_MainWindow(object):
         sizePolicy.setHeightForWidth(self.label_11.sizePolicy().hasHeightForWidth())
         self.label_11.setSizePolicy(sizePolicy)
         self.label_11.setAlignment(
-            QtCore.Qt.AlignmentFlag.AlignRight | QtCore.Qt.AlignmentFlag.AlignTrailing | QtCore.Qt.AlignmentFlag.AlignVCenter)
+            QtCore.Qt.AlignmentFlag.AlignRight |
+            QtCore.Qt.AlignmentFlag.AlignTrailing |
+            QtCore.Qt.AlignmentFlag.AlignVCenter)
         self.label_11.setObjectName("label_11")
         self.horizontalLayout_9.addWidget(self.label_11)
         self.LE_profileID = QtWidgets.QLineEdit(parent=self.tab_image_account)
@@ -225,11 +239,6 @@ class Ui_MainWindow(object):
                        QtGui.QIcon.State.On)
 
         self.tabWidget.addTab(self.tab_image_account, icon, "")
-
-
-
-
-
 
     def create_tab_home(self):
         print(self.UID)
@@ -274,9 +283,10 @@ class Ui_MainWindow(object):
         self.TW_all_courses.setColumnCount(4)
         headers = ['Название', 'Автор', 'Описание', 'Опубликован']
         self.TW_all_courses.setHorizontalHeaderLabels(headers)
+        self.TW_all_courses.horizontalHeader().setDefaultSectionSize(248)
         self.TW_all_courses.setObjectName("TW_all_courses")
         self.TW_all_courses.setRowCount(0)
-        self.TW_all_courses.horizontalHeader().setDefaultSectionSize(252)
+        self.TW_all_courses.cellClicked.connect(self.on_cell_clicked)
 
         self.horizontalLayout_6.addWidget(self.TW_all_courses)
         self.verticalLayout.addLayout(self.horizontalLayout_6)
@@ -289,15 +299,8 @@ class Ui_MainWindow(object):
         self.tabWidget.addTab(self.tab_home, icon1, "")
         self.show_courses_in_courses_tab()
 
-    def edit_user_name(self):
-        print("&" * 10)
-        new_name = self.LE_name.text()
-        uid = self.UID
-        if uid and new_name:
-            self.logic.edit_user_name(uid, self.LE_name, new_name)
 
-    def printik(self):
-        print("Эта ебана кнопка работает")
+
 
     def create_tab_my_courses(self):
 
@@ -321,6 +324,7 @@ class Ui_MainWindow(object):
         self.verticalLayout_3.setObjectName("verticalLayout_3")
         self.TW_my_courses = QtWidgets.QTableWidget(parent=self.tab_my_courses)
         self.TW_my_courses.setColumnCount(4)
+        self.TW_my_courses.setMaximumSize(QtCore.QSize(1010, 16777215))
         self.TW_my_courses.setObjectName("TW_my_courses")
         self.TW_my_courses.setRowCount(0)
         self.TW_my_courses.horizontalHeader().setVisible(True)
@@ -532,8 +536,6 @@ class Ui_MainWindow(object):
                         QtGui.QIcon.State.On)
         self.tabWidget.addTab(self.tab_my_students, icon4, "")
 
-
-
     def create_course(self):
         course_params = {
             'uid': int(self.LE_profileID.text()),
@@ -542,20 +544,20 @@ class Ui_MainWindow(object):
             'complexity': self.cB_choose_complexity.currentText(),
         }
 
-        self.logic.create_course(course_params)
+        self.logic.create_course(self.treeWidget, course_params)
         self.clearing_the_course_creation_window()
 
     def create_module(self):
         self.logic.create_module(self.treeWidget)
 
     def create_lesson(self):
-        self.logic.create_lesson()
+        self.logic.create_lesson(self.treeWidget)
 
     def move_up(self):
-        self.logic.move_up()
+        self.logic.move_up(self.treeWidget)
 
     def move_down(self):
-        self.logic.move_down()
+        self.logic.move_down(self.treeWidget)
 
     def show_reference(self):
         self.logic.show_reference()
@@ -570,15 +572,31 @@ class Ui_MainWindow(object):
             self.logic.show_courses_in_my_courses_tab(uid, self.TW_my_courses)
 
     def show_context_menu(self, item):
-        self.logic.show_context_menu(item)
+        self.logic.show_context_menu(self.treeWidget, item)
 
     def clearing_the_course_creation_window(self):
-        self.logic.clearing_the_course_creation_window(self.PTE_course_name, self.PTE_description_course)
+        self.logic.clearing_the_course_creation_window(self.treeWidget,
+                                                       self.PTE_course_name,
+                                                       self.PTE_description_course)
 
+    def edit_user_name(self):
+        new_name = self.LE_name.text()
+        uid = self.UID
+        if uid and new_name:
+            self.logic.edit_user_name(uid, self.LE_name, new_name)
+        self.logic.show_courses_in_courses_tab(self.TW_all_courses) # обновление записей в таблице, т.к. измененно имя
 
-    # def fill_profile_data(self):
-    #     self.logic.
+    def course_filter(self):
+        '''Фильтрация курсов в таблице TW_all_courses'''
+        ...
 
+    def search_for_course(self):
+        '''Функция поиска нужных курсов по названию'''
+        data_in_search_bar = self.LE_search_string.text()
+        ...
+
+    def on_cell_clicked(self, row, col):
+        self.logic.on_cell_clicked(self.TW_all_courses, row, col)
 
 
 # if __name__ == "__main__":
