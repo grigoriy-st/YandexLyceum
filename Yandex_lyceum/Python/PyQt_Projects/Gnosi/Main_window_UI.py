@@ -1,10 +1,8 @@
 # Main_Window_UI.py
-from PyQt5.QtWidgets import QShortcut
-from PyQt6 import QtCore, QtGui, QtWidgets
 
-from PyQt6.QtWidgets import QInputDialog, QTreeWidgetItem, QMessageBox, QWidget
+from PyQt6 import QtCore, QtGui, QtWidgets
 from PyQt6.QtCore import Qt
-from PyQt6.QtGui import QKeySequence
+
 from logic import Logic
 
 
@@ -26,11 +24,9 @@ class Ui_MainWindow(object):
 
         self.create_tab_widget()
         self.create_tab_profile_info()
-        self.create_tab_home()
+        self.create_tab_course_catalog()
         self.create_tab_my_courses()
         self.create_tab_for_create_courses()
-        self.create_tab_management_account()
-
 
         self.horizontalLayout_5.addWidget(self.tabWidget)
         MainWindow.setCentralWidget(self.centralwidget)
@@ -57,32 +53,43 @@ class Ui_MainWindow(object):
         self.label_12.setText(_translate("MainWindow", "Имя:"))
 
         self.label.setText(_translate("MainWindow", "Курсы"))
-        self.CB_change_filter.setItemText(0, _translate("MainWindow", "По умолчанию"))
-        self.CB_change_filter.setItemText(1, _translate("MainWindow", "Новые"))
-        self.CB_change_filter.setItemText(2, _translate("MainWindow", "Старые"))
+        self.CB_change_filter.setItemText(
+            0, _translate("MainWindow", "По умолчанию"))
+        self.CB_change_filter.setItemText(1,
+                                          _translate("MainWindow", "Новые"))
+        self.CB_change_filter.setItemText(2,
+                                          _translate("MainWindow", "Старые"))
         self.btn_search_courses.setText(_translate("MainWindow", "Поиск"))
         self.btn_search_courses.setShortcut(_translate("MainWindow", "Return"))
         self.label_2.setText(_translate("MainWindow", "Мои курсы"))
         self.label_4.setText(_translate("MainWindow", "Программма курса"))
-        self.treeWidget.headerItem().setText(0, _translate("MainWindow", "Обзор"))
+        self.treeWidget.headerItem().setText(
+            0, _translate("MainWindow", "Обзор"))
         __sortingEnabled = self.treeWidget.isSortingEnabled()
         self.treeWidget.setSortingEnabled(False)
 
-
         self.treeWidget.setSortingEnabled(__sortingEnabled)
-        self.btn_create_module.setText(_translate("MainWindow", "Создать модуль"))
-        self.btn_create_lesson.setText(_translate("MainWindow", "Создать урок"))
-        self.btn_move_up.setText(_translate("MainWindow", "Переместить выше"))
-        self.pbt_move_down.setText(_translate("MainWindow", "Переместить ниже"))
+        self.btn_create_module.setText(
+            _translate("MainWindow", "Создать модуль"))
+        self.btn_create_lesson.setText(
+            _translate("MainWindow", "Создать урок"))
+        self.btn_move_up.setText(
+            _translate("MainWindow", "Переместить выше"))
+        self.pbt_move_down.setText(
+            _translate("MainWindow", "Переместить ниже"))
         self.pbt_reference.setText(_translate("MainWindow", "Справка"))
         self.label_5.setText(_translate("MainWindow", "Название курса"))
         self.label_6.setText(_translate("MainWindow", "Описание"))
-        self.btn_create_course.setText(_translate("MainWindow", "Создать курс"))
+        self.btn_create_course.setText(
+            _translate("MainWindow", "Создать курс"))
         self.label_3.setText(_translate("MainWindow", "Создание курса"))
 
     def create_tab_widget(self):
+        """ Создание виджета QTabWidget"""
+        
         self.tabWidget = QtWidgets.QTabWidget(parent=self.centralwidget)
-        self.tabWidget.setLayoutDirection(QtCore.Qt.LayoutDirection.LeftToRight)
+        self.tabWidget.setLayoutDirection(
+            QtCore.Qt.LayoutDirection.LeftToRight)
         self.tabWidget.setStyleSheet("")
         self.tabWidget.setTabPosition(QtWidgets.QTabWidget.TabPosition.West)
         self.tabWidget.setTabShape(QtWidgets.QTabWidget.TabShape.Rounded)
@@ -90,9 +97,13 @@ class Ui_MainWindow(object):
         self.tabWidget.setElideMode(QtCore.Qt.TextElideMode.ElideNone)
         self.tabWidget.setObjectName("tabWidget")
 
+# Созданиe вкладок для tab_widget
     def create_tab_profile_info(self):
+        """ Создание вкладки "Мой профиль" в QTabWidget"""
+        
         self.tab_image_account = QtWidgets.QWidget()
-        self.tab_image_account.setLayoutDirection(QtCore.Qt.LayoutDirection.LeftToRight)
+        self.tab_image_account.setLayoutDirection(
+            QtCore.Qt.LayoutDirection.LeftToRight)
         self.tab_image_account.setAutoFillBackground(False)
         self.tab_image_account.setStyleSheet("")
         self.tab_image_account.setObjectName("tab_image_account")
@@ -126,10 +137,14 @@ class Ui_MainWindow(object):
         self.horizontalLayout_10.addWidget(self.label_12)
         self.LE_name = QtWidgets.QLineEdit(parent=self.tab_image_account)
 
-        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Policy.Minimum, QtWidgets.QSizePolicy.Policy.Fixed)
+        sizePolicy = QtWidgets.QSizePolicy(
+            QtWidgets.QSizePolicy.Policy.Minimum,
+            QtWidgets.QSizePolicy.Policy.Fixed
+        )
         sizePolicy.setHorizontalStretch(0)
         sizePolicy.setVerticalStretch(0)
-        sizePolicy.setHeightForWidth(self.LE_name.sizePolicy().hasHeightForWidth())
+        sizePolicy.setHeightForWidth(
+            self.LE_name.sizePolicy().hasHeightForWidth())
 
         self.LE_name.setSizePolicy(sizePolicy)
         self.LE_name.setMinimumSize(QtCore.QSize(200, 0))
@@ -138,11 +153,15 @@ class Ui_MainWindow(object):
         self.LE_name.setObjectName("LE_name")
 
         self.horizontalLayout_10.addWidget(self.LE_name)
-        self.btn_change_name = QtWidgets.QPushButton(parent=self.tab_image_account)
-        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Policy.Maximum, QtWidgets.QSizePolicy.Policy.Fixed)
+        self.btn_change_name = (
+            QtWidgets.QPushButton(parent=self.tab_image_account))
+        sizePolicy = QtWidgets.QSizePolicy(
+            QtWidgets.QSizePolicy.Policy.Maximum,
+            QtWidgets.QSizePolicy.Policy.Fixed)
         sizePolicy.setHorizontalStretch(0)
         sizePolicy.setVerticalStretch(0)
-        sizePolicy.setHeightForWidth(self.btn_change_name.sizePolicy().hasHeightForWidth())
+        sizePolicy.setHeightForWidth(
+            self.btn_change_name.sizePolicy().hasHeightForWidth())
         self.btn_change_name.setSizePolicy(sizePolicy)
         self.btn_change_name.setObjectName("btn_change_name")
         self.btn_change_name.setText("Изменить имя")
@@ -151,7 +170,8 @@ class Ui_MainWindow(object):
 
         self.verticalLayout_9.addLayout(self.horizontalLayout_10)
         self.horizontalLayout_7 = QtWidgets.QHBoxLayout()
-        self.horizontalLayout_7.setSizeConstraint(QtWidgets.QLayout.SizeConstraint.SetDefaultConstraint)
+        self.horizontalLayout_7.setSizeConstraint(
+            QtWidgets.QLayout.SizeConstraint.SetDefaultConstraint)
         self.horizontalLayout_7.setObjectName("horizontalLayout_7")
         self.label_8 = QtWidgets.QLabel(parent=self.tab_image_account)
         self.label_8.setAlignment(
@@ -161,7 +181,9 @@ class Ui_MainWindow(object):
         self.label_8.setObjectName("label_8")
         self.horizontalLayout_7.addWidget(self.label_8)
         self.LE_profile_login = QtWidgets.QLineEdit(parent=self.tab_image_account)
-        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Policy.Minimum, QtWidgets.QSizePolicy.Policy.Fixed)
+        sizePolicy = QtWidgets.QSizePolicy(
+            QtWidgets.QSizePolicy.Policy.Minimum,
+            QtWidgets.QSizePolicy.Policy.Fixed)
         sizePolicy.setHorizontalStretch(0)
         sizePolicy.setVerticalStretch(0)
         sizePolicy.setHeightForWidth(self.LE_profile_login.sizePolicy().hasHeightForWidth())
@@ -176,7 +198,8 @@ class Ui_MainWindow(object):
         self.horizontalLayout_7.addWidget(self.LE_profile_login)
         self.verticalLayout_9.addLayout(self.horizontalLayout_7)
         self.horizontalLayout_4 = QtWidgets.QHBoxLayout()
-        self.horizontalLayout_4.setSizeConstraint(QtWidgets.QLayout.SizeConstraint.SetDefaultConstraint)
+        self.horizontalLayout_4.setSizeConstraint(
+            QtWidgets.QLayout.SizeConstraint.SetDefaultConstraint)
         self.horizontalLayout_4.setContentsMargins(-1, 0, -1, -1)
         self.horizontalLayout_4.setObjectName("horizontalLayout_4")
         self.label_9 = QtWidgets.QLabel(parent=self.tab_image_account)
@@ -188,7 +211,9 @@ class Ui_MainWindow(object):
         self.horizontalLayout_4.addWidget(self.label_9)
 
         self.LE_profile_type = QtWidgets.QLineEdit(parent=self.tab_image_account)
-        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Policy.Minimum, QtWidgets.QSizePolicy.Policy.Fixed)
+        sizePolicy = QtWidgets.QSizePolicy(
+            QtWidgets.QSizePolicy.Policy.Minimum,
+            QtWidgets.QSizePolicy.Policy.Fixed)
         sizePolicy.setHorizontalStretch(0)
         sizePolicy.setVerticalStretch(0)
         sizePolicy.setHeightForWidth(self.LE_profile_type.sizePolicy().hasHeightForWidth())
@@ -238,7 +263,9 @@ class Ui_MainWindow(object):
 
         self.tabWidget.addTab(self.tab_image_account, icon, "")
 
-    def create_tab_home(self):
+    def create_tab_course_catalog(self):
+        """ Создание вкладки "Курсы" в QTabWidget"""
+        
         print(self.UID)
         self.tab_home = QtWidgets.QWidget()
         self.tab_home.setObjectName("tab_home")
@@ -300,6 +327,7 @@ class Ui_MainWindow(object):
         self.show_courses_in_courses_tab()
 
     def create_tab_my_courses(self):
+        """ Создание вкладки "Мои курсы" в QTabWidget"""
 
         self.tab_my_courses = QtWidgets.QWidget()
         self.tab_my_courses.setObjectName("tab_my_courses")
@@ -346,6 +374,8 @@ class Ui_MainWindow(object):
         self.tabWidget.addTab(self.tab_my_courses, icon2, "")
 
     def create_tab_for_create_courses(self):
+        """ Создание вкладки "Создание курсов" в QTabWidget"""
+
         self.tab_create_cource = QtWidgets.QWidget()
         self.tab_create_cource.setObjectName("tab_create_cource")
         self.verticalLayout_6 = QtWidgets.QVBoxLayout(self.tab_create_cource)
@@ -531,16 +561,11 @@ class Ui_MainWindow(object):
                         QtGui.QIcon.State.On)
         self.tabWidget.addTab(self.tab_create_cource, icon3, "")
 
-    def create_tab_management_account(self):
-        self.tab_my_students = QtWidgets.QWidget()
-        self.tab_my_students.setObjectName("tab_my_students")
-        icon4 = QtGui.QIcon()
-        icon4.addPixmap(QtGui.QPixmap("UI/icons/For Left bar/Учетные записи.png"), QtGui.QIcon.Mode.Normal,
-                        QtGui.QIcon.State.On)
-        self.tabWidget.addTab(self.tab_my_students, icon4, "")
 
 # Функции для управления содержанием курса в конструкторе
     def create_course(self):
+        """ Создание курса. """
+
         course_params = {
             'uid': int(self.LE_profileID.text()),
             'course_name': self.PTE_course_name.toPlainText(),
@@ -552,38 +577,57 @@ class Ui_MainWindow(object):
         self.clearing_the_course_creation_window()
 
     def create_module(self):
+        """ Создание модуля. """
         self.logic.create_module(self.treeWidget)
 
     def create_lesson(self):
+        """ Создание урока. """
         self.logic.create_lesson(self.treeWidget)
 
     def move_up(self):
+        """ Перемещения элемента выше по иерархии. """
         self.logic.move_up(self.treeWidget)
 
     def move_down(self):
+        """ Перемещения элемента ниже по иерархии. """
         self.logic.move_down(self.treeWidget)
 
+    def show_context_menu(self, item):
+        """ Отображение контекстного меню в QTreeWidget. """
+        self.logic.show_context_menu(self.treeWidget, item)
+
     def show_reference(self):
+        """ Отображение справки по конструктору. """
         self.logic.show_reference()
 
+# Управление таблицами
     def show_courses_in_courses_tab(self):
+        """ Отображение курсов во вкладке "Курсы". """
         self.logic.show_courses_in_courses_tab(self.TW_all_courses)
 
     def show_courses_in_my_courses_tab(self):
-        print("Зашёл в show_courses_in_my_courses_tab")
+        """ Отображение курсов во вкладке "Мои курсы". """
+        
         uid = self.UID
         if uid:
             self.logic.show_courses_in_my_courses_tab(uid, self.TW_my_courses)
 
-    def show_context_menu(self, item):
-        self.logic.show_context_menu(self.treeWidget, item)
-
     def clearing_the_course_creation_window(self):
+        """ Очистка всех полей во вкладке "Создание курсов". """
+        
         self.logic.clearing_the_course_creation_window(self.treeWidget,
                                                        self.PTE_course_name,
                                                        self.PTE_description_course)
 
+    def on_cell_clicked(self, row, col):
+        """ Действие при нажатии на ячейку таблицы. """
+        # на доработке
+        return_code = self.logic.on_cell_clicked(self.TW_all_courses, self.TW_my_courses, row, col)
+        if return_code:
+            self.logic.add_course_to_my_courses(self.TW_my_courses, return_code)
+
     def edit_user_name(self):
+        """ Изменение имени пользователя. """
         new_name = self.LE_name.text()
         uid = self.UID
         if uid and new_name:
@@ -591,18 +635,16 @@ class Ui_MainWindow(object):
         self.logic.show_courses_in_courses_tab(self.TW_all_courses) # обновление записей в таблице, т.к. измененно имя
 
     def course_filter(self):
-        '''Фильтрация курсов в таблице TW_all_courses'''
+        """ Фильтрация курсов в таблице TW_all_courses. """
         ...
 
     def search_for_course(self):
-        '''Функция поиска нужных курсов по названию'''
+        """ Функция поиска нужных курсов по названию. """
+        # на доработке
         data_in_search_bar = self.LE_search_string.text()
         ...
 
-    def on_cell_clicked(self, row, col):
-        return_code = self.logic.on_cell_clicked(self.TW_all_courses, self.TW_my_courses, row, col)
-        if return_code:
-            self.logic.add_course_to_my_courses(self.TW_my_courses, return_code)
+
 
 
 # if __name__ == "__main__":

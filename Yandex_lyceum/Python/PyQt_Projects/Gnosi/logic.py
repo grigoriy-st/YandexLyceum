@@ -1,14 +1,17 @@
 # logic.py
+
 import os
 import random
 import shutil
 import sqlite3
 import datetime
 import json
-import traceback
+
 
 from PyQt6.QtWidgets import (QTreeWidget, QTreeWidgetItem,
-                             QInputDialog, QMessageBox, QMenu, QDialog, QFileDialog, QTableWidget, QTableWidgetItem)
+                             QInputDialog, QMessageBox, QMenu,
+                             QDialog, QFileDialog, QTableWidget,
+                             QTableWidgetItem)
 from PyQt6.QtCore import Qt
 from reference import Reference_Dialog
 from w_create_theory import Window_for_create_theory
@@ -18,13 +21,14 @@ DB_NAME = "test_db.sqlite"
 BASE_DIR = ''
 COURSES_DIR = 'Courses'
 
-class Logic():
+class Logic:
     def __init__(self):
         super().__init__()
         self.temp_course_name = None    # переменная хранения временного имени курса
         self.courseID = None
 
     def create_module(self, tree_widget):
+        """ Создание модуля. """
         module_name, ok = QInputDialog.getText(tree_widget, "Создать модуль", "Введите название модуля:")
         if ok and module_name:
             # Добавляем модуль в QTreeWidget
@@ -40,17 +44,20 @@ class Logic():
                 os.chdir(self.temp_course_name)
             os.mkdir(module_name)
 
-        # self.courseID = self.generate_courseID()
+        # self.courseID = self.generate_course_id()
 
-    def create_lesson(self, treeWidget):
-        selected_items = treeWidget.selectedItems()
+    @staticmethod
+    def create_lesson(tree_widget):
+        """ Создание урока. """
+
+        selected_items = tree_widget.selectedItems()
         print("Ты вместе с: ", '  '.join(os.listdir('.')))
         if not selected_items:
             # Если модуль не выбран, показываем сообщение об ошибке
-            QMessageBox.warning(treeWidget, "Ошибка", "Сначала выберите модуль, чтобы создать урок.")
+            QMessageBox.warning(tree_widget, "Ошибка", "Сначала выберите модуль, чтобы создать урок.")
             return
 
-        lesson_name, ok = QInputDialog.getText(treeWidget, "Создать урок", "Введите название урока:")
+        lesson_name, ok = QInputDialog.getText(tree_widget, "Создать урок", "Введите название урока:")
         if ok and lesson_name:
             # Получаем выбранный модуль
             module_item = selected_items[0]
@@ -64,49 +71,60 @@ class Logic():
             os.mkdir(lesson_name)
             os.chdir('..')
 
-    def move_up(self, treeWidget):
-        selected_item = treeWidget.currentItem()
+    @staticmethod
+    def move_up(tree_widget):
+        """ Перемещение элемента QTreeWidget выше по иерархии. """
+
+        selected_item = tree_widget.currentItem()
         if selected_item is None:
-            QMessageBox.warning(treeWidget, "Ошибка", "Пожалуйста, выберите объект для перемещения")
+            QMessageBox.warning(tree_widget, "Ошибка", "Пожалуйста, выберите объект для перемещения")
             return
 
         parent_item = selected_item.parent()
         if parent_item is None:
-            index = treeWidget.indexOfTopLevelItem(selected_item)
+            index = tree_widget.indexOfTopLevelItem(selected_item)
             if index > 0:
-                treeWidget.insertTopLevelItem(index - 1, treeWidget.takeTopLevelItem(index))
-                treeWidget.setCurrentItem(selected_item)
+                tree_widget.insertTopLevelItem(index - 1, tree_widget.takeTopLevelItem(index))
+                tree_widget.setCurrentItem(selected_item)
         else:
             index = parent_item.indexOfChild(selected_item)
             if index > 0:
                 parent_item.insertChild(index - 1, parent_item.takeChild(index))
-                treeWidget.setCurrentItem(selected_item)
+                tree_widget.setCurrentItem(selected_item)
 
-    def move_down(self, treeWidget):
-        selected_item = treeWidget.currentItem()
+    @staticmethod
+    def move_down(tree_widget):
+        """ Перемещение элемента QTreeWidget ниже по иерархии. """
+
+        selected_item = tree_widget.currentItem()
         if selected_item is None:
-            QMessageBox.warning(treeWidget, "Warning", "Please select an item to move.")
+            QMessageBox.warning(tree_widget, "Warning", "Please select an item to move.")
             return
 
         parent_item = selected_item.parent()
         if parent_item is None:
-            index = treeWidget.indexOfTopLevelItem(selected_item)
-            if index < treeWidget.topLevelItemCount() - 1:
-                treeWidget.insertTopLevelItem(index + 1, treeWidget.takeTopLevelItem(index))
-                treeWidget.setCurrentItem(selected_item)
+            index = tree_widget.indexOfTopLevelItem(selected_item)
+            if index < tree_widget.topLevelItemCount() - 1:
+                tree_widget.insertTopLevelItem(index + 1, tree_widget.takeTopLevelItem(index))
+                tree_widget.setCurrentItem(selected_item)
         else:
             index = parent_item.indexOfChild(selected_item)
             if index < parent_item.childCount() - 1:
                 parent_item.insertChild(index + 1, parent_item.takeChild(index))
-                treeWidget.setCurrentItem(selected_item)
+                tree_widget.setCurrentItem(selected_item)
 
-    def rename_item(self, item):
+    @staticmethod
+    def rename_item(item):
+        """ Переименование элемента в QTreeWidget. """
+
         new_name, ok = QInputDialog.getText(None, 'Переименовать', 'Введите новое имя:', text=item.text(0))
         if ok and new_name:
             item.setText(0, new_name)
 
-    def delete_item(self, item):
-        """Удаление элемента из QTreeWidget и из папки с курсом"""
+    @staticmethod
+    def delete_item(item):
+        """ Удаление элемента из QTreeWidget и из папки с курсом. """
+
         reply = QMessageBox.question(None, 'Удалить элемент', 'Вы уверены, что хотите удалить этот элемент?',
                                      QMessageBox.StandardButton.Yes |
                                      QMessageBox.StandardButton.No, QMessageBox.StandardButton.No)
@@ -117,11 +135,16 @@ class Logic():
             else:
                 item.parent().removeChild(item)
 
-    def show_reference(self):
+    @staticmethod
+    def show_reference():
+        """ Отображение справки по конструктору. """
+
         w_ref = Reference_Dialog()
         w_ref.exec()
 
     def show_courses_in_courses_tab(self, table):
+        """ Отображение курсов во вкладке "Курсы". """
+
         con = sqlite3.connect(DB_NAME)
         cur = con.cursor()
         courses_list = cur.execute(
@@ -153,8 +176,10 @@ class Logic():
         self.protect_table_from_changes(table, row_quantity)
 
     def show_courses_in_my_courses_tab(self, uid, table):
-        print(uid)
-        print(os.getcwd())
+        """ Отображение курсов во вкладке "Мои кусы". """
+
+        print("Текущий uid:", uid)
+        print("Ты в папке:", os.path.basename(os.getcwd()))
         con = sqlite3.connect(DB_NAME)
         cur = con.cursor()
 
@@ -183,8 +208,9 @@ class Logic():
         con.close()
         self.protect_table_from_changes(table, row_quantity)
 
-    def protect_table_from_changes(self, table, row_quantity):
-        '''Убирает возможность редактирования ячеек таблиц'''
+    @staticmethod
+    def protect_table_from_changes(table, row_quantity):
+        """ Убирает возможность редактирования ячеек таблиц. """
 
         for row in range(row_quantity):
             for col in range(5):
@@ -192,6 +218,8 @@ class Logic():
                 item.setFlags(item.flags() & ~Qt.ItemFlag.ItemIsEditable)
 
     def on_cell_clicked(self, tw_all_courses, tw_my_courses, row, column):
+        """ Действия при нажатии на ячейку QTableWidget. """
+
         course_id = tw_all_courses.item(row, 0).text()
         course_name = tw_all_courses.item(row, 1).text()
 
@@ -201,7 +229,7 @@ class Logic():
         if course_name in os.listdir('.'):
             os.chdir(course_name)
             courseStructureW = CourseStructureW()
-            self.fill_treeWidget_in_course_structure_w(courseStructureW.TW_course_structure, course_name)
+            self.fill_tree_widget_in_course_structure_w(courseStructureW.TW_course_structure, course_name)
             return_code = courseStructureW.exec()
             if return_code == 1:
                 self.show_message("Успешно!",
@@ -216,6 +244,8 @@ class Logic():
 
 
     def add_course_to_my_courses(self, tw_my_courses, course_id):
+        """ Добавление курса в QTableWidget вкладки "Мои курсы". """
+
         self.move_to_gnosi_folder()
         con = sqlite3.connect(DB_NAME)
         cur = con.cursor()
@@ -230,21 +260,23 @@ class Logic():
             '''
         ).fetchall()[0]
         row_quantity = tw_my_courses.rowCount()
+        row_quantity += 1   # Так как нужно вставлять следующей за последней строкой
+
+        tw_my_courses.setRowCount(row_quantity)
         course_name = course_data[0]
         course_author = course_data[1]
         course_description = course_data[2]
         course_created_date = course_data[3]
-        tw_my_courses.setItem(tw_my_courses, row_quantity, 0, QTableWidgetItem(str(course_id)))
-        tw_my_courses.setItem(tw_my_courses, row_quantity, 0, QTableWidgetItem(course_name))
-        tw_my_courses.setItem(tw_my_courses, row_quantity, 0, QTableWidgetItem(course_author))
-        tw_my_courses.setItem(tw_my_courses, row_quantity, 0, QTableWidgetItem(course_description))
-        tw_my_courses.setItem(tw_my_courses, row_quantity, 0, QTableWidgetItem(course_created_date))
-
-
+        tw_my_courses.setItem(row_quantity, 0, QTableWidgetItem(str(course_id)))
+        tw_my_courses.setItem(row_quantity, 1, QTableWidgetItem(course_name))
+        tw_my_courses.setItem(row_quantity, 2, QTableWidgetItem(course_author))
+        tw_my_courses.setItem(row_quantity, 3, QTableWidgetItem(course_description))
+        tw_my_courses.setItem(row_quantity, 4, QTableWidgetItem(course_created_date))
 
     def show_context_menu(self, tree_widget, pos):
-        item = tree_widget.itemAt(pos)
+        """ Отображение контектного меню при клике ПКМ. """
 
+        item = tree_widget.itemAt(pos)
         menu = QMenu(tree_widget)
 
         if item is not None:
@@ -282,9 +314,10 @@ class Logic():
                     self.load_material(tree_widget, item)
 
     def create_theory(self, tree_widget, item):
-        """Создание теории"""
+        """Создание теории для урока"""
+
         ui = Window_for_create_theory()
-        print("ТЫ хочаешь создать теорию в :", os.listdir('.'))
+        print("Создание теории в папке:", os.path.basename(os.getcwd()))
         if ui.exec() == 1:
             lesson_item_name, lesson_text = ui.get_article_info()
 
@@ -301,7 +334,7 @@ class Logic():
                 f.write(lesson_text)
 
     def load_material(self, tree_widget, item):
-        """Загрузка готового документа"""
+        """Загрузка готового документа для урока"""
         file_path, _ = QFileDialog.getOpenFileName(tree_widget, "Выберите файл", "", "Все файлы (*)")
         if file_path:
             QMessageBox. information(tree_widget, "Информация", f"Вы выбрали файл: {file_path}")
@@ -317,8 +350,9 @@ class Logic():
         except Exception as e:
             print("Ошибка!", e)
 
-    def get_item_hierarchy(self, item) -> list:
-        """Получение обхектов иерархии"""
+    @staticmethod
+    def get_item_hierarchy(item) -> list:
+        """ Получение объектов иерархии. """
         hierarchy = []
         current_item = item
         # Сбор информации о родителях
@@ -327,17 +361,11 @@ class Logic():
             current_item = current_item.parent()
         return hierarchy
 
-    def get_selected_items_hierarchy(self):
-        '''Отображение иерархии'''
-        selected_items = self.treeWidget.selectedItems()
-        for item in selected_items:
-            hierarchy = self.get_item_hierarchy(item)
-
-            print(" -> ".join(hierarchy))
 
     def create_course(self, tree_widget, course_params):
-        '''Создание курса и занесение его в бд'''
-        courseID = self.generate_courseID()
+        """ Создание курса и занесение его в бд. """
+        
+        courseID = self.generate_course_id()
         title = course_params['course_name']
         userid = course_params['uid']
         description = course_params['course_description']
@@ -366,10 +394,12 @@ class Logic():
         os.rename(self.temp_course_name, title)
         self.temp_course_name = title
         self.save_tree_to_json(tree_widget, self.temp_course_name)
+        self.show_message("Поздравляем!", "Курс успешно создан!", "Information")
 
 # Преобразования с JSON
     def tree_to_dict(self, tree_widget):
-        """Преобразует QTreeWidget в словарь."""
+        """ Преобразует QTreeWidget в словарь. """
+        
         tree_dict = {}
 
         for index in range(tree_widget.topLevelItemCount()):
@@ -379,7 +409,8 @@ class Logic():
         return tree_dict
 
     def item_to_dict(self, item):
-        """Рекурсивно преобразует элемент QTreeWidgetItem в словарь"""
+        """ Рекурсивно преобразует элемент QTreeWidgetItem в словарь. """
+        
         item_dict = {}
 
         for index in range(item.childCount()):
@@ -389,7 +420,8 @@ class Logic():
         return item_dict
 
     def save_tree_to_json(self, tree_widget, course_name):
-        """Сохраняет данные QTreeWidget в json-файл"""
+        """ Сохраняет данные QTreeWidget в json-файл. """
+        
         tree_data = self.tree_to_dict(tree_widget)
         self.move_to_gnosi_folder()
         os.chdir(COURSES_DIR)
@@ -397,18 +429,19 @@ class Logic():
         with open(f'{course_name}.json', 'w') as json_file:
             json.dump(tree_data, json_file, indent=4)
 
-
-
-
-    def fill_treeWidget_in_course_structure_w(self, tree_widget, course_name):
+    def fill_tree_widget_in_course_structure_w(self, tree_widget, course_name):
+        """ Заполняет QTreeWidget ознакомительного окна. """
+        
         json_file_name = course_name + '.json'
         self.load_json_to_tree_widget(tree_widget, json_file_name)
 
-    def load_json_to_tree_widget(self, tree_widget, json_file):
-        """Загружает данные из JSON-файла в QTreeWidget"""
+    @staticmethod
+    def load_json_to_tree_widget(tree_widget, json_file):
+        """ Загружает данные из JSON-файла в QTreeWidget. """
 
         with open(json_file, 'r', encoding='utf-8') as file:
             data = json.load(file)
+
             # Стек для хранения элементов
             stack = [(tree_widget.invisibleRootItem(), data)]
             while stack:
@@ -425,10 +458,9 @@ class Logic():
                     # Если это не dict и не list, добавляем значение как текст
                     QTreeWidgetItem(parent, [str(current_data)])
 
+    def generate_course_id(self) -> int:
+        """ Генерация уникального идентификатора курса. """
 
-
-    def generate_courseID(self) -> int:
-        # генерация courseID
         # выход из директории Courses
         print("БЫЛ:", os.getcwd())
         history_of_movements = self.move_to_gnosi_folder()
@@ -452,7 +484,10 @@ class Logic():
         os.chdir('./' + history_of_movements)
         return gen_courseID
 
-    def move_to_gnosi_folder(self):
+    @staticmethod
+    def move_to_gnosi_folder():
+        """ Перемещение в основную папку Gnosi. """
+        
         history = []
         cur_dir = os.path.basename(os.getcwd())
         while DB_NAME not in os.listdir('.'):
@@ -463,13 +498,17 @@ class Logic():
 
         return '/'.join(history[1:])
 
-    def clearing_the_course_creation_window(self, tree_widget,  course_name, course_description):
+    @staticmethod
+    def clearing_the_course_creation_window(tree_widget,  course_name, course_description):
+        """ Очистка всех поле во вкладке "Создание курсов". """
+        
         tree_widget.clear()
         course_name.setPlainText("")
         course_description.setPlainText("")
 
     def edit_user_name(self, uid,  le_name, new_name):
-        # print("Зашёл в edit_user_name")
+        """  Изменение имени пользователя. """
+
         le_name.setText(new_name)
         con = sqlite3.connect(DB_NAME)
         cur = con.cursor()
@@ -490,7 +529,7 @@ class Logic():
 
     @staticmethod
     def show_message(title, text_msg, icon_type="Critical"):
-        # Создаем окно сообщения
+        """ Отображение окна сообщения. """
 
         msg = QMessageBox()
         match icon_type:
@@ -498,9 +537,10 @@ class Logic():
                 msg.setIcon(QMessageBox.Icon.Critical)  # Устанавливаем иконку ошибки
             case "Information":
                 msg.setIcon(QMessageBox.Icon.Information)
+
         msg.setText(title)
         msg.setInformativeText(text_msg)
         msg.setWindowTitle("Уведомление")
         msg.setStandardButtons(QMessageBox.StandardButton.Ok)
-        # Показываем окно сообщения
+
         msg.exec()

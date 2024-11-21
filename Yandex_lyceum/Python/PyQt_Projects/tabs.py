@@ -1,3 +1,0 @@
-# tabs
-from PyQt6 import QtWidgets, QtGui, QtCore
-# from PyQt6.QtWidgets import ...

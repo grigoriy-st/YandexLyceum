@@ -43,6 +43,7 @@ class CourseStructureW(QDialog):
         QtCore.QMetaObject.connectSlotsByName(Dialog)
 
     def close_window(self):
+        """ Закрытие окна и возврат код возврата 1. """
         self.done(1)
 
     def retranslateUi(self, Dialog):

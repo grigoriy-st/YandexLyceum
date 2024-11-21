@@ -1,20 +1,15 @@
 import sys
-import os
-
-from uaclient.api.u.pro.services.disable.v1 import disable
 
 # Все части программы
 from Main_window_UI import Ui_MainWindow
-
 from Auth_dialog_window import Auth_Dialog
 
 
 from PyQt6 import QtWidgets
 from PyQt6.QtWidgets import (
-    QApplication, QMainWindow, QPushButton,
-    QTabWidget, QLabel, QWidget,
-    QVBoxLayout, QDialog,
+    QMainWindow
 )
+
 
 class MainWindow(QMainWindow):
     def __init__(self):

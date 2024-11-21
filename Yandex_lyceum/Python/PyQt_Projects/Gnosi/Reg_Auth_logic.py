@@ -11,7 +11,7 @@ class RegAuthLogic:
         super().__init__()
         
     def regestration_ac(self, login, password, ac_type=1):
-          # + 1 так как индексация типов с нуля
+        """ Регистрирует нового пользователя. """
 
         if not login or not password:
             self.show_message("Ошибка", "Пожалуйста, введите корректное число.")
@@ -32,22 +32,21 @@ class RegAuthLogic:
                 if password == user_data[login]:
                     self.show_message("Ошибка", "Такой пользователь уже есть.")
                     return
-            all_userIDs = sorted(cur.execute(f'''
+            id_of_all_users = sorted(cur.execute(f'''
                                             select users.userID
                                             from users
                                     ''').fetchall())
-            userID = self.generate_userID(all_userIDs)
+            uid = self.generate_uid(id_of_all_users)
             try:
                 _ = cur.execute(f'''
                                     insert into users
                                         (userid, name,  login, password, accounttypeid)
                                         values
-                                        ({userID}, "Пользователь", "{login}", "{password}", {ac_type})
+                                        ({uid}, "Пользователь", "{login}", "{password}", {ac_type})
                                 ''')
                 self.show_message(f"Поздравляем, {login}!", "Вы зарегистрированы!", "Information")
             except Exception as e:
                 self.show_message("Error!", e)
-
 
             con.commit()
             
@@ -59,15 +58,18 @@ class RegAuthLogic:
 
         ...
 
-    def generate_userID(self, all_userIDs):
-        id = random.randint(1, 1000)
-        while id in all_userIDs:
-            id = random.randint(1, 1000)
-        return id
+    @staticmethod
+    def generate_uid(id_of_all_users) -> int:
+        """ Генерирует уникальный UID для пользователя. """
+
+        uid = random.randint(1, 1000)
+        while uid in id_of_all_users:
+            uid = random.randint(1, 1000)
+        return uid
 
     @staticmethod
     def show_message(title, text_msg, icon_type="Critical"):
-        # Создаем окно сообщения
+        """ Отоюражение сообщение. """
 
         msg = QMessageBox()
         match icon_type:
@@ -79,5 +81,5 @@ class RegAuthLogic:
         msg.setInformativeText(text_msg)
         msg.setWindowTitle("Уведомление")
         msg.setStandardButtons(QMessageBox.StandardButton.Ok)
-        # Показываем окно сообщения
+
         msg.exec()

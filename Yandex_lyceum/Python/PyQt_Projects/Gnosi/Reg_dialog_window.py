@@ -128,9 +128,9 @@ class Reg_Dialog(QDialog):
 
         login = self.lineE_login.text()
         password = self.lineE_pasword.text()
-        ac_type = str(self.CB_change_ac_type.currentIndex() + 1)
+        ac_type = str(self.CB_change_ac_type.currentIndex() + 1) # + 1 так как индексация типов с нуля
         self.logic.regestration_ac(login, password, ac_type)
         self.accept()
 
     def generate_userID(self, all_userIDs):
-        self.logic.generate_userID(all_userIDs)
+        self.logic.generate_uid(all_userIDs)

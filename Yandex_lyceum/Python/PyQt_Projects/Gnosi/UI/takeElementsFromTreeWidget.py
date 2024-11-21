@@ -4,7 +4,7 @@ from PyQt5.QtWidgets import QApplication, QTreeWidget, QTreeWidgetItem, QPushBut
 
 
 def tree_to_dict(tree_widget):
-    """Преобразует QTreeWidget в словарь."""
+    """ Преобразует QTreeWidget в словарь. """
     tree_dict = {}
 
     for index in range(tree_widget.topLevelItemCount()):
@@ -15,7 +15,7 @@ def tree_to_dict(tree_widget):
 
 
 def item_to_dict(item):
-    """Рекурсивно преобразует элемент QTreeWidgetItem в словарь."""
+    """ Рекурсивно преобразует элемент QTreeWidgetItem в словарь. """
     item_dict = {}
 
     for index in range(item.childCount()):
@@ -26,7 +26,7 @@ def item_to_dict(item):
 
 
 def save_tree_to_json(tree_widget, filename):
-    """Сохраняет данные QTreeWidget в JSON-файл."""
+    """ Сохраняет данные QTreeWidget в JSON-файл. """
     tree_data = tree_to_dict(tree_widget)
     with open(filename, 'w') as json_file:
         json.dump(tree_data, json_file, indent=4)

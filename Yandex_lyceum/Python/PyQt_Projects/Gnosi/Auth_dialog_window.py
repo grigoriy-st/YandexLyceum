@@ -145,16 +145,18 @@ class Auth_Dialog(QDialog):
         self.btn_registration.setText(_translate("Dialog", "Регистрация"))
 
     def entry_auth_data(self):
+        """ Проверка вводимых данных """
         login = self.lineE_login.text()
         password = self.lineE_password.text()
 
 
         if not login or not password:
-            self.show_error_message("Ошибка", "Пожалуйста, введите корректное число.")
+            self.show_message("Ошибка", "Пожалуйста, заполните все поля.")
             return
+
         while DB_NAME not in os.listdir('.'):
             os.chdir('..')
-            print(os.getcwd())
+            print("DB founded in", os.getcwd())
         con = sqlite3.connect(DB_NAME)
         cur = con.cursor()
         self.type_ac = cur.execute(
@@ -164,9 +166,11 @@ class Auth_Dialog(QDialog):
                         from users inner join accounttype on users.AccountTypeID = accounttype.AccountTypeID
                         where 
                             users.login = "{login}" and users.password = "{password}"
-                    ''').fetchall()[0][0]
+                    ''').fetchall()
+        if self.type_ac:
+            self.type_ac = self.type_ac[0][0]
 
-        users_data = list(cur.execute(f'''
+        users_data = cur.execute(f'''
                         select
                             users.userid,
                             users.name,
@@ -175,8 +179,15 @@ class Auth_Dialog(QDialog):
                         from users
                         where 
                             users.login = "{login}" and users.password = "{password}"
-                    ''').fetchall())[0]
+                    ''').fetchall()
         con.close()
+
+        if users_data:
+            users_data = users_data[0]
+
+        if not users_data or not self.type_ac:
+            self.show_message("Ошибка", "Данные неверны")
+            return
 
         if login == users_data[2] and password == users_data[3]:
 
@@ -186,32 +197,33 @@ class Auth_Dialog(QDialog):
             super().accept()
 
         elif login not in users_data:
-            self.show_error_message("Ошибка", "Неверный логин")
+            self.show_message("Ошибка", "Неверный логин")
             return
 
         elif login in users_data:
-            self.show_error_message("Ошибка", "Такой пользователь уже есть.")
+            self.show_message("Ошибка", "Такой пользователь уже есть.")
             return
 
         elif login in users_data:
             if password != users_data[3]:
-                self.show_error_message("Ошибка", "Неверный пароль")
+                self.show_message("Ошибка", "Неверный пароль")
                 return
-
-
 
         con.close()
 
+    @staticmethod
+    def show_message(self, title, message):
+        """ Отображение сообщения """
 
-    def show_error_message(self, title, message):
         if title and message:
             dlg = QMessageBox()
+            dlg.resize(300, 300)
             dlg.setWindowTitle(title)
             dlg.setText(message)
             button = dlg.exec()
     #
             if button == QMessageBox.StandardButton.Ok:
-                print("OK!")
+                print("Нажата OK")
 
     def registration_new_ac(self):
         self.register_window = Reg_Dialog()  # Создаем экземпляр окна регистрации
