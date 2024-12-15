@@ -4,7 +4,7 @@ def draw_square(screen, width, height):
     color = pygame.Color(255, 0, 0)
 
     pygame.draw.rect(screen, color,
-                     (1, 1, width - 1, height - 1), 0)
+                     (1, 1, width - 3, height - 3), 0)
 
 
 if __name__ == '__main__':
