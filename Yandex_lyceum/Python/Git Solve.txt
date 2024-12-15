@@ -1,0 +1,60 @@
+┌─[grigoriy@desktop1] - [/mnt/DATA_500GB/___PROJECTS___/Test_Rep_3] - [Вс дек 15, 21:19]
+└─[$] <git:(main*)> git branch -a | cat                 
+* main
+  remotes/origin/HEAD -> origin/main
+  remotes/origin/main
+┌─[grigoriy@desktop1] - [/mnt/DATA_500GB/___PROJECTS___/Test_Rep_3] - [Вс дек 15, 21:19]
+└─[$] <git:(main*)> git checkout -b boots_buttons       
+Переключились на новую ветку «boots_buttons»
+┌─[grigoriy@desktop1] - [/mnt/DATA_500GB/___PROJECTS___/Test_Rep_3] - [Вс дек 15, 21:19]
+└─[$] <git:(boots_buttons*)> cd human                     
+┌─[grigoriy@desktop1] - [/mnt/DATA_500GB/___PROJECTS___/Test_Rep_3/human] - [Вс дек 15, 21:19]
+└─[$] <git:(boots_buttons)> ls
+human.txt  README
+┌─[grigoriy@desktop1] - [/mnt/DATA_500GB/___PROJECTS___/Test_Rep_3/human] - [Вс дек 15, 21:19]
+└─[$] <git:(boots_buttons)> git branch -a | cat          
+* boots_buttons
+  master
+  remotes/origin/HEAD -> origin/master
+  remotes/origin/boots
+  remotes/origin/buttons
+  remotes/origin/demo
+  remotes/origin/hat
+  remotes/origin/master
+┌─[grigoriy@desktop1] - [/mnt/DATA_500GB/___PROJECTS___/Test_Rep_3/human] - [Вс дек 15, 21:20]
+└─[$] <git:(boots_buttons)> git fetch boots_buttons    
+fatal: 'boots_buttons' does not appear to be a git repository
+fatal: Не удалось прочитать из внешнего репозитория.
+
+Удостоверьтесь, что у вас есть необходимые права доступа
+и репозиторий существует.
+┌─[grigoriy@desktop1] - [/mnt/DATA_500GB/___PROJECTS___/Test_Rep_3/human] - [Вс дек 15, 21:20]
+└─[$] <git:(boots_buttons)> git remote add origin git@github.com:grigoriy-st/Test_Rep_3.git
+error: внешний репозиторий origin уже существует
+┌─[grigoriy@desktop1] - [/mnt/DATA_500GB/___PROJECTS___/Test_Rep_3/human] - [Вс дек 15, 21:21]
+└─[$] <git:(boots_buttons)> git push origin boots_buttons                                   
+Username for 'https://github.com': dsf
+Password for 'https://dsf@github.com': 
+remote: Support for password authentication was removed on August 13, 2021.
+remote: Please see https://docs.github.com/get-started/getting-started-with-git/about-remote-repositories#cloning-with-https-urls for information on currently recommended modes of authentication.
+fatal: Authentication failed for 'https://github.com/YandexLyceum/human.git/'
+┌─[grigoriy@desktop1] - [/mnt/DATA_500GB/___PROJECTS___/Test_Rep_3/human] - [Вс дек 15, 21:22]
+└─[$] <git:(boots_buttons)> git remote set-url origin git@github.com:grigoriy-st/Test_Rep_3.git
+┌─[grigoriy@desktop1] - [/mnt/DATA_500GB/___PROJECTS___/Test_Rep_3/human] - [Вс дек 15, 21:23]
+└─[$] <git:(boots_buttons)> git push origin boots_buttons
+Перечисление объектов: 20, готово.
+Подсчет объектов: 100% (20/20), готово.
+При сжатии изменений используется до 12 потоков
+Сжатие объектов: 100% (14/14), готово.
+Запись объектов: 100% (20/20), 1.86 КиБ | 951.00 КиБ/с, готово.
+Total 20 (delta 5), reused 14 (delta 4), pack-reused 0 (from 0)
+remote: Resolving deltas: 100% (5/5), done.
+remote: 
+remote: Create a pull request for 'boots_buttons' on GitHub by visiting:
+remote:      https://github.com/grigoriy-st/Test_Rep_3/pull/new/boots_buttons
+remote: 
+To github.com:grigoriy-st/Test_Rep_3.git
+ * [new branch]      boots_buttons -> boots_buttons
+┌─[grigoriy@desktop1] - [/mnt/DATA_500GB/___PROJECTS___/Test_Rep_3/human] - [Вс дек 15, 21:23]
+└─[$] <git:(boots_buttons)> 
+

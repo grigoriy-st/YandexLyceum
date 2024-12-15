@@ -1,0 +1,90 @@
+
+└─[$] <git:(main*)> git branch -a |cat
+* main
+  remotes/origin/HEAD -> origin/main
+  remotes/origin/main
+┌─[grigoriy@desktop1] - [/mnt/DATA_500GB/___PROJECTS___/Test_Rep_3] - [Вс дек 15, 21:03]
+└─[$] <git:(main*)> cd ..
+┌─[grigoriy@desktop1] - [/mnt/DATA_500GB/___PROJECTS___] - [Вс дек 15, 21:04]
+└─[$] <> git clone https://github.com/YandexLyceum/human.git Test_Rep_3 
+fatal: целевой путь «Test_Rep_3» уже существует и не является пустым каталогом.
+┌─[grigoriy@desktop1] - [/mnt/DATA_500GB/___PROJECTS___] - [Вс дек 15, 21:04]
+└─[$] <> cd Test_Rep_3                                                 
+┌─[grigoriy@desktop1] - [/mnt/DATA_500GB/___PROJECTS___/Test_Rep_3] - [Вс дек 15, 21:04]
+└─[$] <git:(main*)> git checkout master                                           
+error: pathspec 'master' did not match any file(s) known to git
+┌─[grigoriy@desktop1] - [/mnt/DATA_500GB/___PROJECTS___/Test_Rep_3] - [Вс дек 15, 21:05]
+└─[$] <git:(main*)> cd hu        
+cd: Нет такого файла или каталога: hu
+┌─[grigoriy@desktop1] - [/mnt/DATA_500GB/___PROJECTS___/Test_Rep_3] - [Вс дек 15, 21:05]
+└─[$] <git:(main*)> cd human
+cd: Нет такого файла или каталога: human
+┌─[grigoriy@desktop1] - [/mnt/DATA_500GB/___PROJECTS___/Test_Rep_3] - [Вс дек 15, 21:06]
+└─[$] <git:(main*)> git clone https://github.com/YandexLyceum/human.git           
+Клонирование в «human»...
+remote: Enumerating objects: 24, done.
+remote: Counting objects: 100% (8/8), done.
+remote: Compressing objects: 100% (5/5), done.
+remote: Total 24 (delta 4), reused 3 (delta 3), pack-reused 16 (from 1)
+Получение объектов: 100% (24/24), готово.
+Определение изменений: 100% (7/7), готово.
+┌─[grigoriy@desktop1] - [/mnt/DATA_500GB/___PROJECTS___/Test_Rep_3] - [Вс дек 15, 21:06]
+└─[$] <git:(main*)> cd human             
+┌─[grigoriy@desktop1] - [/mnt/DATA_500GB/___PROJECTS___/Test_Rep_3/human] - [Вс дек 15, 21:06]
+└─[$] <git:(master)> git branch -a
+┌─[grigoriy@desktop1] - [/mnt/DATA_500GB/___PROJECTS___/Test_Rep_3/human] - [Вс дек 15, 21:06]
+└─[$] <git:(master)> git branch -a | cat
+* master
+  remotes/origin/HEAD -> origin/master
+  remotes/origin/boots
+  remotes/origin/buttons
+  remotes/origin/demo
+  remotes/origin/hat
+  remotes/origin/master
+┌─[grigoriy@desktop1] - [/mnt/DATA_500GB/___PROJECTS___/Test_Rep_3/human] - [Вс дек 15, 21:06]
+└─[$] <git:(master)> git checkout -b boots_buttons master
+Переключились на новую ветку «boots_buttons»
+┌─[grigoriy@desktop1] - [/mnt/DATA_500GB/___PROJECTS___/Test_Rep_3/human] - [Вс дек 15, 21:06]
+└─[$] <git:(boots_buttons)> git branch -a | cat                 
+* boots_buttons
+  master
+  remotes/origin/HEAD -> origin/master
+  remotes/origin/boots
+  remotes/origin/buttons
+  remotes/origin/demo
+  remotes/origin/hat
+  remotes/origin/master
+┌─[grigoriy@desktop1] - [/mnt/DATA_500GB/___PROJECTS___/Test_Rep_3/human] - [Вс дек 15, 21:06]
+└─[$] <git:(boots_buttons)> git merge boots
+
+git merge buttons
+merge: boots — не является тем, что можно слить
+
+Возможно, вы имели в виду это?
+        origin/boots
+merge: buttons — не является тем, что можно слить
+
+Возможно, вы имели в виду это?
+        origin/buttons
+┌─[grigoriy@desktop1] - [/mnt/DATA_500GB/___PROJECTS___/Test_Rep_3/human] - [Вс дек 15, 21:06]
+└─[$] <git:(boots_buttons)> git merge boots_buttons origin/boots 
+Merge made by the 'ort' strategy.
+ human.txt | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
+┌─[grigoriy@desktop1] - [/mnt/DATA_500GB/___PROJECTS___/Test_Rep_3/human] - [Вс дек 15, 21:07]
+└─[$] <git:(boots_buttons)> git merge boots_buttons origin/buttons 
+Автослияние human.txt
+Merge made by the 'ort' strategy.
+ human.txt | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
+┌─[grigoriy@desktop1] - [/mnt/DATA_500GB/___PROJECTS___/Test_Rep_3/human] - [Вс дек 15, 21:07]
+└─[$] <git:(boots_buttons)> git remote add origin git@github.com:grigoriy-st/Test_Rep_3.git
+error: внешний репозиторий origin уже существует
+┌─[grigoriy@desktop1] - [/mnt/DATA_500GB/___PROJECTS___/Test_Rep_3/human] - [Вс дек 15, 21:08]
+└─[$] <git:(boots_buttons)> git push origin boots_buttons                                  
+Username for 'https://github.com': grigoriy-st
+Password for 'https://grigoriy-st@github.com': 
+remote: Support for password authentication was removed on August 13, 2021.
+remote: Please see https://docs.github.com/get-started/getting-started-with-git/about-remote-repositories#cloning-with-https-urls for information on currently recommended modes of authentication.
+fatal: Authentication failed for 'https://github.com/YandexLyceum/human.git/'
+┌─[grigoriy@desktop1] - [/mnt/DATA_500GB/___PROJECTS___/Test_Rep_3/human] - [Вс дек 15, 21:10]
