@@ -11,7 +11,7 @@ class Board:
         self.left = 10
         self.top = 10
         self.cell_size = 30
-        self.colors = ['black', 'white']
+        self.colors = ['black', 'red', 'blue']
 
     # настройка внешнего вида
     def set_view(self, left, top, cell_size):
@@ -47,8 +47,8 @@ class Board:
                 m_y < self.top or m_y > self.top + self.height * self.cell_size:
             return None
         else:
-            x = (m_x - self.left) // self.cell_size
-            y = (m_y - self.top) // self.cell_size
+            x = (m_y - self.top) // self.cell_size
+            y = (m_x - self.left) // self.cell_size
             return x, y
 
     def on_click(self, mouse_pos):
@@ -56,13 +56,7 @@ class Board:
         if cell is None:
             return
         x, y = cell
-
-        for col in range(self.width):
-            if col != x:
-                self.board[y][col] = (self.board[y][col] + 1) % 2
-
-        for row in range(self.height):
-            self.board[row][x] = (self.board[row][x] + 1) % 2
+        self.board[x][y] = (self.board[x][y] + 1) % 3
 
     def get_click(self):
         ...

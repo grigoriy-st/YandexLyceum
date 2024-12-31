@@ -5,7 +5,7 @@ def main():
     size = width, height = 200, 200
     screen = pygame.display.set_mode(size)
     hide_count = 0
-    font = pygame.font.Font(None, 50)
+    font = pygame.font.Font(None, 100)
 
     running = True
     while running:
