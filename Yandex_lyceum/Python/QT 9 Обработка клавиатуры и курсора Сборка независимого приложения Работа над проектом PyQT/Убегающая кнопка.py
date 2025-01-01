@@ -9,9 +9,10 @@ class MyWidget(QWidget):
         super().__init__()
         self.setWindowTitle("Убегающая кнопка")
         self.setGeometry(200, 200, 800, 600)
-        self.button = QPushButton("button", self)
+        self.button = QPushButton("Нажми на меня", self)
         self.button.setGeometry(100, 100, 100, 50)
         self.button.setMouseTracking(True)
+        self.setMouseTracking(True)
 
     def mouseMoveEvent(self, event):
         button_pos = self.button.geometry()
