@@ -39,6 +39,7 @@ class MyWidget(QMainWindow):
         self.saveButton.clicked.connect(self.choose)
 
     def find_el_in_db(self):
+
         id_num = self.textEdit.text().split('=')[-1]
         con = sqlite3.connect('films_db.sqlite')
         cur = con.cursor()
@@ -91,7 +92,7 @@ class MyWidget(QMainWindow):
                         films.genre,
                         films.duration
                     from films inner join genres on films.id = genres.id
-                    where films.id={id_num}
+                    where films.id = {id_num}
                     ''').fetchall()
             self.tableWidget.setRowCount(len(result))
 
@@ -100,7 +101,7 @@ class MyWidget(QMainWindow):
             year += 1000
             duration *= 2
 
-            result = cur.execute(f'''
+            _ = cur.execute(f'''
                     update films
                     set
                         title = '{title}',

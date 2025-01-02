@@ -14,9 +14,7 @@ class MyWidget(QMainWindow):
 
     def initUI(self):
         self.resize(550, 520)
-        self.statusBar = QStatusBar(self)
-        self.setStatusBar(self.statusBar)
-        self.statusBar.showMessage("")
+        self.statusBar().showMessage("")
 
         ru_up_alfb = 'АБВГДЕЁЖЗИЙКЛМНОПРСТУФХЦЧШЩЪЫЬЭЮЯ'
         self.buttons = []
@@ -67,9 +65,9 @@ class MyWidget(QMainWindow):
                 self.tableWidget.setItem(row, 4,
                                          QTableWidgetItem(str(duration)))
 
-            self.statusBar.showMessage(f'Нашлось {n} записей')
+            self.statusBar().showMessage(f'Нашлось {n} записей')
         else:
-            self.statusBar.showMessage("К сожалению, ничего не нашлось")
+            self.statusBar().showMessage("К сожалению, ничего не нашлось")
 
 
 if __name__ == '__main__':

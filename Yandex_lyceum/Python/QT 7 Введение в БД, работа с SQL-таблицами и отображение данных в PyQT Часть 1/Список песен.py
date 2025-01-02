@@ -4,16 +4,24 @@ author = input()
 con = sqlite3.connect('music_db.sqlite')
 cur = con.cursor()
 
-track_names = cur.execute(f'''
-    select distinct track.name
-    from track 
-        inner join album on track.trackid = album.albumid
-        inner join artist on album.albumid = artist.artistid
-    where artist.name = '{author}'
-    order by track.name
-''').fetchall()
-
-for name in track_names:
-    print(name)
-
-
+try:
+    result = cur.execute(
+        f'''
+        select distinct track.Name 
+        from 
+            track
+        join 
+            album ON album.AlbumId = track.AlbumId,
+            artist ON artist.artistId = album.ArtistId
+        where 
+            artist.Name = {author}
+        order by 
+            track.Name
+        '''
+    )
+    for track in result:
+        print(track)
+except sqlite3.OperationalError:
+    ...
+finally:
+    con.close()

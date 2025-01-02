@@ -31,14 +31,14 @@ class MyWidget(QMainWindow):
         self.update_result()
 
     def adding(self):
-        self.add_form = AddWidget(self, self.tableWidget)
+        self.add_form = AddWidget(self)
         self.add_form.show()
         self.add_form.pushButton.clicked.connect(self.update_result)
 
     def update_result(self):
         con = sqlite3.connect('films_db.sqlite')
         cur = con.cursor()
-        result = cur.execute(
+        films_info = cur.execute(
             '''
             select
                 films.id,
@@ -52,8 +52,8 @@ class MyWidget(QMainWindow):
         ).fetchall()
         con.close()
 
-        self.tableWidget.setRowCount(len(result))
-        for index, rec in enumerate(result):
+        self.tableWidget.setRowCount(len(films_info))
+        for index, rec in enumerate(films_info):
             rec_id, title, year, genre, duration = rec
             self.tableWidget.setItem(index, 0, QTableWidgetItem(str(rec_id)))
             self.tableWidget.setItem(index, 1, QTableWidgetItem(str(title)))
@@ -63,7 +63,7 @@ class MyWidget(QMainWindow):
 
 
 class AddWidget(QMainWindow):
-    def __init__(self, table, parent=None):
+    def __init__(self, parent=None):
         super().__init__(parent)
 
         self.initUI()
@@ -92,13 +92,16 @@ class AddWidget(QMainWindow):
         cur = con.cursor()
         self.params = cur.execute(
             '''
-            select distinct genres.title
-            from films inner join genres on genres.id = films.genre
+            select 
+                distinct genres.title
+            from films 
+                inner join genres on genres.id = films.genre
             '''
         ).fetchall()
         cur.close()
         self.params = {genre[0]: index
-                       for index, genre in enumerate(self.params)}
+                       for index, genre in
+                       enumerate(self.params)}  # словарь типа жанр: индекс. Нужно для дальнейшей вставки
         self.comboBox.addItems(self.params.keys())
 
         self.lbl_dur = QLabel("Длина", self)
@@ -118,17 +121,20 @@ class AddWidget(QMainWindow):
         duration = self.duration.toPlainText()
 
         if not title or not year or not genre or not duration:
+            self.statusBar.showMessage("Неверно заполнена форма")
             return False
         if not year.isdigit() or int(year) > 2024:
+            self.statusBar.showMessage("Неверно заполнена форма")
             return False
         if int(duration) < 0:
+            self.statusBar.showMessage("Неверно заполнена форма")
             return False
 
-        genre_id = self.params[genre]
+        genre_id = self.params[genre]  # вставка id жанра
         con = sqlite3.connect('films_db.sqlite')
         cur = con.cursor()
         try:
-            _ = cur.execute(
+            _ = cur.execute(  # Вставка данных
                 f'''
                 insert into films
                 (title, year, genre, duration)

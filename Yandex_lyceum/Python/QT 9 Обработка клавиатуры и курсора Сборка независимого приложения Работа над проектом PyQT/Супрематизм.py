@@ -3,7 +3,7 @@ import random
 
 from PyQt6.QtGui import QPainter, QColor, QCursor, QPolygonF
 from PyQt6.QtWidgets import QMainWindow, QApplication
-from PyQt6.QtCore import Qt, QPoint, QPointF, QRectF
+from PyQt6.QtCore import Qt, QPointF, QRectF
 
 
 class Suprematism(QMainWindow):
@@ -26,9 +26,14 @@ class Suprematism(QMainWindow):
                 radius = el['size']
 
                 coords = [
-                    QPointF(el['pos'].x(), el['pos'].y() - radius),
-                    QPointF(el['pos'].x() - radius * 0.866, el['pos'].y() + radius * 0.5),
-                    QPointF(el['pos'].x() + radius * 0.866, el['pos'].y() + radius * 0.5)
+                    QPointF(el['pos'].x(),
+                            el['pos'].y() - radius * (3 ** 0.5) / 2),
+
+                    QPointF(el['pos'].x() - radius / 2,
+                            el['pos'].y() + radius * (3 ** 0.5) / 6),
+
+                    QPointF(el['pos'].x() + radius / 2,
+                            el['pos'].y() + radius * (3 ** 0.5) / 6)
                 ]
                 polygon = QPolygonF(coords)
                 painter.drawPolygon(polygon)
@@ -36,7 +41,7 @@ class Suprematism(QMainWindow):
     def mousePressEvent(self, event):
         """ Обработка кликов мыши. Рисование круга или квадрата. """
         if event.button() == Qt.MouseButton.LeftButton:
-            size = random.randint(10, 100)
+            size = random.randint(20, 100)
             color = self.get_random_color()
 
             shape_info = {'type': 'circle',
@@ -46,7 +51,7 @@ class Suprematism(QMainWindow):
             self.shapes.append(shape_info)
 
         elif event.button() == Qt.MouseButton.RightButton:
-            size = random.randint(10, 100)
+            size = random.randint(20, 100)
             color = self.get_random_color()
 
             shape_info = {'type': 'square',
@@ -54,16 +59,18 @@ class Suprematism(QMainWindow):
                           'size': size,
                           'color': color}
             self.shapes.append(shape_info)
-        self.update()
+
+        self.update()  # Обновление окна
 
     def keyPressEvent(self, event):
         """ Обработка нажатия пробела. Рисование треугольника. """
         if event.key() == Qt.Key.Key_Space:
-            size = random.randint(10, 100)
+            size = random.randint(20, 100)
             color = self.get_random_color()
+            cursor_pos = self.mapFromGlobal(QCursor.pos())
 
             shape_info = {'type': 'triangle',
-                          'pos': self.mapFromGlobal(QCursor.pos()),
+                          'pos': cursor_pos,
                           'size': size,
                           'color': color}
             self.shapes.append(shape_info)
@@ -82,5 +89,6 @@ class Suprematism(QMainWindow):
 if __name__ == "__main__":
     app = QApplication(sys.argv)
     ui = Suprematism()
+
     ui.show()
     sys.exit(app.exec())
