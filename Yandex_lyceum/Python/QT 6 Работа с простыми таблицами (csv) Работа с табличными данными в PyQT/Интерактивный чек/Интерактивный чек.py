@@ -20,7 +20,6 @@ class InteractiveReceipt(QMainWindow):
         self.initUI()
 
     def initUI(self):
-
         with open('price.csv', 'r', newline='', encoding='utf-8') as file:
             data = list(csv.reader(file, delimiter=";"))
             headers = data[0]
@@ -35,23 +34,25 @@ class InteractiveReceipt(QMainWindow):
 
                 self.tableWidget.setItem(index, 0, QTableWidgetItem(name))
                 self.tableWidget.setItem(index, 1, QTableWidgetItem(price))
+                self.tableWidget.setItem(index, 2, QTableWidgetItem('0'))
 
         self.tableWidget.itemChanged.connect(self.update_total)
         self.update_total()
 
     def update_total(self):
-
+        total = 0
         for row in range(self.tableWidget.rowCount()):
             price = self.tableWidget.item(row, 1)
             quantity = self.tableWidget.item(row, 2)
 
-            if quantity:
-                price = int(price.text())
-                quantity = int(quantity.text())
-                self.total += price * quantity
+            price = int(price.text())
+            quantity = int(quantity.text())
+
+            total += price * quantity
+        self.total.setText(str(total))
 
         if self.total:
-            self.total.setText(str(self.total))
+            self.total.setText(str(self.total.text()))
         else:
             if not self.total:
                 self.total.setText('0')

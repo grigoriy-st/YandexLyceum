@@ -1,8 +1,7 @@
 import sys
 import io
 
-from decimal import Decimal
-# print("Текущая директория:", os.listdir())
+from decimal import Decimal, InvalidOperation
 from PyQt6 import uic
 from PyQt6.QtWidgets import QApplication, QMainWindow
 
@@ -508,6 +507,8 @@ class Calculator(QMainWindow):
         self.last_is_eq = False
         self.last_is_op = False
 
+        op_buttons[6].clicked.connect(self.checking_for_an_extra_point)
+
     def click_btn(self):
         sender = self.sender()
         main_label = self.main_label.text()
@@ -522,30 +523,42 @@ class Calculator(QMainWindow):
             match sender.text():
                 case '=':
                     try:
-                        result = eval(secondary_label + main_label)
+                        # Преобразуем числа в Decimal перед выполнением операции
+                        result = eval(f"{secondary_label.strip()} {main_label}")
+                        # print('With equality:', secondary_label.strip(), main_label)
+
                     except ZeroDivisionError:
                         result = 'ОШИБКА'
+                    except InvalidOperation:
+                        result = 'ОШИБКА'
 
-                    if len(str(result)) > 11:
-                        temp_num = Decimal(str(result))
-                        temp_num = "{0:.2e}".format(temp_num)
-                        temp_num = temp_num.replace("+", "")
+                    self.secondary_label.setText("")
+                    if len(str(result).replace('.', '')) > 11:
+                        temp_num = self.conversion_to_exponential_form(result)
+                        temp_num = self.clear_extra_zeros(temp_num)
                         self.main_label.setText(temp_num)
                     else:
-                        self.secondary_label.setText("")
-                        self.main_label.setText(str(result))
+                        result = self.clear_extra_zeros(str(result))
+                        self.main_label.setText(result)
+
                     self.last_is_eq = True
+
                 case '/':
                     self.secondary_label.setText(main_label + ' /')
+
                 case '*':
                     self.secondary_label.setText(main_label + ' *')
+
                 case '-':
                     self.secondary_label.setText(main_label + ' -')
+
                 case '+':
                     self.secondary_label.setText(main_label + ' +')
+
                 case '±':
                     if main_label.replace('.', '').replace('0', ''):
                         self.main_label.setText(str(int(main_label) * -1))
+
             self.last_is_op = True
 
         elif sender.text().isdigit():
@@ -559,12 +572,10 @@ class Calculator(QMainWindow):
                 else:
                     temp_num = main_label + sender.text()
                     if len(temp_num) > 11:
-                        temp_num = Decimal(temp_num)
-                        temp_num = "{0:.2e}".format(temp_num)
-                        temp_num = temp_num.replace("+", "")
+                        temp_num = self.conversion_to_exponential_form(temp_num)
                         self.main_label.setText(temp_num)
                     else:
-                        self.main_label.setText(main_label + sender.text())
+                        self.main_label.setText(temp_num)
 
             elif secondary_label:
                 if self.last_is_op:
@@ -575,23 +586,46 @@ class Calculator(QMainWindow):
                 else:
                     temp_num = main_label + sender.text()
                     if len(temp_num) > 11:
-                        temp_num = Decimal(temp_num)
-                        temp_num = "{0:.2e}".format(temp_num)
-                        temp_num = temp_num.replace("+", "")
+                        temp_num = self.clear_extra_zeros(temp_num)
+                        temp_num = self.conversion_to_exponential_form(temp_num)
                         self.main_label.setText(temp_num)
                     else:
-                        self.main_label.setText(main_label + sender.text())
+                        result = self.clear_extra_zeros(main_label + sender.text())
+                        self.main_label.setText(result)
 
-        elif sender.text() in ['C', 'CE', '.']:
+        elif sender.text() in ['C', 'CE']:
             match sender.text():
                 case 'C':
                     self.main_label.setText("0")
                     self.secondary_label.setText("")
                 case 'CE':
                     self.main_label.setText("0")
-                case '.':
-                    if '.' not in self.main_label.text():
-                        self.main_label.setText(self.main_label.text() + '.')
+
+    def clear_extra_zeros(self, num):
+        """ Удаляет лишние нули. """
+        if '.' in num and int(float(num)) != 0:
+            num = num.rstrip('0')
+            num = num.rstrip('.')
+
+        return num
+
+    def conversion_to_exponential_form(self, num):
+        """ Преобразует число к экспоненциальному виду. """
+
+        temp_num = Decimal(num)
+        temp_num = "{0:.2e}".format(temp_num)
+        # print('In conversation:', num, temp_num)
+
+        temp_num = temp_num.replace("+", "")
+
+        return temp_num
+
+    def checking_for_an_extra_point(self):
+        """ Проверка на лишнее добавление точки. """
+        if '.' not in self.main_label.text():
+            self.main_label.setText(self.main_label.text() + '.')
+        else:
+            return  # игнорирование нажатие кнопки float_point_button
 
 
 if __name__ == "__main__":
