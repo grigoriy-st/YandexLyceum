@@ -1,18 +1,17 @@
 import pygame
 
+
 def draw_square(screen, width, height):
     color = pygame.Color(255, 0, 0)
 
     pygame.draw.rect(screen, color,
-                     (1, 1, width - 3, height - 3), 0)
+                     (1, 1, width - 2, height - 2), 0)
 
 
 if __name__ == '__main__':
     try:
         width, height = list(map(int, input().split()))
         if width <= 0 or height <= 0:
-            raise ValueError
-        elif width == height:
             raise ValueError
 
         pygame.init()

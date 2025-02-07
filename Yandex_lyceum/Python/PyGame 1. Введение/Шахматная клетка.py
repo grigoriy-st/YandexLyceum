@@ -1,9 +1,13 @@
 import pygame
 
+
 def draw_board(screen, side_size, cell_quantity):
     w_cell = pygame.Color("white")
     b_cell = pygame.Color("black")
     cell_size = side_size // cell_quantity
+
+    if cell_quantity % 2:
+        w_cell, b_cell = b_cell, w_cell
 
     for row_c in range(side_size):
         for col_c in range(side_size):

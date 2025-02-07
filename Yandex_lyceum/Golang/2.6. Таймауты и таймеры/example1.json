@@ -1,0 +1,34 @@
+[
+    {
+        "name": "Shayne Wolf",
+        "phoneNumber": "+1.371.239.7548",
+        "email": "traynor@yahoo.com",
+        "address": "97158 Dianna Lane Apt. 240\nWest Kole, WA 33306-0472",
+        "userAgent": "Mozilla\/5.0 (compatible; MSIE 6.0; Windows NT 4.0; Trident\/3.0)",
+        "hexcolor": "#b23e34"
+    },
+    {
+        "name": "Kathleen Bode",
+        "phoneNumber": "694.910.4640",
+        "email": "davon.gislason@hotmail.com",
+        "address": "84526 Legros Extensions Suite 973\nNew Ebbafort, UT 51554",
+        "userAgent": "Mozilla\/5.0 (X11; Linux i686; rv:6.0) Gecko\/20181126 Firefox\/37.0",
+        "hexcolor": "#dafa47"
+    },
+    {
+        "name": "Prof. Colten Witting I",
+        "phoneNumber": "1-610-838-6609",
+        "email": "doris32@gmail.com",
+        "address": "752 Buckridge Creek Suite 772\nSouth Lucasside, NC 23093-4875",
+        "userAgent": "Mozilla\/5.0 (Windows; U; Windows NT 6.1) AppleWebKit\/535.48.3 (KHTML, like Gecko) Version\/4.1 Safari\/535.48.3",
+        "hexcolor": "#9b39b3"
+    },
+    {
+        "name": "Marlon Hoeger",
+        "phoneNumber": "+1.654.706.1652",
+        "email": "okon.dell@yahoo.com",
+        "address": "475 Kathryne Valleys Apt. 855\nKonopelskiland, WA 85875",
+        "userAgent": "Opera\/8.37 (Windows NT 4.0; sl-SI) Presto\/2.12.352 Version\/10.00",
+        "hexcolor": "#f065d6"
+    }
+]
