@@ -5,7 +5,7 @@ import (
 	"sync"
 )
 
-type Сount interface{  
+type Сount interface {
 	Increment()    // увеличение счётчика на единицу
 	GetValue() int // получение текущего значения
 }
@@ -16,7 +16,15 @@ type Counter struct {
 }
 
 func (c *Counter) GetValue() int {
+	c.mu.Lock()
+	defer c.mu.Unlock()
 	return c.value
+}
+
+func (c *Counter) Increment() {
+	c.mu.Lock()
+	defer c.mu.Unlock()
+	c.value++
 }
 
 func NewCounter() *Counter {
@@ -27,6 +35,10 @@ func NewCounter() *Counter {
 
 func main() {
 	counter := NewCounter()
-
+	counter.Increment()
+	fmt.Println(counter.GetValue())
+	counter.Increment()
+	fmt.Println(counter.GetValue())
+	counter.Increment()
 	fmt.Println(counter.GetValue())
 }

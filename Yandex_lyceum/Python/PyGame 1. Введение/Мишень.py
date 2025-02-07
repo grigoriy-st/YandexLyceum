@@ -1,44 +1,48 @@
 import pygame
+import sys
 
-def draw_board(screen, side_size, cell_quantity):
-    w_cell = pygame.Color("white")
-    b_cell = pygame.Color("black")
-    cell_size = side_size // cell_quantity
 
-    for row_c in range(side_size):
-        for col_c in range(side_size):
-            if (row_c + col_c) % 2 == 0:
-                color = w_cell
-            else:
-                color = b_cell
+pygame.init()
 
-            pygame.draw.rect(screen, color,
-                             (
-                                row_c * cell_size,
-                                col_c * cell_size,
-                                cell_size,
-                                cell_size
-                             )
-                             )
 
-if __name__ == '__main__':
-    try:
-        w, n = list(map(int, input().split()))
-        pygame.init()
+width = 500
+height = 500
 
-        # size = width, height = side_size, side_size
-        if w <= 0 or n <= 0:
-            raise ValueError
 
-        screen = pygame.display.set_mode(size)
-        pygame.display.set_caption("Шахматая доска")
-        draw_board(screen, side_size, cell_quantity)
-        pygame.display.flip()
+screen = pygame.display.set_mode((width, height))
 
-        while pygame.event.wait().type != pygame.QUIT:
-            pass
 
-    except ValueError:
-        print("Неправильный формат ввода")
-    finally:
-        pygame.quit()
+pygame.display.set_caption("RGB мишень")
+
+
+try:
+    w, n = map(int, input("Введите толщину кольца и количество колец: ").split())
+except ValueError:
+    print("Неправильный формат ввода")
+    sys.exit()
+
+
+colors = [pygame.Color("red"), pygame.Color("green"), pygame.Color("blue")]
+
+
+radius = w
+x = 0
+y = 0
+for i in range(n):
+    color = colors[i % 3]
+
+    pygame.draw.circle(screen, color, (x + radius, y + radius), radius, w)
+    radius += w
+
+
+pygame.display.flip()
+
+
+running = True
+while running:
+    for event in pygame.event.get():
+        if event.type == pygame.QUIT:
+            running = False
+
+
+pygame.quit()
