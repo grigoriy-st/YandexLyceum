@@ -1,35 +1,30 @@
 package main
 
 import (
-	"sync"
 	"testing"
 )
 
 func TestAreAnagrams(t *testing.T) {
-	slice := [][]string{
-		{"hello", "olloeh"},
-		{"malo", "morlo"},
-		{"first", "tsrif"},
+	tests := []struct {
+		str1           string
+		str2           string
+		expectedResult bool
+	}{
+		{"hello", "olleh", true},
+		{"malo", "mrl", false},
+		{"first", "tsrif", true},
+		{"Listen", "Silent", true},
+		{"Dormitory", "Dirty room", false},
+		{"The eyes", "They see", true},
+		{"", "", true},
+		{"a", "a", true},
+		{"a", "b", false},
 	}
 
-	expectedResults := []bool{
-		true,
-		false,
-		true,
+	for _, test := range tests {
+		got := AreAnagrams(test.str1, test.str2)
+		if got != test.expectedResult {
+			t.Errorf("AreAnagrams(%q, %q) = %v; want %v", test.str1, test.str2, got, test.expectedResult)
+		}
 	}
-
-	var wg sync.WaitGroup
-	wg.Add(len(slice))
-
-	for i := 0; i < len(slice); i++ {
-		go func(i int) {
-			defer wg.Done()
-			got := AreAnagrams(slice[i][0], slice[i][1])
-			if got != expectedResults[i] {
-				t.Errorf("Error. Expected: %v, Got: %v", expectedResults[i], got)
-			}
-		}(i)
-	}
-
-	wg.Wait()
 }
