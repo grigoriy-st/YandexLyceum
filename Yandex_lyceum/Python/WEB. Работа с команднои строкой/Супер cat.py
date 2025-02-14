@@ -1,22 +1,50 @@
+import os
 import sys
 
-args = sys.argv
-last_cmd = None
 
-for arg in args[1:]:
-    if arg in ['--num', '--count', '--sort']:
-        last_cmd = arg
-        continue
+def print_data(filename, count, num, sort):
+    try:
+        if os.path.isfile(os.getcwd() + filename):
+            print('Файла нет')
+            return
 
-    if last_cmd == '--num':
-        row_num = 0
+        with open(filename, 'r', encoding='utf-8') as file:
+            lines = file.readlines()
 
-        with open(arg, "r", encoding='utf-8') as file:
-            while True:
-                line = file.readline().rstrip("\n")
-                if not line:
-                    break
+        if sort:
+            lines.sort()
 
-                print(f'{row_num} {line}')
-                row_num += 1
+        if num:
+            [print(i, line.rstrip('\n')) for i, line in enumerate(lines)]
+        else:
+            [print(line.rstrip('\n')) for line in lines]
 
+        if count:
+            print(f'rows count: {len(lines)}')
+    except Exception:
+        print('ERROR')
+
+
+def main():
+    args = sys.argv[1:]
+
+    if not args:
+        print('Error')
+        return
+
+    count = '--count' in args
+    num = '--num' in args
+    sort = '--sort' in args
+    
+    for el in args:
+        if '.' in el:
+            filename = el
+
+    if not filename:
+        print('ERROR')
+        return
+    print_data(filename, count=count, num=num, sort=sort)
+
+
+if __name__ == '__main__':
+    main()
