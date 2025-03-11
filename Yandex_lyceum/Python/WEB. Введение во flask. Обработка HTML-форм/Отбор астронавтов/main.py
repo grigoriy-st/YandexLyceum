@@ -1,7 +1,7 @@
 from flask import Flask, url_for, request, render_template
 
 app = Flask(__name__)
-@app.route('/choice/<planet_naem>', methods=['POST', 'GET'])
+@app.route('/choice/<planet_name>', methods=['POST', 'GET'])
 def get_pae(planet_name):
     specialities = ['Инженер-исследователь', 'Инженер-строитель', 
                     'Пилот', 'Метеоролог', 'Инженер по жизнеобеспечению', 
