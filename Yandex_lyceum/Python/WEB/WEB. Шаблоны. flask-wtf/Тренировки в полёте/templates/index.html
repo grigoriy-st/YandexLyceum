@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css')}}">
+    <title>{{ page.title }}</title>
+</head>
+<body>
+    <header>
+        <h1>Миссия Колонизация Марса</h1>
+        <h3>Mars One</h3>
+    </header>
+    <h3>И на Марсе будут яблони цвести!</h3>
+
+    <main>
+        <h2>{{ page.title }}</h2>
+        <img class="photo" src="{{ url_for('static', filename=page.image )}}" alt="">
+    </main>
+    
+</body>
+</html>

@@ -1,0 +1,32 @@
+* {
+    font-family: 'Courier New', Courier, monospace;
+    margin: 0 auto;
+}
+
+body {
+    display: flex;
+    width: 100%;
+    flex-direction: column;
+    justify-content: space-around;
+    align-items: center;
+}
+header {
+    display: flex;
+    width: 100%;
+    flex-direction: row;
+    justify-content: space-around;
+    margin-top: 20px;
+    margin-bottom: 50px;
+}
+
+main {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 50%;
+}
+
+.photo {
+    padding-top: 30px;
+    width: 50%;
+}

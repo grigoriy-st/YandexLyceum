@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <title>Карусель Фото</title>
+</head>
+<body>
+<h1>Пейзажи Марса</h1>
+<div class="carousel">
+
+    <form method="POST">
+        <input type="hidden" name="current_index" value="{{ current_index }}">
+        <button class="button left" name="prev">&#10094;</button>
+        <img src="{{ url_for('static', filename=images[current_index]) }}" class="active" alt="Photo num {{ current_index}}">
+        <button class="button right" name="next">&#10095;</button>
+    </form>
+</div>
+
+</body>
+</html>
