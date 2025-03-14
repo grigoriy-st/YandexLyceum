@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css')}}">
+    <title>Цвет каюты</title>
+
+</head>
+
+<body>
+    <header>
+        <h1>Миссия Колонизация Марса</h1>
+        <h3>Mars One</h3>
+    </header>
+
+    <h2 class="second_title">И на Марсе будут яблони цвести!</h2>
+    <main>
+        <table>
+            <tr>
+                <td>Цвет стен</td>
+                <td>Эмблема</td>
+            </tr>
+            <tr>
+                <td style="background-color: {{ data.wall_color }};">
+                </td>
+                <td>
+                    <img src="{{ url_for('static', filename='img/' + data.image) }}" alt="">
+                </td>
+            </tr>
+        </table>
+    </main>
+
+</body>
+</html>
