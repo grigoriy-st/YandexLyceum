@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css')}}">
+    <title>Auth</title>
+</head>
+<body>
+    <header>
+        <h1>Миссия Колонизация Марса</h1>
+        <h3>Mars One</h3>
+    </header>
+    <h3 class="second_title">И на Марсе будут яблони цвести!</h3>
+
+    <main>
+        <div class="container">
+            <img class="photo" src="{{ url_for('static', filename='img/MARS-2-7.png' )}}" alt="">
+            <h2>Аварийный доступ</h2>
+        </div>
+
+        <form class="entity" method="post"">
+
+            <label for="a_id">Id астронавта</label>
+            <input type="number" class="form_control" id="a_id" name="id">
+            <label for="a_password">Пароль капитана</label>
+            <input type="text" class="form_control" id="a_password" name="password">
+            <label for="c_id">Id капитана</label>
+            <input type="number" class="form_control" id="c_id" name="id">
+            <label for="c_password">Пароль капитана</label>
+            <input type="text" class="form_control" id="c_password" name="password">
+
+            <button type="submit" class="btn">Доступ</button>
+        </form>
+    </main>
+    
+</body>
+</html>
