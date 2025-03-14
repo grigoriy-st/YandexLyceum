@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <title>Карусель Фото</title>
+</head>
+    <body>
+        <header>
+            <h2>Миссия Колонизация Марса</h2>
+            <h5>Mars One</h5>
+        </header>
+        <br>
+        <h4>И на Марсе будут яблони цвести!</h4>
+        <br>
+        <h1>Пейзажи Марса</h1>
+        <div class="carousel">
+
+            <form method="POST">
+                <input type="hidden" name="current_index" value="{{ current_index }}">
+                <button class="button left" name="prev">&#10094;</button>
+                <img src="{{ url_for('static', filename=images[current_index]) }}" class="active" alt="Photo num {{ current_index}}">
+                <button class="button right" name="next">&#10095;</button>
+            </form>
+
+        </div>
+        <form class="upload_image_form" method="post" enctype="multipart/form-data">
+            <label for="file">Добавить картинку</label>
+            <br>
+            <input type="file" name="file" class="form-control-file" required>
+            {% if filename %}
+                <h2 class="photo">Загруженное изображение:</h2>
+                <img src="{{ url_for('static', filename='img/' + filename) }}" class="img-fluid mt-3" alt="Uploaded Image">
+            {% endif %}
+            <button type="submit" class="btn-primary">Загрузить</button>
+        </form>
+    </body>
+</html>
