@@ -1,0 +1,26 @@
+[
+    {
+        "first_name": "John",
+        "last_name": "Doe",
+        "photo": "john_doe.jpg",
+        "specialties": ["Pilot", "Navigator"]
+    },
+    {
+        "first_name": "Jane",
+        "last_name": "Smith",
+        "photo": "jane_smith.jpg",
+        "specialties": ["Engineer", "Mechanic"]
+    },
+    {
+        "first_name": "Alice",
+        "last_name": "Johnson",
+        "photo": "alice_johnson.jpg",
+        "specialties": ["Scientist", "Researcher"]
+    },
+    {
+        "first_name": "Bob",
+        "last_name": "Brown",
+        "photo": "bob_brown.jpg",
+        "specialties": ["Doctor", "Medic"]
+    }
+]

@@ -20,7 +20,7 @@
             <form method="POST">
                 <input type="hidden" name="current_index" value="{{ current_index }}">
                 <button class="button left" name="prev">&#10094;</button>
-                <img src="{{ url_for('static', filename=images[current_index]) }}" class="active" alt="Photo num {{ current_index}}">
+                <img src="{{ url_for('static', filename='img/' + images[current_index]) }}" class="active" alt="Photo num {{ current_index}}">
                 <button class="button right" name="next">&#10095;</button>
             </form>
 
