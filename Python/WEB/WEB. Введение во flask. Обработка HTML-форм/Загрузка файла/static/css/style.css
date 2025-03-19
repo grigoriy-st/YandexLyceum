@@ -1,0 +1,25 @@
+p {
+    margin: 0;
+}
+
+textarea {
+    width: 100%;
+}
+.main_container {
+    display: flex;
+    margin: 0 auto;
+    max-width: 500px;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #ffc983;
+    border: 1px solid gray;
+    border-radius: 5px;
+    padding: 10px;
+}
+
+
+.photo {
+    max-width: 300px;
+    max-height: 500px;
+}

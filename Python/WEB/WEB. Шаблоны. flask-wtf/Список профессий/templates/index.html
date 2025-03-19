@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css')}}">
+    <title>Миссия Колонизация Марса</title>
+</head>
+<body>
+    <header>
+        <h1>Миссия Колонизация Марса</h1>
+        <h3>Mars One</h3>
+    </header>
+    <h3>И на Марсе будут яблони цвести!</h3>
+
+    <main>
+        <h2>Список профессий</h2>
+
+        {% if page.list_type == 'ul' %}
+
+        <ul class="prof_list">
+            {% for item in page.profs %}
+                <li>{{ item }} </li>
+            {% endfor %}
+        </ul>
+
+        {% else %}
+
+        <ol class="prof_list">
+            {% for item in page.profs %}
+                <li>{{ item }} </li>
+            {% endfor %}
+        </ol>
+
+        {% endif %}
+        
+    </main>
+    
+</body>
+</html>

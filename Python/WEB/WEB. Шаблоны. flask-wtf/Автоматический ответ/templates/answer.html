@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css')}}">
+    <title>Анкета</title>
+</head>
+<body>
+    <header>
+        <h1>Миссия Колонизация Марса</h1>
+        <h3>Mars One</h3>
+    </header>
+    <h4>{{ data.title }}</h4>
+
+    <main>
+        <ul>
+            <li>Фамилия: {{ data.surname }}</li>
+            <li>Имя: {{ data.name }}</li>
+            <li>Образование: {{ data.education }}</li>
+            <li>Процессия: {{ data.profession }}</li>
+            <li>Пол: {{ data.sex }}</li>
+            <li>Мотивация: {{ data.motivation }}</li>
+            <li>Готовы остаться на Марсе? {{ data.ready }}</li>
+        </ul>
+    </main> 
+</body>
+</html>
