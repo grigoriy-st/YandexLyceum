@@ -4,7 +4,6 @@ from sqlalchemy.orm import sessionmaker
 from users import User
 from jobs import Jobs
 from users import SqlAlchemyBase
-from sqlalchemy import DateTime
 
 engine = create_engine("sqlite:///mars_explorer.sqlite", echo=True)
 SqlAlchemyBase.metadata.create_all(engine)
@@ -54,5 +53,16 @@ colonists = [
 session.add(captain)
 session.add_all(colonists)
 session.commit()
-session.close()
 
+job_1 = Jobs(
+    team_leader=1,
+    job='deployment of residential modules 1 and 2',
+    work_size=15,
+    collaborators='2, 3',
+    start_date=datetime.datetime.now(),
+    is_finished=False
+)
+
+session.add(job_1)
+session.commit()
+session.close()

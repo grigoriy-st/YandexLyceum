@@ -1,10 +1,8 @@
 import datetime
 import sqlalchemy
 from sqlalchemy import ForeignKey
-from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import relationship
-
-SqlAlchemyBase = declarative_base()
+from users import SqlAlchemyBase
 
 class Jobs(SqlAlchemyBase):
     __tablename__ = 'jobs'
@@ -18,5 +16,5 @@ class Jobs(SqlAlchemyBase):
     end_date = sqlalchemy.Column(sqlalchemy.DateTime, default=datetime.datetime.now)
     is_finished = sqlalchemy.Column(sqlalchemy.Boolean, default=False)
 
-    team_leader_user = relationship("User", back_populates='jobs')
+    team_leader_user = relationship("User", back_populates="jobs")
 

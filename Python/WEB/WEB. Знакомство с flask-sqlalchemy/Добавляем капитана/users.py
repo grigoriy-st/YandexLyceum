@@ -1,6 +1,7 @@
 import datetime
 import sqlalchemy
 from sqlalchemy.ext.declarative import declarative_base
+from sqlalchemy.orm import relationship
 
 SqlAlchemyBase = declarative_base()
 
@@ -18,3 +19,4 @@ class User(SqlAlchemyBase):
     hashed_password = sqlalchemy.Column(sqlalchemy.String, nullable=True)
     modified_date = sqlalchemy.Column(sqlalchemy.DateTime, default=datetime.datetime.now)
 
+    jobs = relationship("Jobs", back_populates="team_leader_user", lazy="dynamic")
