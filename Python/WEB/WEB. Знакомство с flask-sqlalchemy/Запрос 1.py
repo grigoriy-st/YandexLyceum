@@ -1,7 +1,6 @@
-import datetime
 import sqlalchemy
-from sqlalchemy.ext.declarative import declarative_base
-from sqlalchemy.orm import relationship
+from sqlalchemy.orm import sessionmaker, declarative_base
+import datetime
 
 SqlAlchemyBase = declarative_base()
 
@@ -20,7 +19,20 @@ class User(SqlAlchemyBase):
     hashed_password = sqlalchemy.Column(sqlalchemy.String, nullable=True)
     modified_date = sqlalchemy.Column(sqlalchemy.DateTime, default=datetime.datetime.now)
 
-    jobs = relationship("Jobs", back_populates="team_leader_user", lazy="dynamic")
 
-    def __repr__(self):
-        print(f'<Colonist> {self.id} {self.surname} {self.name}')
+db_name = input().strip()
+
+engine = sqlalchemy.create_engine(f'sqlite:///{db_name}')
+Session = sessionmaker(bind=engine)
+session = Session()
+
+colonists = session.query(User.id).filter(
+    User.address == 'module_1',
+    ~User.position.ilike('%engineer%'),
+    ~User.speciality.ilike('%engineer%')
+).all()
+
+for colonist_id, in colonists:
+    print(colonist_id)
+
+session.close()
