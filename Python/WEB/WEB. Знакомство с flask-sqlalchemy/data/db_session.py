@@ -1,14 +1,17 @@
+import os
 import sqlalchemy as sa
 import sqlalchemy.orm as orm
 from sqlalchemy.orm import Session
+from sqlalchemy.ext.declarative import declarative_base
 
-SqlAlchemyBase = orm.declarative_base()
-
+SqlAlchemyBase = declarative_base()
 __factory = None
+
+if 'WEB. Знакомство с flask-sqlalchemy' not in os.getcwd():
+    os.chdir('WEB. Знакомство с flask-sqlalchemy')
 
 def global_init(db_file):
     global __factory
-
     if __factory:
         return
 
