@@ -1,8 +1,8 @@
-import sqlalchemy
-from sqlalchemy.orm import sessionmaker, declarative_base
 import datetime
-
-SqlAlchemyBase = declarative_base()
+import sqlalchemy
+from sqlalchemy import orm
+from .db_session import SqlAlchemyBase
+from werkzeug.security import generate_password_hash, check_password_hash
 
 
 class User(SqlAlchemyBase):
@@ -15,24 +15,14 @@ class User(SqlAlchemyBase):
     position = sqlalchemy.Column(sqlalchemy.String, nullable=True)
     speciality = sqlalchemy.Column(sqlalchemy.String, nullable=True)
     address = sqlalchemy.Column(sqlalchemy.String, nullable=True)
-    email = sqlalchemy.Column(sqlalchemy.String, unique=True, nullable=True)
+    email = sqlalchemy.Column(sqlalchemy.String, index=True, unique=True, nullable=True)
     hashed_password = sqlalchemy.Column(sqlalchemy.String, nullable=True)
     modified_date = sqlalchemy.Column(sqlalchemy.DateTime, default=datetime.datetime.now)
 
+    news = orm.relationship("News", back_populates='user')
 
-db_name = input().strip()
+    def set_password(self, password):
+        self.hashed_password = generate_password_hash(password)
 
-engine = sqlalchemy.create_engine(f'sqlite:///{db_name}')
-Session = sessionmaker(bind=engine)
-session = Session()
-
-colonists = session.query(User.id).filter(
-    User.address == 'module_1',
-    ~User.position.ilike('%engineer%'),
-    ~User.speciality.ilike('%engineer%')
-).all()
-
-for colonist_id, in colonists:
-    print(colonist_id)
-
-session.close()
+    def check_password(self, password):
+        return check_password_hash(self.hashed_password, password)

@@ -6,8 +6,19 @@ from data.news import News
 from forms.user import RegisterForm
 from werkzeug.security import generate_password_hash
 
+from sqlalchemy import create_engine, Column, Integer, String
+from sqlalchemy.ext.declarative import declarative_base
+from sqlalchemy.orm import sessionmaker
+
 # if 'WEB. Знакомство с flask-sqlalchemy' not in os.getcwd():
 #     os.chdir('WEB. Знакомство с flask-sqlalchemy')
+
+# class Action:
+engine = create_engine('sqlite:///example.db')
+Base = declarative_base()
+
+Session = sessionmaker(bind=engine)
+session = Session()
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'yandexlyceum_secret_key'
