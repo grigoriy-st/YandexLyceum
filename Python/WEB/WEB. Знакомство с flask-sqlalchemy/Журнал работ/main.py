@@ -1,5 +1,6 @@
 import os
-import datetime
+from datetime import datetime
+from pprint import pprint
 from flask import Flask, render_template, redirect, url_for, request
 from sqlalchemy.exc import IntegrityError
 
@@ -71,9 +72,28 @@ def create_job():
     if request.method == 'POST':
         title = request.form['title']
         team_leader = request.form['team_leader']
-        duration = request.form['duration']
+        beginning_of_duration = request.form['beginning_of_duration']
+        end_of_duration = request.form['end_of_duration']
         list_of_collaborators = request.form['list_of_collaborators']
-        is_finished = request.forn['is_finished']
+        is_finished = request.form['is_finished']
+
+
+        # Вычисление разницы времени
+        start_date = datetime.strptime(beginning_of_duration, "%Y-%m-%dT%H:%M")
+        end_date = datetime.strptime(end_of_duration, "%Y-%m-%dT%H:%M")
+        difference = start_date - end_date
+        days_difference = difference.days
+        seconds_difference = difference.seconds
+
+        hours_difference = seconds_difference // 3600
+        minutes_difference = (seconds_difference % 3600) // 60
+
+        # Работа с бд
+        duration = " ".join([
+            f"{days_difference} дней,",
+            f"{hours_difference} часов,",
+            f"{minutes_difference} минут."
+        ])
 
         new_job = Jobs(
             team_leader=team_leader,
@@ -86,13 +106,15 @@ def create_job():
         try:
             db_ss = db_session.create_session()
             db_ss.add(new_job)
+            message = "Job is added"
 
         except IntegrityError:
+            print("Error")
             db_ss.rollback()
             error_message = "Ошибка при добавлении работы. Возможно, такая работа уже существует."
-            return render_template('add_job.html', error=error_message)
+            return render_template('new_job.html', error=error_message)
 
-    return render_template('new_job.html')
+    return render_template('new_job.html', message=message)
 
 
 @app.route('/add_user')

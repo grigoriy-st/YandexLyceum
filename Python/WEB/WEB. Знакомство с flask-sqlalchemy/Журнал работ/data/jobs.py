@@ -19,6 +19,7 @@ class Jobs(SqlAlchemyBase):
                                    default=datetime.datetime.now)
     end_date = sqlalchemy.Column(sqlalchemy.DateTime,
                                  default=datetime.datetime.now)
+    duration = sqlalchemy.Column(sqlalchemy.String, nullable=True)
     is_finished = sqlalchemy.Column(sqlalchemy.Boolean, default=False)
 
-    team_leader_user = relationship("User", back_populates="jobs")
+    # team_leader_user = relationship("User", back_populates="jobs")
