@@ -21,3 +21,7 @@
     width: 100px;
     height: 30px;
 }
+
+.success_message {
+    color: green;
+}

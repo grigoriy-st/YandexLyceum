@@ -40,8 +40,10 @@ def main():
 def index():
     """ Отображение журнала работ. """
     db_sess = db_session.create_session()
-    users = db_sess.query(User)
-    return render_template("index.html", users=users)
+    jobs = db_sess.query(Jobs)
+
+
+    return render_template("jobs.html", jobs=jobs)
 
 
 @app.route('/register', methods=['GET', 'POST'])
@@ -66,9 +68,18 @@ def register():
     return render_template('register.html', form=form)
 
 
+def get_leaders():
+    db_ss = db_session.create_session()
+
+
 @app.route('/create_job', methods=['GET', 'POST'])
 def create_job():
     """ Страница создания работы. """
+    db_ss = db_session.create_session()
+
+    # Дальнейшая обработка тим лидов
+    team_leaders = db_ss.query(User).all()
+
     if request.method == 'POST':
         title = request.form['title']
         team_leader = request.form['team_leader']
@@ -76,45 +87,46 @@ def create_job():
         end_of_duration = request.form['end_of_duration']
         list_of_collaborators = request.form['list_of_collaborators']
         is_finished = request.form['is_finished']
-
+        print(is_finished)
 
         # Вычисление разницы времени
         start_date = datetime.strptime(beginning_of_duration, "%Y-%m-%dT%H:%M")
         end_date = datetime.strptime(end_of_duration, "%Y-%m-%dT%H:%M")
-        difference = start_date - end_date
+        difference = end_date - start_date
         days_difference = difference.days
         seconds_difference = difference.seconds
 
-        hours_difference = seconds_difference // 3600
-        minutes_difference = (seconds_difference % 3600) // 60
+        work_size = seconds_difference // 3600
+        print(work_size)
 
         # Работа с бд
-        duration = " ".join([
-            f"{days_difference} дней,",
-            f"{hours_difference} часов,",
-            f"{minutes_difference} минут."
-        ])
 
         new_job = Jobs(
             team_leader=team_leader,
             job=title,
             collaborators=list_of_collaborators,
-            duration=duration,
-            is_finished=True if is_finished == "yes" else False,
+            start_date=start_date,
+            end_date=end_date,
+            work_size=work_size,
+            is_finished=True if is_finished == "finished" else False,
         )
 
+        print(new_job.is_finished)
         try:
-            db_ss = db_session.create_session()
             db_ss.add(new_job)
+            db_ss.commit()
             message = "Job is added"
 
-        except IntegrityError:
-            print("Error")
+
+        except IntegrityError as e:
+            print(f"Error: {e}")
             db_ss.rollback()
             error_message = "Ошибка при добавлении работы. Возможно, такая работа уже существует."
-            return render_template('new_job.html', error=error_message)
+            return render_template('new_job.html', error=error_message, team_leaders=team_leaders)
+        return render_template('new_job.html', message=message, team_leaders=team_leaders)
 
-    return render_template('new_job.html', message=message)
+
+    return render_template('new_job.html', team_leaders=team_leaders)
 
 
 @app.route('/add_user')

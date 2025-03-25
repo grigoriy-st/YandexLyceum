@@ -1,4 +1,8 @@
 * {
+    /* dark mode */
+    background-color: #121212;
+    color: white;
+
     margin: 0px;
     padding: 0px;
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
@@ -20,12 +24,10 @@ main {
 
     height: 100vh;
     margin-top: 20px;
-    outline: 1px dashed green;
-
 }
 
 .second_header {
     margin-top: 30px;
     margin-left: 15vw;
-    opacity: 0.3;
+    color: grey;
 }

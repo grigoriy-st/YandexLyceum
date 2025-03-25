@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+
+{% block styles %}
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/job_list.css')}}"> 
+{% endblock %}
+
+{% block content %}
+<h1>Записи в блоге</h1>
+{% for job  in jobs %}
+    <div class="action">
+        <h2>Action # {{ loop.index }} </h2>
+        <table>
+            <tr>
+                <th>Title of avtivity</th>
+                <th>Team leader</th>
+                <th>Duration</th>
+                <th>List of collaborators</th>
+                <th>Is finished</th>
+            </tr>
+            <tr>
+                <td>{{ job.job }}</td>
+                <td>{{ job.team_leader }}</td>
+                <td>{{ job.work_size }}</td>
+                <td>{{ job.collaborators }}</td>
+                <td>{{ job.is_finished }}</td>
+            </tr>
+        </table>
+    </div>
+{% endfor %}
+
+
+{% endblock %}

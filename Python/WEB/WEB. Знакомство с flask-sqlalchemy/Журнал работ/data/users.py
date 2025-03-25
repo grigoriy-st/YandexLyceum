@@ -26,3 +26,6 @@ class User(SqlAlchemyBase):
 
     def check_password(self, password):
         return check_password_hash(self.hashed_password, password)
+
+    def __repr__(self):
+        return f'{self.name}, {self.surname}, id={self.id}'
