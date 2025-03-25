@@ -1,14 +1,11 @@
 {% extends "base.html" %}
 {% block content %}
-<main>
-    
-</main>
 <h1>Записи в блоге</h1>
-{% for item in news %}
+{% for user in users %}
     <div>
-        <h2>{{ item.title }}</h2>
-        <p>{{ item.content }}</p>
-        <p>Автор - {{ item.user.name }}, Дата: {{ item.created_date }}</p>
+        <h2>{{ user.surname }}</h2>
+        <p>{{ user.name }}</p>
+        <p>Автор - {{ user.age }}, Дата: {{ user.created_date }}</p>
     </div>
 {% endfor %}
 {% endblock %}

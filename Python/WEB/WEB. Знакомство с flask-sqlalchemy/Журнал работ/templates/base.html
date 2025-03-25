@@ -3,19 +3,34 @@
 <head>
     <meta charset="UTF-8">
     <title>{% block title %}Колонизация марса{% endblock %}</title>
+    <link rel="stylesheet"
+    href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/css/bootstrap.min.css"
+    integrity="sha384-giJF6kkoqNQ00vy+HMDP7azOuL0xtbfIcaT9wjKHr8RbDVddVHyTfAAsrekwKmP1"
+    crossorigin="anonymous">
+
+    <!-- Стандартный стиль -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css')}}"> 
+
+    <!-- Дополнительный стиль -->
+    {% block styles %}{% endblock %}
+
 </head>
 <body>
+
     <header>
         <h1>Миссия Колонизация Марса</h1>
         <h4>Mars One</h4>
     </header>
-    <h3>И на Марсе будут яблони c</h3>
-    <nav>
-        <a href="/">Главная</a> |
-        <a href="/register">Регистрация</a>
-    </nav>
-    <div>
+
+    <h3 class="second_header">И на Марсе будут яблони цвести!</h3>
+    <main>
+        <nav>
+            <a href="/">Главная</a> |
+            <a href="/register">Регистрация</a>
+        </nav>
+
         {% block content %}{% endblock %}
-    </div>
+    </main>
+
 </body>
 </html>

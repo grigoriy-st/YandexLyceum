@@ -7,8 +7,9 @@ from sqlalchemy.ext.declarative import declarative_base
 SqlAlchemyBase = declarative_base()
 __factory = None
 
-if 'WEB. Знакомство с flask-sqlalchemy' not in os.getcwd():
-    os.chdir('WEB. Знакомство с flask-sqlalchemy')
+# if 'WEB. Знакомство с flask-sqlalchemy' not in os.getcwd():
+#     os.chdir('WEB. Знакомство с flask-sqlalchemy')
+
 
 def global_init(db_file):
     global __factory
@@ -27,6 +28,7 @@ def global_init(db_file):
     from . import __all_models
 
     SqlAlchemyBase.metadata.create_all(engine)
+
 
 def create_session() -> Session:
     global __factory
