@@ -1,8 +1,6 @@
 import os
 from datetime import datetime
-from pprint import pprint
 from flask import Flask, render_template, redirect, url_for, request
-from sqlalchemy.exc import IntegrityError
 
 from data import db_session
 from data.users import User
@@ -11,21 +9,11 @@ from data.jobs import Jobs
 from forms.user import RegisterForm
 from werkzeug.security import generate_password_hash
 
+from sqlalchemy.exc import IntegrityError
 from sqlalchemy import create_engine, Column, Integer, String
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
 
-# if 'WEB. Знакомство с flask-sqlalchemy' not in os.getcwd():
-#     os.chdir('WEB. Знакомство с flask-sqlalchemy')
-
-# class Action:
-engine = create_engine('sqlite:///db/data.db')
-Base = declarative_base()
-
-Session = sessionmaker(bind=engine)
-# session = Session()
-
-# users = session.query(User).all()
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'yandexlyceum_secret_key'
@@ -42,13 +30,12 @@ def index():
     db_sess = db_session.create_session()
     jobs = db_sess.query(Jobs)
 
-
     return render_template("jobs.html", jobs=jobs)
 
 
 @app.route('/register', methods=['GET', 'POST'])
 def register():
-    """ Нерабочая функция регистрации"""
+    """ Нерабочая функция регистрации. Для следующего задания. """
     form = RegisterForm()
     if form.validate_on_submit():
         if form.password.data != form.password_again.data:
@@ -65,11 +52,8 @@ def register():
         db_sess.add(user)
         db_sess.commit()
         return redirect('/')
+
     return render_template('register.html', form=form)
-
-
-def get_leaders():
-    db_ss = db_session.create_session()
 
 
 @app.route('/create_job', methods=['GET', 'POST'])
@@ -77,7 +61,7 @@ def create_job():
     """ Страница создания работы. """
     db_ss = db_session.create_session()
 
-    # Дальнейшая обработка тим лидов
+    # Получение всех пользователей
     team_leaders = db_ss.query(User).all()
 
     if request.method == 'POST':
@@ -87,7 +71,6 @@ def create_job():
         end_of_duration = request.form['end_of_duration']
         list_of_collaborators = request.form['list_of_collaborators']
         is_finished = request.form['is_finished']
-        print(is_finished)
 
         # Вычисление разницы времени
         start_date = datetime.strptime(beginning_of_duration, "%Y-%m-%dT%H:%M")
@@ -96,8 +79,7 @@ def create_job():
         days_difference = difference.days
         seconds_difference = difference.seconds
 
-        work_size = seconds_difference // 3600
-        print(work_size)
+        work_size = days_difference * 24 + seconds_difference // 3600
 
         # Работа с бд
 
@@ -111,26 +93,31 @@ def create_job():
             is_finished=True if is_finished == "finished" else False,
         )
 
-        print(new_job.is_finished)
         try:
             db_ss.add(new_job)
             db_ss.commit()
             message = "Job is added"
 
-
         except IntegrityError as e:
             print(f"Error: {e}")
             db_ss.rollback()
-            error_message = "Ошибка при добавлении работы. Возможно, такая работа уже существует."
-            return render_template('new_job.html', error=error_message, team_leaders=team_leaders)
-        return render_template('new_job.html', message=message, team_leaders=team_leaders)
+            error_message = "Ошибка при добавлении работы. " \
+                            "Возможно, такая работа уже существует."
 
+            return render_template('new_job.html',
+                                   error=error_message,
+                                   team_leaders=team_leaders)
+
+        return render_template('new_job.html',
+                               message=message,
+                               team_leaders=team_leaders)
 
     return render_template('new_job.html', team_leaders=team_leaders)
 
 
 @app.route('/add_user')
 def add_user():
+    """ Добавления пользователя. Для следующего задания. """
     new_user = User(
         surname="Иванов",
         name="Иван",

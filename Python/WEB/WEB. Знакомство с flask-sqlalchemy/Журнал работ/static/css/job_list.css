@@ -1,6 +1,6 @@
 .action {
     margin-top: 30px;
-    width: 1000px;
+    width: 80%;
 }
 
 table {
@@ -9,4 +9,8 @@ table {
 
 tr {
     border: 1px solid grey;
+}
+
+th {
+    background-color: rgb(181, 183, 185);
 }

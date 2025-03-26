@@ -8,7 +8,7 @@
 <h1>Записи в блоге</h1>
 {% for job  in jobs %}
     <div class="action">
-        <h2>Action # {{ loop.index }} </h2>
+        <h2>Action # {{ job.id }} </h2>
         <table>
             <tr>
                 <th>Title of avtivity</th>
@@ -20,9 +20,13 @@
             <tr>
                 <td>{{ job.job }}</td>
                 <td>{{ job.team_leader }}</td>
-                <td>{{ job.work_size }}</td>
+                <td>{{ job.work_size }} Hours</td>
                 <td>{{ job.collaborators }}</td>
-                <td>{{ job.is_finished }}</td>
+                {% if job.is_finished %}
+                    <td>Is finished</td>
+                {% else %}
+                    <td>Is not finished</td>
+                {% endif %}
             </tr>
         </table>
     </div>
