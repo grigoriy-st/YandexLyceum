@@ -1,7 +1,9 @@
 import sqlalchemy
 from sqlalchemy.orm import sessionmaker, declarative_base
+from sqlalchemy import create_engine
 
 SqlAlchemyBase = declarative_base()
+__factory = None
 
 
 class User(SqlAlchemyBase):
@@ -34,23 +36,26 @@ class Jobs(SqlAlchemyBase):
         return f'<Job> {self.job}'
 
 
+def global_init(db_name):
+    global __factory
+    if __factory:
+        return
+    engine = create_engine(f'sqlite:///{db_name}', echo=False)
+    SqlAlchemyBase.metadata.create_all(engine)
+    __factory = sessionmaker(bind=engine)
+
+
+def create_session():
+    global __factory
+    return __factory() if __factory else None
+
+
 db_name = input().strip()
+global_init(db_name)
+session = create_session()
 
-engine = sqlalchemy.create_engine(f"sqlite:///{db_name}")
-Session = sessionmaker(bind=engine)
-session = Session()
-
-try:
-    jobs = session.query(Jobs).filter(
-        Jobs.work_size < 20,
-        Jobs.is_finished.is_(False)
-    ).all()
-
-    for job in jobs:
-        print(job)
-
-except Exception as e:
-    print(f"Error: {e}")
-
-finally:
-    session.close()
+if session:
+    session.query(User).filter(User.address == 'module_1', User.age < 21).update(
+        {User.address: 'module_3'}, synchronize_session='fetch'
+    )
+    session.commit()

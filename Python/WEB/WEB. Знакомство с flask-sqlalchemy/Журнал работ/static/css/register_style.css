@@ -14,7 +14,17 @@
 .field {
     width: 100%;
 }
-.post_button {
 
+button.post_button {
+    border: none;
     margin-top: 50px;
+    /* width: 200px; */
+}
+
+input#submit {
+    border-radius: 15px;
+    width: 100px;
+    height: 40px;
+    background-color: blue;
+    color: rgb(255, 255, 255);
 }
