@@ -1,0 +1,16 @@
+.action {
+    margin-top: 30px;
+    width: 80%;
+}
+
+table {
+    width: 100%;
+}
+
+tr {
+    border: 1px solid grey;
+}
+
+th {
+    background-color: rgb(181, 183, 185);
+}
