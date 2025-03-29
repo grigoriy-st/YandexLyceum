@@ -35,7 +35,8 @@
             </tr>
         </table>
 
-        {% if current_user_id == %}
+        <!-- Добавить проверку по id -->
+
         <div class="buttons_block">
             <form action="{{ url_for('edit_job', job_id=job.id )}}" method="get">
                 <button class="edit_job_btn" type="submit">Edit job</button>
