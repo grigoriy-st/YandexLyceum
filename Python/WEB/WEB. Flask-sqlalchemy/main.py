@@ -1,3 +1,8 @@
+# main.py
+
+# Этот файл скорее всего есть в репозитории
+# https://github.com/grigoriy-st/YandexLyceum/tree/main/Python/WEB
+
 import datetime
 import sqlalchemy
 from flask import Flask, request, redirect, abort
@@ -16,6 +21,7 @@ from flask import render_template, redirect
 
 from werkzeug.security import generate_password_hash
 from sqlalchemy.exc import IntegrityError
+from datetime import datetime
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'yandexlyceum_secret_key'
@@ -50,7 +56,8 @@ def login():
         user = db_ss.query(User).filter(User.email == form.email.data).first()
         if user and user.check_password(form.password.data):
             login_user(user, remember=form.remember_me.data)
-            return redirect("/")
+            return redirect("/jobs_list")  # Перенаправление на список работ
+
         return render_template("login.html",
                                message="Error",
                                form=form)
@@ -167,7 +174,7 @@ def register():
 
 @app.route('/create_job', methods=['GET', 'POST'])
 def create_job():
-    """ Страница создания работы. """
+    """ Страница добавления работы. """
     db_ss = db_session.create_session()
 
     # Получение всех пользователей
@@ -190,8 +197,6 @@ def create_job():
 
         work_size = days_difference * 24 + seconds_difference // 3600
 
-        # Работа с бд
-
         new_job = Jobs(
             team_leader=team_leader,
             job=title,
@@ -201,6 +206,8 @@ def create_job():
             work_size=work_size,
             is_finished=True if is_finished == "finished" else False,
         )
+
+        # Работа с бд
 
         try:
             db_ss.add(new_job)
@@ -217,11 +224,21 @@ def create_job():
                                    error=error_message,
                                    team_leaders=team_leaders)
 
-        return render_template('new_job.html',
-                               message=message,
-                               team_leaders=team_leaders)
+        # return render_template('new_job.html',
+        #                        message=message,
+        #                        team_leaders=team_leaders)
+        return redirect('/jobs_list')
 
     return render_template('new_job.html', team_leaders=team_leaders)
+
+
+@app.route('/jobs_list')
+def get_jobs_list():
+    """ Отображение списка работ. """
+    db_ss = db_session.create_session()
+    jobs = db_ss.query(Jobs).all()
+
+    return render_template('jobs.html', jobs=jobs)
 
 
 @app.route('/user_list')

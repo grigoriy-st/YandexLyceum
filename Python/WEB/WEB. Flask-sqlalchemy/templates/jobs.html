@@ -4,6 +4,10 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='css/job_list.css')}}"> 
 {% endblock %}
 
+{% if massage %}
+    <h3 class="success_message"> {{ message }} </h3>
+{% endif %}
+
 {% block content %}
 <h1>Записи в блоге</h1>
 {% for job  in jobs %}
@@ -11,11 +15,11 @@
         <h2>Action # {{ job.id }} </h2>
         <table>
             <tr>
-                <th>Title of avtivity</th>
-                <th>Team leader</th>
-                <th>Duration</th>
-                <th>List of collaborators</th>
-                <th>Is finished</th>
+                <th width="200">Title of avtivity</th>
+                <th width="100">Team leader</th>
+                <th width="50">Duration</th>
+                <th width="50">List of collaborators</th>
+                <th width="50">Is finished</th>
             </tr>
             <tr>
                 <td>{{ job.job }}</td>

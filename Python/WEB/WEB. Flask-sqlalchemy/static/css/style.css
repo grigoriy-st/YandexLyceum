@@ -17,7 +17,7 @@ main {
     display: flex;
     flex-direction: column;
     align-items: center;
-
+    
     height: 100vh;
     margin-top: 20px;
 }
@@ -26,10 +26,30 @@ nav {
     margin: 20px;
 }
 
+.auth_buttons {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    width: 17%;
+}
+
 .second_header {
+    display: flex;
+    justify-content: space-around;
+
+    align-items: center;
+    margin: 0 auto;
     margin-top: 30px;
     margin-left: 15vw;
+
+    width: 100%;
+}
+
+.second_header_text {
     color: grey;
+    margin-top: 30px;
+    margin-left: 15vw;
 }
 
 .success_message {

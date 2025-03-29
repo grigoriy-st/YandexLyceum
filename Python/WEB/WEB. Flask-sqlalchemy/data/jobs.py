@@ -1,3 +1,8 @@
+# jobs.py
+
+# Этот файл скорее всего есть в репозитории
+# https://github.com/grigoriy-st/YandexLyceum/tree/main/Python/WEB
+
 import datetime
 import sqlalchemy
 from sqlalchemy import ForeignKey

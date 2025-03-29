@@ -19,24 +19,30 @@
 
     <header>
         <h1>Миссия Колонизация Марса</h1>
+
+        {% if current_user.is_authenticated %}
+        <h5> User:
+            <a class="navbar-brand" href="/logout">{{ current_user.name }}</a>
+        </h5>
+        {% else %}
+            <div class="auth_buttons">
+                <a class="btn btn-primary " href="/register">Зарегистрироваться</a>
+                <a class="btn btn-success" href="/login">Войти</a>
+            </div>
+        {% endif %}
+
         <h4>Mars One</h4>
     </header>
+    <h3 class="second_header_text">И на Марсе будут яблони цвести!</h3>
+        
 
-    <h3 class="second_header">И на Марсе будут яблони цвести!</h3>
+    </div>
+
     <main>
         <nav>
-            {% if current_user.is_authenticated %}
-                <a class="navbar-brand" href="/logout">{{ current_user.name }}</a>
-            {% else %}
-                <p>
-                    <a class="btn btn-primary " href="/register">Зарегистрироваться</a>
-                    <a class="btn btn-success" href="/login">Войти</a>
-                </p>
-            {% endif %}
-            <a href="/">Job List</a> |
+            <a href="/jobs_list">Job List</a> |
             <a href="/create_job">Create new job</a> |
-            <a href="/register">Registration</a> |
-            <a href="/user_list">User list</a>
+            <a href="/user_list">Users list</a>
         </nav>
 
         {% block content %}{% endblock %}
