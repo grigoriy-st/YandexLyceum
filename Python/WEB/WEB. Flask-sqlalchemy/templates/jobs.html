@@ -10,6 +10,7 @@
 
 {% block content %}
 <h1>Записи в блоге</h1>
+
 {% for job  in jobs %}
     <div class="action">
         <h2>Action # {{ job.id }} </h2>
@@ -33,6 +34,18 @@
                 {% endif %}
             </tr>
         </table>
+
+        {% if current_user_id == %}
+        <div class="buttons_block">
+            <form action="{{ url_for('edit_job', job_id=job.id )}}" method="get">
+                <button class="edit_job_btn" type="submit">Edit job</button>
+            </form>
+
+            <form action="{{ url_for('delete_job', job_id=job.id )}}" method="post">
+                <button class="delete_job_btn" type="submit">Delete job</button>
+            </form>
+        </div>
+
     </div>
 {% endfor %}
 

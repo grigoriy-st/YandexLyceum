@@ -1,4 +1,7 @@
 div.action {
+    border: 1px solid rgb(0, 0, 0);
+    padding: 10px;
+    border-radius: 30px;
     margin-top: 30px;
     width: 80%;
 }
@@ -13,4 +16,27 @@ tr {
 
 th {
     background-color: rgb(181, 183, 185);
+}
+
+.buttons_block {
+    display: flex;
+    justify-content: space-between;
+    width: 170px;
+    margin-top: 5px;
+}
+
+.edit_job_btn, .delete_job_btn {
+    border-radius: 10px;
+    border-color: rgb(175, 176, 176);
+    height: 30px;
+    width: 80px;
+}
+
+.edit_job_btn {
+    background-color: yellow;
+}
+
+.delete_job_btn {
+    color: white;
+    background-color: red;
 }

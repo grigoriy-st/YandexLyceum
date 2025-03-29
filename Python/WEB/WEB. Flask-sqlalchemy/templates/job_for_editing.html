@@ -1,0 +1,21 @@
+{% extends "base.html %}
+
+
+<form action="/edit_job" method="post" class="editing_form">
+
+    <label for="title">Title</label>
+    <input type="text" id="" name="title" value="{{ job.title }}">
+
+    <label for="team_leader">Team_leader</label>
+    <input type="text" id="" name="team_leader" value="{{ job.team_leader }}">
+
+    <label for="duration">Duration</label>
+    <input type="number" id="" name="duration" value="{{ job.work_size }}">
+    
+    <label for="list_of_collaborators">List of collaborators</label>
+    <input type="text" id="" name="list_of_collaborators" value="{{ job.list_of_collaborators }}">
+    
+    <label for="is_finished">Is finished?</label>
+    <input type="checkbox" id="" name="is_finished" value="{{ job.is_finished }}">
+
+</form>

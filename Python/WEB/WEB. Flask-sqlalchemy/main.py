@@ -26,7 +26,6 @@ from datetime import datetime
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'yandexlyceum_secret_key'
 
-
 login_manager = LoginManager()
 login_manager.init_app(app)
 
@@ -49,6 +48,8 @@ def get_main_page():
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
+    global current_user_id
+    
     form = LoginForm()
 
     if form.validate_on_submit():
@@ -56,6 +57,7 @@ def login():
         user = db_ss.query(User).filter(User.email == form.email.data).first()
         if user and user.check_password(form.password.data):
             login_user(user, remember=form.remember_me.data)
+
             return redirect("/jobs_list")  # Перенаправление на список работ
 
         return render_template("login.html",
@@ -232,13 +234,27 @@ def create_job():
     return render_template('new_job.html', team_leaders=team_leaders)
 
 
+@app.route('/edit_job', methods=['GET', 'POST'])
+def edit_job():
+
+    return render_template('job_for_editing.html')
+
+
 @app.route('/jobs_list')
+@login_required
 def get_jobs_list():
     """ Отображение списка работ. """
     db_ss = db_session.create_session()
     jobs = db_ss.query(Jobs).all()
+    current_user_id = current_user.id
 
-    return render_template('jobs.html', jobs=jobs)
+    return render_template('jobs.html', jobs=jobs,
+                           current_user_id=current_user_id)
+
+
+@app.route('/delete_job', methods=['GET', 'POST'])
+def delete_job():
+    pass
 
 
 @app.route('/user_list')
