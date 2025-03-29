@@ -22,8 +22,20 @@ main {
     margin-top: 20px;
 }
 
+nav {
+    margin: 20px;
+}
+
 .second_header {
     margin-top: 30px;
     margin-left: 15vw;
     color: grey;
+}
+
+.success_message {
+    color: green;
+}
+
+.error_message {
+    color: red;
 }

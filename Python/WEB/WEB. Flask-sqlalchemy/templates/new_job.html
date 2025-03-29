@@ -1,0 +1,42 @@
+{% extends "base.html" %}
+
+{% block styles %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/new_job.css')}}"> 
+{% endblock %}
+
+{% block content %}
+<h1>Create new job</h1>
+
+{% if message %}
+    <h2 class="success_message">{{ message }}</h2>
+{% endif %}
+
+<form action="/create_job" method="post" class="form1">
+    <label for="title">Title</label>
+    <input type="text" name="title" id="title" required>
+
+    <label for="team_leader">Team leader</label>
+    <select id="team_leader" name="team_leader">
+        {% for team_leader in team_leaders %}
+        <option>{{ team_leader.name }} {{team_leader.surname}} ({{team_leader.id}})</option>
+        {% endfor %}
+    </select>
+
+    <label for="beginning_of_duration">Начать работу с</label>
+    <input type="datetime-local" id="start_datetime" name="beginning_of_duration">
+
+    <label for="end_of_duration">Окончить работу</label>
+    <input type="datetime-local" id="end_datetime" name="end_of_duration">
+
+    <label for="list_of_collaborators">List of collaborators</label>
+    <input type="text" name="list_of_collaborators" id="list_of_collaborators" required>
+
+    <label for="is_finished">Is finished</label>
+    <select id="is_finished" name="is_finished" required>
+        <option value="finished">yes</option>
+        <option value="not_finished">no</option>
+    </select>
+
+    <input type="submit" value="Send" class="post_button">
+</form>
+{% endblock %}

@@ -25,6 +25,14 @@
     <h3 class="second_header">И на Марсе будут яблони цвести!</h3>
     <main>
         <nav>
+            {% if current_user.is_authenticated %}
+                <a class="navbar-brand" href="/logout">{{ current_user.name }}</a>
+            {% else %}
+                <p>
+                    <a class="btn btn-primary " href="/register">Зарегистрироваться</a>
+                    <a class="btn btn-success" href="/login">Войти</a>
+                </p>
+            {% endif %}
             <a href="/">Job List</a> |
             <a href="/create_job">Create new job</a> |
             <a href="/register">Registration</a> |
