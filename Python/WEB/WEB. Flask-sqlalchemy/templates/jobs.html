@@ -11,6 +11,8 @@
 {% block content %}
 <h1>Записи в блоге</h1>
 
+<p>This is ID: {{ current_user_id }}</p>
+
 {% for job  in jobs %}
     <div class="action">
         <h2>Action # {{ job.id }} </h2>
@@ -24,7 +26,7 @@
             </tr>
             <tr>
                 <td>{{ job.job }}</td>
-                <td>{{ job.team_leader }}</td>
+                <td>{{ job.team_leader.name }}</td>
                 <td>{{ job.work_size }} Hours</td>
                 <td>{{ job.collaborators }}</td>
                 {% if job.is_finished %}

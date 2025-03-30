@@ -26,4 +26,4 @@ class Jobs(SqlAlchemyBase):
                                  default=datetime.datetime.now)
     is_finished = sqlalchemy.Column(sqlalchemy.Boolean, default=False)
 
-    # team_leader_user = relationship("User", back_populates="jobs")
+    team_leader_user = relationship("User", backref='jobs')

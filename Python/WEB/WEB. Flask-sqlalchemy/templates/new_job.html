@@ -23,7 +23,7 @@ https://github.com/grigoriy-st/YandexLyceum/tree/main/Python/WEB -->
     <label for="team_leader">Team leader</label>
     <select id="team_leader" name="team_leader">
         {% for team_leader in team_leaders %}
-        <option>{{ team_leader.name }} {{team_leader.surname}} ({{team_leader.id}})</option>
+        <option value="{{ team_leader.id }}">{{ team_leader.name }} {{team_leader.surname}} ({{team_leader.id}})</option>
         {% endfor %}
     </select>
 
