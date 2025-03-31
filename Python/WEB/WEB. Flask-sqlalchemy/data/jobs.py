@@ -15,6 +15,8 @@ class Jobs(SqlAlchemyBase):
 
     id = sqlalchemy.Column(sqlalchemy.Integer, primary_key=True,
                            autoincrement=True)
+    author = sqlalchemy.Column(sqlalchemy.Integer,
+                               ForeignKey('users.id'), nullable=False)
     team_leader = sqlalchemy.Column(sqlalchemy.Integer,
                                     ForeignKey('users.id'), nullable=False)
     job = sqlalchemy.Column(sqlalchemy.String, nullable=True)
@@ -26,4 +28,7 @@ class Jobs(SqlAlchemyBase):
                                  default=datetime.datetime.now)
     is_finished = sqlalchemy.Column(sqlalchemy.Boolean, default=False)
 
-    team_leader_user = relationship("User", backref='jobs')
+    team_leader_user = relationship("User", backref='team_leader_jobs',
+                                    foreign_keys=[team_leader])
+    author_user = relationship("User", backref='author_jobs',
+                               foreign_keys=[author])

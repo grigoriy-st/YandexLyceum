@@ -26,7 +26,7 @@
             </tr>
             <tr>
                 <td>{{ job.job }}</td>
-                <td>{{ job.team_leader.name }}</td>
+                <td>{{ job.team_leader_user.name }} {{ job.team_leader_user.surname }}</td>
                 <td>{{ job.work_size }} Hours</td>
                 <td>{{ job.collaborators }}</td>
                 {% if job.is_finished %}
@@ -37,8 +37,9 @@
             </tr>
         </table>
 
-        <!-- Добавить проверку по id -->
+        <!-- Проверка на доступ к изменению работы -->
 
+        {% if job.author_user.id == current_user_id or current_user_id == 1 %}
         <div class="buttons_block">
             <form action="{{ url_for('edit_job', job_id=job.id )}}" method="get">
                 <button class="edit_job_btn" type="submit">Edit job</button>
@@ -48,6 +49,7 @@
                 <button class="delete_job_btn" type="submit">Delete job</button>
             </form>
         </div>
+        {% endif %}
 
     </div>
 {% endfor %}

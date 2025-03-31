@@ -181,8 +181,11 @@ def create_job():
 
     # Получение всех пользователей
     team_leaders = db_ss.query(User).all()
+    current_user_id = current_user.id
 
     if request.method == 'POST':
+        author = request.form['author']
+        print(f'Author: {author}')
         title = request.form['title']
         team_leader = request.form['team_leader']
         beginning_of_duration = request.form['beginning_of_duration']
@@ -200,6 +203,7 @@ def create_job():
         work_size = days_difference * 24 + seconds_difference // 3600
 
         new_job = Jobs(
+            author=author,
             team_leader=team_leader,
             job=title,
             collaborators=list_of_collaborators,
@@ -231,7 +235,8 @@ def create_job():
         #                        team_leaders=team_leaders)
         return redirect('/jobs_list')
 
-    return render_template('new_job.html', team_leaders=team_leaders)
+    return render_template('new_job.html', current_user_id=current_user_id,
+                           team_leaders=team_leaders)
 
 
 @app.route('/edit_job', methods=['GET', 'POST'])

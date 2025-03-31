@@ -42,6 +42,9 @@ https://github.com/grigoriy-st/YandexLyceum/tree/main/Python/WEB -->
         <option value="not_finished">no</option>
     </select>
 
+    <!-- Current user ID -->
+    <input type="hidden" name="author" value="{{ current_user_id }}">
+
     <input type="submit" value="Send" class="post_button">
 </form>
 {% endblock %}
