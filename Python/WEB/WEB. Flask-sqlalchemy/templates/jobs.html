@@ -12,7 +12,8 @@
     <h3 class="success_message"> {{ message[0] }} </h3>
 {% endif %}
 
-<p>This is ID: {{ current_user_id }}</p>
+<p>This is user ID: {{ current_user_id }}</p>
+<button onclick="window.location.href='/create_job'">Add job </button>
 
 {% for job  in jobs %}
     <div class="action">
@@ -40,7 +41,7 @@
 
         <!-- Проверка на доступ к изменению работы -->
 
-        {% if job.author_user.id == current_user_id or current_user_id == 1 %}
+        {% if job.author_user.id == current_user_id or current_user_id == 1 or job.team_leader == current_user_id %}
         <div class="buttons_block">
             <form action="{{ url_for('work_with_jobs.edit_job', job_id=job.id )}}" method="get">
                 <button class="edit_job_btn" type="submit">Edit job</button>

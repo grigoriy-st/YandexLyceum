@@ -1,0 +1,52 @@
+{% extends "base.html" %}
+
+{% block content %}
+{% if message %}
+    <h3 class="success_message"> {{ message[0] }} </h3>
+{% endif %}
+
+<p>This is user ID: {{ current_user_id }}</p>
+
+<h2>List of Departments</h2>
+
+<div class="buttons_block">
+    <button onclick="window.location.href='/create_job'" class="add_btn">Add job </button>
+    <button onclick="window.location.href='/add_department'" class="add_btn">Add department </button>
+</div>
+
+{% for department in departments %}
+    <div class="action">
+        <h2>Action # {{ department.id }} </h2>
+        <table>
+            <tr>
+                <th width="200">Title of department</th>
+                <th width="100">Chief</th>
+                <th width="50">Members</th>
+                <th width="50">Department email</th>
+            </tr>
+            <tr>
+                <td>{{ department.title }}</td>
+                <td>{{ department.team_leader_user.name }} {{ job.team_leader_user.surname }}</td>
+                <td>{{ department.members }} Hours</td>
+                <td>{{ department.dep_email }}</td>
+            </tr>
+        </table>
+
+        <!-- Проверка на доступ к изменению работы -->
+
+        {% if job.author_user.id == current_user_id or current_user_id == 1 or job.team_leader == current_user_id %}
+        <div class="buttons_block">
+            <form action="{{ url_for('work_with_departments_bp.edit_department', dep_id=department.id )}}" method="get">
+                <button class="edit_job_btn" type="submit">Edit department</button>
+            </form>
+
+            <form action="{{ url_for('work_with_repartments_bp.delete_department', dep_id=department.id )}}" method="post">
+                <button class="delete_job_btn" type="submit">Delete department</button>
+            </form>
+        </div>
+        {% endif %}
+
+    </div>
+{% endfor %}
+
+{% endblock %}
