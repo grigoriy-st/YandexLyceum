@@ -20,11 +20,16 @@ from forms.LoginForm import LoginForm
 from flask import render_template, redirect
 
 from werkzeug.security import generate_password_hash
-from sqlalchemy.exc import IntegrityError
-from datetime import datetime
+
+# Handlers
+from handlers.auth import auth_bp
+from handlers.work_with_jobs import work_with_jobs_bp
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'yandexlyceum_secret_key'
+
+app.register_blueprint(auth_bp)
+app.register_blueprint(work_with_jobs_bp)
 
 login_manager = LoginManager()
 login_manager.init_app(app)
@@ -44,33 +49,6 @@ def load_user(user_id):
 @app.route('/')
 def get_main_page():
     return render_template('user_list.html')
-
-
-@app.route('/login', methods=['GET', 'POST'])
-def login():
-    global current_user_id
-    
-    form = LoginForm()
-
-    if form.validate_on_submit():
-        db_ss = db_session.create_session()
-        user = db_ss.query(User).filter(User.email == form.email.data).first()
-        if user and user.check_password(form.password.data):
-            login_user(user, remember=form.remember_me.data)
-
-            return redirect("/jobs_list")  # Перенаправление на список работ
-
-        return render_template("login.html",
-                               message="Error",
-                               form=form)
-    return render_template('login.html', title='Authorization', form=form)
-
-
-@app.route('/logout')
-@login_required
-def logout():
-    logout_user()
-    return redirect("/")
 
 
 @app.route('/news',  methods=['GET', 'POST'])
@@ -138,128 +116,6 @@ def news_delete(id):
     else:
         abort(404)
     return redirect('/')
-
-
-@app.route('/register', methods=['GET', 'POST'])
-def register():
-    """ Регистрация пользователя. """
-    form = RegisterForm()
-    if form.validate_on_submit():
-        if form.password.data != form.password_again.data:
-            return render_template('register.html',
-                                   form=form,
-                                   message="Пароли не совпадают")
-
-        db_sess = db_session.create_session()
-        if db_sess.query(User).filter(User.email == form.email.data).first():
-            return render_template('register.html',
-                                   form=form,
-                                   message="Такой пользователь уже есть")
-
-        user = User(
-            email=form.email.data,
-            surname=form.surname.data,
-            name=form.name.data,
-            age=form.age.data,
-            position=form.position.data,
-            speciality=form.speciality.data,
-            address=form.address.data,
-        )
-        user.hashed_password = generate_password_hash(form.password.data)
-        db_sess.add(user)
-        db_sess.commit()
-        return render_template('register.html',
-                               form=form, message="The user has been added")
-
-    return render_template('register.html', form=form)
-
-
-@app.route('/create_job', methods=['GET', 'POST'])
-def create_job():
-    """ Страница добавления работы. """
-    db_ss = db_session.create_session()
-
-    # Получение всех пользователей
-    team_leaders = db_ss.query(User).all()
-    current_user_id = current_user.id
-
-    if request.method == 'POST':
-        author = request.form['author']
-        print(f'Author: {author}')
-        title = request.form['title']
-        team_leader = request.form['team_leader']
-        beginning_of_duration = request.form['beginning_of_duration']
-        end_of_duration = request.form['end_of_duration']
-        list_of_collaborators = request.form['list_of_collaborators']
-        is_finished = request.form['is_finished']
-
-        # Вычисление разницы времени
-        start_date = datetime.strptime(beginning_of_duration, "%Y-%m-%dT%H:%M")
-        end_date = datetime.strptime(end_of_duration, "%Y-%m-%dT%H:%M")
-        difference = end_date - start_date
-        days_difference = difference.days
-        seconds_difference = difference.seconds
-
-        work_size = days_difference * 24 + seconds_difference // 3600
-
-        new_job = Jobs(
-            author=author,
-            team_leader=team_leader,
-            job=title,
-            collaborators=list_of_collaborators,
-            start_date=start_date,
-            end_date=end_date,
-            work_size=work_size,
-            is_finished=True if is_finished == "finished" else False,
-        )
-
-        # Работа с бд
-
-        try:
-            db_ss.add(new_job)
-            db_ss.commit()
-            message = "Job is added"
-
-        except IntegrityError as e:
-            print(f"Error: {e}")
-            db_ss.rollback()
-            error_message = "Ошибка при добавлении работы. " \
-                            "Возможно, такая работа уже существует."
-
-            return render_template('new_job.html',
-                                   error=error_message,
-                                   team_leaders=team_leaders)
-
-        # return render_template('new_job.html',
-        #                        message=message,
-        #                        team_leaders=team_leaders)
-        return redirect('/jobs_list')
-
-    return render_template('new_job.html', current_user_id=current_user_id,
-                           team_leaders=team_leaders)
-
-
-@app.route('/edit_job', methods=['GET', 'POST'])
-def edit_job():
-
-    return render_template('job_for_editing.html')
-
-
-@app.route('/jobs_list')
-@login_required
-def get_jobs_list():
-    """ Отображение списка работ. """
-    db_ss = db_session.create_session()
-    jobs = db_ss.query(Jobs).all()
-    current_user_id = current_user.id
-
-    return render_template('jobs.html', jobs=jobs,
-                           current_user_id=current_user_id)
-
-
-@app.route('/delete_job', methods=['GET', 'POST'])
-def delete_job():
-    pass
 
 
 @app.route('/user_list')

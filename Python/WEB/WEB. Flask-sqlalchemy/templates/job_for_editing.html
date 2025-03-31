@@ -1,21 +1,28 @@
-{% extends "base.html %}
+{% extends "base.html" %}
 
+{% block styles %}
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/job_for_editing.css')}}"> 
+{% endblock %}
 
-<form action="/edit_job" method="post" class="editing_form">
+{% block content %}
+<h1>Edit Job</h1>
+<form action="{{ url_for('work_with_jobs.edit_job', job_id=job.id) }}" method="post" class="editing_form">
 
     <label for="title">Title</label>
-    <input type="text" id="" name="title" value="{{ job.title }}">
+    <input type="text" id="title" name="title" value="{{ job.title }}" required>
 
-    <label for="team_leader">Team_leader</label>
-    <input type="text" id="" name="team_leader" value="{{ job.team_leader }}">
+    <label for="team_leader">Team Leader</label>
+    <input type="text" id="team_leader" name="team_leader" value="{{ job.team_leader }}" required>
 
-    <label for="duration">Duration</label>
-    <input type="number" id="" name="duration" value="{{ job.work_size }}">
+    <label for="duration">Duration (in hours)</label>
+    <input type="number" id="duration" name="duration" value="{{ job.work_size }}" required>
     
-    <label for="list_of_collaborators">List of collaborators</label>
-    <input type="text" id="" name="list_of_collaborators" value="{{ job.list_of_collaborators }}">
+    <label for="list_of_collaborators">List of Collaborators</label>
+    <input type="text" id="list_of_collaborators" name="list_of_collaborators" value="{{ job.list_of_collaborators }}" required>
     
-    <label for="is_finished">Is finished?</label>
-    <input type="checkbox" id="" name="is_finished" value="{{ job.is_finished }}">
+    <label for="is_finished">Is Finished?</label>
+    <input type="checkbox" id="is_finished" name="is_finished" {% if job.is_finished %}checked{% endif %}>
 
+    <button type="submit">Save Changes</button>
 </form>
+{% endblock %}

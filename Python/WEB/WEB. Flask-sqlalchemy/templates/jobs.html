@@ -41,11 +41,11 @@
 
         {% if job.author_user.id == current_user_id or current_user_id == 1 %}
         <div class="buttons_block">
-            <form action="{{ url_for('edit_job', job_id=job.id )}}" method="get">
+            <form action="{{ url_for('work_with_jobs.edit_job', job_id=job.id )}}" method="get">
                 <button class="edit_job_btn" type="submit">Edit job</button>
             </form>
 
-            <form action="{{ url_for('delete_job', job_id=job.id )}}" method="post">
+            <form action="{{ url_for('work_with_jobs.delete_job', job_id=job.id )}}" method="post">
                 <button class="delete_job_btn" type="submit">Delete job</button>
             </form>
         </div>
