@@ -19,7 +19,7 @@ class Jobs(SqlAlchemyBase):
                                ForeignKey('users.id'), nullable=False)
     team_leader = sqlalchemy.Column(sqlalchemy.Integer,
                                     ForeignKey('users.id'), nullable=False)
-    job = sqlalchemy.Column(sqlalchemy.String, nullable=True)
+    job_title = sqlalchemy.Column(sqlalchemy.String, nullable=True)
     work_size = sqlalchemy.Column(sqlalchemy.Integer, nullable=False)
     collaborators = sqlalchemy.Column(sqlalchemy.String, nullable=True)
     start_date = sqlalchemy.Column(sqlalchemy.DateTime,

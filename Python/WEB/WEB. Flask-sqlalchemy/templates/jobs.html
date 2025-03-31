@@ -4,12 +4,13 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='css/job_list.css')}}"> 
 {% endblock %}
 
-{% if massage %}
-    <h3 class="success_message"> {{ message }} </h3>
-{% endif %}
 
 {% block content %}
-<h1>Записи в блоге</h1>
+<h1>Job list</h1>
+
+{% if message %}
+    <h3 class="success_message"> {{ message[0] }} </h3>
+{% endif %}
 
 <p>This is ID: {{ current_user_id }}</p>
 
@@ -25,7 +26,7 @@
                 <th width="50">Is finished</th>
             </tr>
             <tr>
-                <td>{{ job.job }}</td>
+                <td>{{ job.job_title }}</td>
                 <td>{{ job.team_leader_user.name }} {{ job.team_leader_user.surname }}</td>
                 <td>{{ job.work_size }} Hours</td>
                 <td>{{ job.collaborators }}</td>

@@ -59,3 +59,15 @@ nav {
 .error_message {
     color: red;
 }
+
+input.post_button {
+    border-radius: 15px;
+    margin: 0 auto;
+    margin-top: 50px;
+    border: none;
+    background-color:rgb(6, 76, 255);
+    color: white;
+    
+    width: 100px;
+    height: 30px;
+}

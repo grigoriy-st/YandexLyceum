@@ -8,21 +8,29 @@
 <h1>Edit Job</h1>
 <form action="{{ url_for('work_with_jobs.edit_job', job_id=job.id) }}" method="post" class="editing_form">
 
-    <label for="title">Title</label>
-    <input type="text" id="title" name="title" value="{{ job.title }}" required>
+    <label for="job_title">Title</label>
+    <input type="text" id="title" name="job_title" value="{{ job.job_title }}" required>
 
-    <label for="team_leader">Team Leader</label>
-    <input type="text" id="team_leader" name="team_leader" value="{{ job.team_leader }}" required>
+    <label for="team_leader">Team leader</label>
+    <select id="team_leader" name="team_leader">
+        <!-- ,зер, который стоял до этого. -->
+        <option value="{{ job.team_leader_user.id }}" >{{ job.team_leader_user.name }} {{ job.team_leader_user.surname}} ({{ job.team_leader_user.id}})</option>
+        {% for team_leader in users %}
+        <option value="{{ team_leader.id }}" >{{ team_leader.name }} {{team_leader.surname}} ({{team_leader.id}})</option>
+        {% endfor %}
+    </select>
 
-    <label for="duration">Duration (in hours)</label>
-    <input type="number" id="duration" name="duration" value="{{ job.work_size }}" required>
+    <label for="work_size">Duration (in hours)</label>
+    <input type="number" id="work_size" name="work_size" value="{{ job.work_size }}" required>
     
-    <label for="list_of_collaborators">List of Collaborators</label>
-    <input type="text" id="list_of_collaborators" name="list_of_collaborators" value="{{ job.list_of_collaborators }}" required>
+    <label for="collaborators">List of Collaborators</label>
+    <input type="text" id="collaborators" name="collaborators" value="{{ job.collaborators }}" required>
     
-    <label for="is_finished">Is Finished?</label>
-    <input type="checkbox" id="is_finished" name="is_finished" {% if job.is_finished %}checked{% endif %}>
+    <div class="is_finished_block">
+        <input type="checkbox" id="is_finished" name="is_finished" {% if job.is_finished %}checked{% endif %}>
+        <label for="is_finished">Is Finished?</label>
+    </div>
 
-    <button type="submit">Save Changes</button>
+    <input type="submit" value="Save changes" class="post_button">
 </form>
 {% endblock %}
