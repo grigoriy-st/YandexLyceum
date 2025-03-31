@@ -17,8 +17,10 @@ work_with_jobs_bp = Blueprint('work_with_jobs', __name__)
 
 
 @work_with_jobs_bp.route('/create_job', methods=['GET', 'POST'])
+@login_required
 def create_job():
     """ Страница добавления работы. """
+
     db_ss = db_session.create_session()
 
     # Получение всех пользователей
@@ -26,12 +28,11 @@ def create_job():
     current_user_id = current_user.id
 
     if request.method == 'POST':
-        author = request.form['author']
         job_title = request.form['job_title']
         team_leader = request.form['team_leader']
         beginning_of_duration = request.form['beginning_of_duration']
         end_of_duration = request.form['end_of_duration']
-        collaborators = request.form['collaboratorSs']
+        collaborators = request.form['collaborators']
         is_finished = request.form['is_finished']
 
         # Вычисление разницы времени
@@ -44,7 +45,7 @@ def create_job():
         work_size = days_difference * 24 + seconds_difference // 3600
 
         new_job = Jobs(
-            author=author,
+            author=current_user_id,
             team_leader=team_leader,
             job_title=job_title,
             collaborators=collaborators,
@@ -53,7 +54,6 @@ def create_job():
             work_size=work_size,
             is_finished=True if is_finished == "finished" else False,
         )
-
         # Работа с бд
 
         try:
@@ -96,9 +96,18 @@ def get_jobs_list():
                            message=message)
 
 
-@work_with_jobs_bp.route('/delete_job', methods=['GET', 'POST'])
-def delete_job():
-    pass
+@work_with_jobs_bp.route('/delete_job/<int:job_id>', methods=['GET', 'POST'])
+def delete_job(job_id):
+    """ Удаление работы. """
+    db_ss = db_session.create_session()
+    job = db_ss.query(Jobs).filter(Jobs.id == job_id).first()
+    db_ss.delete(job)
+    db_ss.commit()
+
+    message = f'Работа \"{job.job_title}\" с id={job.id} удалена!'
+    flash(message)
+
+    return redirect(url_for('work_with_jobs.get_jobs_list'))
 
 
 @work_with_jobs_bp.route('/edit_job/<int:job_id>', methods=['GET', 'POST'])
@@ -118,7 +127,7 @@ def edit_job(job_id):
         job.is_finished = True if request.form.get('is_finished') == 'on' else False
 
         db_ss.commit()
-        message = f'Запись по работе {job.job_title} c id={job_id} изменена!'
+        message = f'Запись по работе \"{job.job_title}\" c id={job_id} изменена!'
 
         flash(message)
 
