@@ -13,7 +13,7 @@
 {% endif %}
 
 <p>This is user ID: {{ current_user_id }}</p>
-<button onclick="window.location.href='/create_job'">Add job </button>
+<button onclick="window.location.href='/create_job'" class="add_btn">Add job </button>
 
 {% for job  in jobs %}
     <div class="action">
@@ -44,11 +44,11 @@
         {% if job.author_user.id == current_user_id or current_user_id == 1 or job.team_leader == current_user_id %}
         <div class="buttons_block">
             <form action="{{ url_for('work_with_jobs.edit_job', job_id=job.id )}}" method="get">
-                <button class="edit_job_btn" type="submit">Edit job</button>
+                <button class="btn_for_edit" type="submit">Edit job</button>
             </form>
 
             <form action="{{ url_for('work_with_jobs.delete_job', job_id=job.id )}}" method="post">
-                <button class="delete_job_btn" type="submit">Delete job</button>
+                <button class="btn_for_delete" type="submit">Delete job</button>
             </form>
         </div>
         {% endif %}

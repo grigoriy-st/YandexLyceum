@@ -1,6 +1,11 @@
 {% extends "base.html" %}
 
+{% block styles %}
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/list_of_departments.css') }}">
+{% endblock %}
+
 {% block content %}
+
 {% if message %}
     <h3 class="success_message"> {{ message[0] }} </h3>
 {% endif %}
@@ -26,22 +31,22 @@
             </tr>
             <tr>
                 <td>{{ department.title }}</td>
-                <td>{{ department.team_leader_user.name }} {{ job.team_leader_user.surname }}</td>
-                <td>{{ department.members }} Hours</td>
+                <td>{{ department.chief_user.name }} {{ department.chief_user.surname }}</td>
+                <td>{{ department.members }}</td>
                 <td>{{ department.dep_email }}</td>
             </tr>
         </table>
 
         <!-- Проверка на доступ к изменению работы -->
 
-        {% if job.author_user.id == current_user_id or current_user_id == 1 or job.team_leader == current_user_id %}
+        {% if department.creator_user.id == current_user_id or current_user_id == 1 or department.creator_user.id == current_user_id %}
         <div class="buttons_block">
-            <form action="{{ url_for('work_with_departments_bp.edit_department', dep_id=department.id )}}" method="get">
-                <button class="edit_job_btn" type="submit">Edit department</button>
+            <form action="{{ url_for('work_with_departments.edit_department', dep_id=department.id )}}" method="get">
+                <button class="btn_for_edit" type="submit">Edit department</button>
             </form>
 
-            <form action="{{ url_for('work_with_repartments_bp.delete_department', dep_id=department.id )}}" method="post">
-                <button class="delete_job_btn" type="submit">Delete department</button>
+            <form action="{{ url_for('work_with_departments.delete_department', dep_id=department.id )}}" method="post">
+                <button class="btn_for_delete" type="submit">Delete department</button>
             </form>
         </div>
         {% endif %}

@@ -15,13 +15,13 @@ tr {
 }
 
 th {
-    background-color: rgb(181, 183, 185);
+    background-color: rgb(210, 211, 212);
 }
 
 .buttons_block {
-    display: flex;
-    justify-content: space-between;
-    width: 170px;
-    margin-top: 5px;
+    width: 250px;
 }
 
+.btn_for_edit, .btn_for_delete {
+    width: 150px;
+}
