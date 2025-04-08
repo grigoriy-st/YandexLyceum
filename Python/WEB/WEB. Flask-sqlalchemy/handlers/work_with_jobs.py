@@ -99,6 +99,7 @@ def get_jobs_list():
 @work_with_jobs_bp.route('/delete_job/<int:job_id>', methods=['GET', 'POST'])
 def delete_job(job_id):
     """ Удаление работы. """
+
     db_ss = db_session.create_session()
     job = db_ss.query(Jobs).filter(Jobs.id == job_id).first()
     db_ss.delete(job)
