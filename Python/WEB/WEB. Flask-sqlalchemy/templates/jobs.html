@@ -31,6 +31,8 @@
                 <td>{{ job.team_leader_user.name }} {{ job.team_leader_user.surname }}</td>
                 <td>{{ job.work_size }} Hours</td>
                 <td>{{ job.collaborators }}</td>
+                <td>{{ job.hazard_category }}</td>
+
                 {% if job.is_finished %}
                     <td>Is finished</td>
                 {% else %}

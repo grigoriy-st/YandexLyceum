@@ -27,8 +27,12 @@ class Jobs(SqlAlchemyBase):
     end_date = sqlalchemy.Column(sqlalchemy.DateTime,
                                  default=datetime.datetime.now)
     is_finished = sqlalchemy.Column(sqlalchemy.Boolean, default=False)
+    hazard_category = sqlalchemy.Column(sqlalchemy.Integer,
+                                        ForeignKey('hazard_category.id'),
+                                        nullable=None)
 
     team_leader_user = relationship("User", backref='team_leader_jobs',
                                     foreign_keys=[team_leader])
     author_user = relationship("User", backref='author_jobs',
                                foreign_keys=[author])
+    # hazard_category_field = relationship()
