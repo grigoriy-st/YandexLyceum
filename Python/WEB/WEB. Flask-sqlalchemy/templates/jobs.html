@@ -25,19 +25,21 @@
                 <th width="50">Duration</th>
                 <th width="50">List of collaborators</th>
                 <th width="50">Is finished</th>
+                <th width="50">Hazard category</th>
             </tr>
             <tr>
                 <td>{{ job.job_title }}</td>
                 <td>{{ job.team_leader_user.name }} {{ job.team_leader_user.surname }}</td>
                 <td>{{ job.work_size }} Hours</td>
                 <td>{{ job.collaborators }}</td>
-                <td>{{ job.hazard_category }}</td>
 
                 {% if job.is_finished %}
                     <td>Is finished</td>
                 {% else %}
                     <td>Is not finished</td>
                 {% endif %}
+
+                <td>{{ job.hazard_category_rel.hazard_category_title }}</td>
             </tr>
         </table>
 

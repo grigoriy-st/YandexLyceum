@@ -34,6 +34,7 @@ def create_job():
         end_of_duration = request.form['end_of_duration']
         collaborators = request.form['collaborators']
         is_finished = request.form['is_finished']
+        hazard_category = request.form['hazard_category']
 
         # Вычисление разницы времени
         start_date = datetime.strptime(beginning_of_duration, "%Y-%m-%dT%H:%M")
@@ -53,6 +54,7 @@ def create_job():
             end_date=end_date,
             work_size=work_size,
             is_finished=True if is_finished == "finished" else False,
+            hazard_category=hazard_category,
         )
         # Работа с бд
 

@@ -8,7 +8,7 @@ import sqlalchemy
 from sqlalchemy import ForeignKey
 from sqlalchemy.orm import relationship
 from data.users import SqlAlchemyBase
-
+from data.hazard_category import HazardCategory
 
 class Jobs(SqlAlchemyBase):
     __tablename__ = 'jobs'
@@ -35,4 +35,4 @@ class Jobs(SqlAlchemyBase):
                                     foreign_keys=[team_leader])
     author_user = relationship("User", backref='author_jobs',
                                foreign_keys=[author])
-    # hazard_category_field = relationship()
+    hazard_category_rel = relationship("HazardCategory", back_populates="jobs") 

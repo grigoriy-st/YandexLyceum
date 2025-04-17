@@ -1,5 +1,5 @@
 import json
-from flask import Blueprint, Response
+from flask import Blueprint, Response, abort
 from data import db_session
 
 from data.jobs import Jobs
@@ -31,10 +31,17 @@ def get_job_list():
     response_data = json.dumps({'jobs': jobs_list})
     return Response(response_data, mimetype='application/json')
 
-@jobs_api.route('/api/job/<int:job_id>')
+@jobs_api.route('/api/job/<job_id>')
 def get_job_by_id(job_id):
+    if not job_id.isdigit():
+        abort(400)
+
     db_ss = db_session.create_session()
     job = db_ss.query(Jobs).filter(Jobs.id == job_id).first()
+
+    if not job:  # Проверка на несуществующую запись
+        abort(404)
+
     job = {
             "id": job.id,
             "author": job.author,
