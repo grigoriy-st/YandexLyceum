@@ -1,5 +1,6 @@
 import json
-from flask import Blueprint, Response, abort
+
+from flask import Blueprint, Response, abort, request, jsonify
 from data import db_session
 
 from data.jobs import Jobs
@@ -31,9 +32,61 @@ def get_job_list():
     response_data = json.dumps({'jobs': jobs_list})
     return Response(response_data, mimetype='application/json')
 
-@jobs_api.route('/api/job/<job_id>')
+
+@jobs_api.route('/api/jobs', methods=['POST'])
+def add_job_by_id():
+    job_id = str(request.json['id'])
+
+    if not job_id.isdigit():  # Проверка на некорректную строку
+        abort(400)
+
+    required_fields = ['id', 'job_title', 'team_leader_id', 'work_size', 'collaborators']
+    if not all(field in request.json for field in required_fields):
+        return jsonify({'error': f'Missing required fields. Required: {required_fields}'}), 400
+
+
+    db_ss = db_session.create_session()
+    job = db_ss.query(Jobs).filter(Jobs.id == job_id).first()
+
+    if job:  # Проверка на существующую запись
+        return jsonify({'error': 'Job is exists.'})
+
+    new_job = Jobs (
+            id=job_id,
+            job_title=request.json['job_title'],
+            team_leader=request.json['team_leader_id'],
+            work_size=request.json['work_size'],
+            collaborators=request.json['collaborators'],
+            author=request.json.get('author_id', request.json['team_leader_id']),  # Если автор не указан, используем team_leader
+            is_finished=request.json.get('is_finished', False),
+            hazard_category=request.json.get('hazard_category'),
+    )
+    respose_data = {
+        'job': {
+            'status': 'JOB IS ADDED',
+            'id': new_job.id,
+            'title': new_job.job_title,
+            'team_leader_id': new_job.team_leader,
+            'work_size': new_job.work_size,
+            'is_finished': new_job.is_finished,
+        }
+    }
+    
+    try:
+        db_ss.add(new_job)
+        db_ss.commit()
+        message = "Job is added"
+
+    except IntegrityError as e:
+        print(f"Error: {e}")
+        db_ss.rollback()
+
+    return jsonify(respose_data)
+
+
+@jobs_api.route('/api/job/<job_id>', methods=['GET'])
 def get_job_by_id(job_id):
-    if not job_id.isdigit():
+    if not job_id.isdigit():  # Проверка на некорректную строку
         abort(400)
 
     db_ss = db_session.create_session()
