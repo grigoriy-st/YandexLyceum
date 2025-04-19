@@ -41,20 +41,20 @@ def find_job_by_id(job_id):
 # Тесты
 class TestJobCreation:
     """Тесты для создания работ"""
-    
+
     def test_valid_job_creation(self, sample_job_data, cleanup_jobs):
         """Тест корректного создания работы"""
         response = requests.post(f"{BASE_URL}/api/jobs", json=sample_job_data)
-        
+
         assert response.status_code == 201
         print('Вот ответ', response.json())
         assert response.json().get('success') == 'Job added'
-        
+
         # Проверяем что работа появилась в списке
         job = find_job_by_id(sample_job_data['id'])
         assert job is not None
         assert job['job_title'] == sample_job_data['job_title']
-    
+
     @pytest.mark.parametrize("test_case", [
         {
             "name": "missing_field",
@@ -110,34 +110,34 @@ class TestJobCreation:
         # Сначала создаем валидную работу для теста дубликата
         if test_case['name'] == 'duplicate_id':
             requests.post(f"{BASE_URL}/api/jobs", json=sample_job_data)
-        
+
         response = requests.post(f"{BASE_URL}/api/jobs", json=test_case['data'])
-        
+
         assert response.status_code == test_case['expected_status']
         assert test_case['error_keyword'].lower() in response.json().get('error', '').lower()
 
 class TestJobRetrieval:
     """Тесты для получения работ"""
-    
+
     def test_get_all_jobs(self, sample_job_data, cleanup_jobs):
         """Тест получения списка работ"""
         # Сначала создаем тестовую работу
         requests.post(f"{BASE_URL}/api/jobs", json=sample_job_data)
-        
+
         response = requests.get(f"{BASE_URL}/api/jobs")
-        
+
         assert response.status_code == 200
         jobs = response.json().get('jobs', [])
         assert isinstance(jobs, list)
         assert any(job['id'] == sample_job_data['id'] for job in jobs)
-    
+
     def test_get_single_job(self, sample_job_data, cleanup_jobs):
         """Тест получения конкретной работы"""
         # Сначала создаем тестовую работу
         requests.post(f"{BASE_URL}/api/jobs", json=sample_job_data)
-        
+
         response = requests.get(f"{BASE_URL}/api/jobs/{sample_job_data['id']}")
-        
+
         assert response.status_code == 200
         job = response.json().get('job')
         assert job['id'] == sample_job_data['id']
