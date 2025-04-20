@@ -31,6 +31,17 @@
         <label for="is_finished">Is Finished?</label>
     </div>
 
+    <div>
+        <label for="hazard_category">Hazard category</label>
+        <select id="hazard_category" name="hazard_category" required>
+            <option value="{{ job.hazard_category_rel.id }}">{{ job.hazard_category_rel.hazard_category_title }}</option>
+            {% for category in hazard_category %}
+                {% if category.id != job.hazard_category_rel.id %}
+                <option value="{{ category.id }}">{{ category.hazard_category_title }}</option>
+                {% endif %}
+            {% endfor %}
+        </select>    
+    </div>
     <input type="submit" value="Save changes" class="post_button">
 </form>
 {% endblock %}

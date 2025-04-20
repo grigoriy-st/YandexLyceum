@@ -42,11 +42,11 @@ https://github.com/grigoriy-st/YandexLyceum/tree/main/Python/WEB -->
         <option value="not_finished">no</option>
     </select>
 
-    <label for="hazard_category">Is finished</label>
+    <label for="hazard_category">Hazard category</label>
     <select id="hazard_category" name="hazard_category" required>
-        <option value="1">Physical</option>
-        <option value="2">Ergonimc</option>
-        <option value="3">Chemical</option>
+        {% for category in hazard_category %}
+        <option value="{{ category.id }}">{{ category.hazard_category_title }}</option>
+        {% endfor %}
     </select>
 
     <input type="submit" value="Send" class="post_button">

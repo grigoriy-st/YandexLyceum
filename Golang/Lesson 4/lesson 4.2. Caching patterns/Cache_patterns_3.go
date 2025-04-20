@@ -1,39 +1,32 @@
 package main
 
 import (
+	"container/list"
 	"sync"
 )
 
 type Cache struct {
 	UpperBound int
 	LowerBound int
-	values     map[string]*entry
-	frequency  map[int]*frequencyList
-	minFreq    int
-	lock       sync.Mutex
+
+	values    map[string]*cacheEntry
+	freqLists map[int]*list.List
+	minFreq   int
+	lock      sync.Mutex
 }
 
-type entry struct {
-	key   string
-	value interface{}
-	freq  int
-}
-
-type frequencyList struct {
-	entries map[string]*entry
+type cacheEntry struct {
+	key       string
+	value     interface{}
+	freq      int
+	listElem  *list.Element
 }
 
 func New() *Cache {
-	return NewWithBounds(0, 0)
-}
-
-func NewWithBounds(upperBound, lowerBound int) *Cache {
 	return &Cache{
-		UpperBound: upperBound,
-		LowerBound: lowerBound,
-		values:     make(map[string]*entry),
-		frequency:  make(map[int]*frequencyList),
-		minFreq:    0,
+		values:    make(map[string]*cacheEntry),
+		freqLists: make(map[int]*list.List),
+		minFreq:   1,
 	}
 }
 
@@ -57,20 +50,32 @@ func (c *Cache) Get(key string) interface{} {
 func (c *Cache) Set(key string, value interface{}) {
 	c.lock.Lock()
 	defer c.lock.Unlock()
+
 	if e, exists := c.values[key]; exists {
 		e.value = value
 		c.increment(e)
 		return
 	}
+
 	if c.UpperBound > 0 && len(c.values) >= c.UpperBound {
-		c.Evict(1)
+		target := c.LowerBound
+		if target <= 0 {
+			target = c.UpperBound - 1
+		}
+		c.evictToSize(target)
 	}
-	e := &entry{key: key, value: value, freq: 1}
+
+	e := &cacheEntry{
+		key:   key,
+		value: value,
+		freq:  1,
+	}
+
+	if c.freqLists[1] == nil {
+		c.freqLists[1] = list.New()
+	}
+	e.listElem = c.freqLists[1].PushFront(e)
 	c.values[key] = e
-	if _, exists := c.frequency[1]; !exists {
-		c.frequency[1] = &frequencyList{entries: make(map[string]*entry)}
-	}
-	c.frequency[1].entries[key] = e
 	c.minFreq = 1
 }
 
@@ -100,43 +105,63 @@ func (c *Cache) Keys() []string {
 }
 
 func (c *Cache) Evict(count int) int {
-	if count <= 0 || c.LowerBound == 0 {
-		return 0
+	c.lock.Lock()
+	defer c.lock.Unlock()
+	return c.evict(count)
+}
+
+func (c *Cache) increment(e *cacheEntry) {
+	currentList := c.freqLists[e.freq]
+	currentList.Remove(e.listElem)
+
+	if e.freq == c.minFreq && currentList.Len() == 0 {
+		c.minFreq++
 	}
+
+	e.freq++
+
+	if c.freqLists[e.freq] == nil {
+		c.freqLists[e.freq] = list.New()
+	}
+	e.listElem = c.freqLists[e.freq].PushFront(e)
+}
+
+func (c *Cache) evict(count int) int {
 	removed := 0
-	for len(c.values) > c.LowerBound && removed < count {
-		if freqList, ok := c.frequency[c.minFreq]; ok {
-			for key := range freqList.entries {
-				delete(c.values, key)
-				removed++
-				if removed >= count {
-					break
-				}
-			}
-			delete(c.frequency, c.minFreq)
+	for i := 0; i < count && len(c.values) > 0; i++ {
+		list := c.freqLists[c.minFreq]
+		if list == nil || list.Len() == 0 {
 			c.minFreq++
-			if len(c.frequency) == 0 {
-				c.minFreq = 0
-			}
+			i--
+			continue
 		}
+
+		back := list.Back()
+		if back == nil {
+			c.minFreq++
+			i--
+			continue
+		}
+
+		e := back.Value.(*cacheEntry)
+		list.Remove(back)
+		delete(c.values, e.key)
+		removed++
 	}
+
+	for c.minFreq <= 1 || (c.freqLists[c.minFreq] != nil && c.freqLists[c.minFreq].Len() > 0) {
+		if c.freqLists[c.minFreq] != nil && c.freqLists[c.minFreq].Len() > 0 {
+			break
+		}
+		c.minFreq++
+	}
+
 	return removed
 }
 
-func (c *Cache) increment(e *entry) {
-	oldFreq := e.freq
-	e.freq++
-	if freqList, ok := c.frequency[oldFreq]; ok {
-		delete(freqList.entries, e.key)
-		if len(freqList.entries) == 0 {
-			delete(c.frequency, oldFreq)
-			if oldFreq == c.minFreq {
-				c.minFreq++
-			}
-		}
+func (c *Cache) evictToSize(target int) int {
+	if target >= len(c.values) {
+		return 0
 	}
-	if _, ok := c.frequency[e.freq]; !ok {
-		c.frequency[e.freq] = &frequencyList{entries: make(map[string]*entry)}
-	}
-	c.frequency[e.freq].entries[e.key] = e
+	return c.evict(len(c.values) - target)
 }

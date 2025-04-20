@@ -10,6 +10,7 @@ from flask_login import login_user, logout_user, login_required, current_user
 from data import db_session
 from data.users import User
 from data.jobs import Jobs
+from data.hazard_category import HazardCategory
 
 from sqlalchemy.exc import IntegrityError
 
@@ -78,8 +79,11 @@ def create_job():
         #                        team_leaders=team_leaders)
         return redirect('/jobs_list')
 
+    hazard_category = db_ss.query(HazardCategory).all()
+
     return render_template('new_job.html', current_user_id=current_user_id,
-                           team_leaders=team_leaders)
+                           team_leaders=team_leaders,
+                           hazard_category=hazard_category)
 
 
 @work_with_jobs_bp.route('/jobs_list')
@@ -91,7 +95,7 @@ def get_jobs_list():
     jobs = db_ss.query(Jobs).all()
     current_user_id = current_user.id
     message = get_flashed_messages()
-    print(message)
+    # print(message)
 
     return render_template('jobs.html', jobs=jobs,
                            current_user_id=current_user_id,
@@ -120,14 +124,15 @@ def edit_job(job_id):
     db_ss = db_session.create_session()
     job = db_ss.query(Jobs).filter(Jobs.id == job_id).first()
     users = db_ss.query(User).all()
+    hazard_category = db_ss.query(HazardCategory).all()
 
     if request.method == 'POST':
-        print(120)
         job.job_title = request.form.get('job_title')
         job.team_leader = request.form.get('team_leader')
         job.work_size = request.form.get('work_size')
         job.collaborators = request.form.get('collaborators')
         job.is_finished = True if request.form.get('is_finished') == 'on' else False
+        job.hazard_category = request.form.get('hazard_category')
 
         db_ss.commit()
         message = f'Запись по работе \"{job.job_title}\" c id={job_id} изменена!'
@@ -136,4 +141,7 @@ def edit_job(job_id):
 
         return redirect(url_for('work_with_jobs.get_jobs_list'))
 
-    return render_template('job_for_editing.html', job=job, users=users)
+    return render_template('job_for_editing.html',
+                           job=job,
+                           users=users,
+                           hazard_category=hazard_category)
