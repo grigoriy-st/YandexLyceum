@@ -25,7 +25,7 @@ from werkzeug.security import generate_password_hash
 from handlers.auth import auth_bp
 from handlers.work_with_jobs import work_with_jobs_bp
 from handlers.work_with_departments import work_with_departments_bp
-from handlers.jobs_api import jobs_api
+from api.jobs_api import jobs_api
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'yandexlyceum_secret_key'

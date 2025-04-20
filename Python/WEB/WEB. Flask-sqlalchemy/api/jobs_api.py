@@ -83,6 +83,24 @@ def add_job_by_id():
 
     return jsonify(respose_data)
 
+@jobs_api.route('/api/jobs/delete/<job_id>', methods=['DELETE'])
+def delete_job_by_id(job_id):
+    print('OK')
+    job_id = str(request.json['id'])
+
+    if not job_id.isdigit():  # Проверка на некорректную строку
+        abort(400)
+    
+    db_ss = db_session.create_session()
+    job = db_ss.query(Jobs).filter(Jobs.id == int(job_id)).first()
+    db_ss.delete(job)
+    db_ss.commit()
+    
+    response_data = json.dumps({'job': {
+        'job_id': job_id,
+        'status': 'deleted'
+    }})
+    return Response(response_data, mimetype='application/json')
 
 @jobs_api.route('/api/job/<job_id>', methods=['GET'])
 def get_job_by_id(job_id):
