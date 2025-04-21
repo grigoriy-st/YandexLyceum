@@ -29,7 +29,9 @@ def get_job_list():
             "is_finished ": job.is_finished,
         })
 
-    response_data = json.dumps({'jobs': jobs_list})
+    response_data = json.dumps({
+        'status': 'all works have been recieved', 
+        'jobs': jobs_list})
     return Response(response_data, mimetype='application/json')
 
 
@@ -135,6 +137,37 @@ def get_job_by_id(job_id):
     return Response(respose_data, mimetype='application/json')
 
 
-@jobs_api.route('/api/jobs/edit/<job_id>', methods=['POST', 'PUT'])
-def edit_job_by_id(job_id):
+@jobs_api.route('/api/jobs/edit/', methods=['POST', 'PUT'])
+def edit_job_by_id():
+    data = request.get_json()
+    if not data:
+        return jsonify({'error': 'Empty sending fields'}), 400
+
+    job_id = data['id']
+
+    if type(job_id) != int:  # Проверка на некорректную строку
+        abort(400)
+
+    db_ss = db_session.create_session()
+    job = db_ss.query(Jobs).filter(Jobs.id == job_id).first() 
+
+    if not job:
+        return jsonify({'error': 'job is not found'}), 400
+
+    available_fields = ['id', 'job_title', 'author', 'team_leader', 'collaborators',
+              'hazard_catgory', 'is_finished', 'work_size']
+
+    # Замена значений у полей
+    for field in data:
+        if field in available_fields:
+            setattr(job, field, data[field])
+        else:
+            return jsonify({'error': f'field {field} not available'}), 400
     
+    db_ss.commit()
+
+    response_data = json.dumps(
+        {'job': 'updated successfully'}
+    )
+
+    return Response(response_data, mimetype='application/json')

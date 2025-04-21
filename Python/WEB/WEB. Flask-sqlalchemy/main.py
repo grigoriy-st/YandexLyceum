@@ -26,7 +26,7 @@ from handlers.auth import auth_bp
 from handlers.work_with_jobs import work_with_jobs_bp
 from handlers.work_with_departments import work_with_departments_bp
 from api.jobs_api import jobs_api
-
+from api.users_api import users_api
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'yandexlyceum_secret_key'
 
@@ -34,6 +34,7 @@ app.register_blueprint(auth_bp)
 app.register_blueprint(work_with_jobs_bp)
 app.register_blueprint(work_with_departments_bp)
 app.register_blueprint(jobs_api)
+app.register_blueprint(users_api)
 
 login_manager = LoginManager()
 login_manager.init_app(app)
