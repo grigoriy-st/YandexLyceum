@@ -2,6 +2,7 @@ import json
 
 from flask import Blueprint, Response, abort, request, jsonify
 from data import db_session
+from sqlalchemy.exc import IntegrityError
 
 from data.jobs import Jobs
 
@@ -13,8 +14,7 @@ def get_job_list():
 
     db_ss = db_session.create_session()
     jobs = db_ss.query(Jobs).all()
-    # print(type(jobs))
-    # print(jobs[0].job_title)
+
     jobs_list = []
     for job in jobs:
         jobs_list.append({
@@ -39,20 +39,20 @@ def add_job_by_id():
 
     if not job_id.isdigit():  # Проверка на некорректную строку
         abort(400)
-    print(job_id)
 
-    required_fields = ['id', 'job_title', 'team_leader_id', 'work_size', 'collaborators']
+    required_fields = ['id', 'job_title',
+                       'team_leader_id', 'work_size', 'collaborators']
     if not all(field in request.json for field in required_fields):
-        return jsonify({'error': f'Missing required fields. Required: {required_fields}'}), 400
-
+        return jsonify({'error':
+                        f'Missing required fields. Required: {required_fields}'}), 400
 
     db_ss = db_session.create_session()
     job = db_ss.query(Jobs).filter(Jobs.id == job_id).first()
 
     if job:  # Проверка на существующую запись
-        return jsonify({'error': 'Job is exists.'})
+        return jsonify({'error': 'Job is exists.'}), 400
 
-    new_job = Jobs (
+    new_job = Jobs(
             id=job_id,
             job_title=request.json['job_title'],
             team_leader=request.json['team_leader_id'],
@@ -72,17 +72,40 @@ def add_job_by_id():
             'is_finished': new_job.is_finished,
         }
     }
-    
+
     try:
         db_ss.add(new_job)
         db_ss.commit()
-        message = "Job is added"
 
     except IntegrityError as e:
         print(f"Error: {e}")
         db_ss.rollback()
 
     return jsonify(respose_data)
+
+
+@jobs_api.route('/api/jobs/delete/<job_id>', methods=['DELETE'])
+def delete_job_by_id(job_id):
+    print('OK')
+
+    if not job_id.isdigit():  # Проверка на некорректную строку
+        abort(400)
+
+    db_ss = db_session.create_session()
+    job = db_ss.query(Jobs).filter(Jobs.id == int(job_id)).first()
+
+    if not job:
+        abort(404)
+
+    db_ss.delete(job)
+    db_ss.commit()
+
+    response_data = json.dumps({'job': {
+        'job_id': job_id,
+        'status': 'deleted'
+    }})
+    print('hello')
+    return Response(response_data, mimetype='application/json')
 
 
 @jobs_api.route('/api/job/<job_id>', methods=['GET'])
@@ -108,5 +131,10 @@ def get_job_by_id(job_id):
             "is_finished ": job.is_finished,
     }
     respose_data = json.dumps({'job': job})
-    
+
     return Response(respose_data, mimetype='application/json')
+
+
+@jobs_api.route('/api/jobs/edit/<job_id>', methods=['POST', 'PUT'])
+def edit_job_by_id(job_id):
+    
