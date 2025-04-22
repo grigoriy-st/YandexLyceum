@@ -28,6 +28,7 @@ def get_all_users():
             'position': user.position,
             'speciality': user.speciality,
             'email': user.email,
+            'city_from': user.city_from
         })
     response_data = json.dumps({
         'status': 'all users have been recieved', 
@@ -53,6 +54,7 @@ def get_info_to_one_user_by_id(id):
         'position': user.position,
         'speciality': user.speciality,
         'email': user.email,
+        'city_from': user.city_from,
     }
     return jsonify({'user': response_of_user})
 
@@ -72,6 +74,7 @@ def add_user():
         'speciality',
         'email',
         'password',
+        'city_from',
     ]
 
     if 'id' not in data.keys() or 'password' not in data.keys():
@@ -148,6 +151,7 @@ def edit_user():
         'position',
         'speciality',
         'email',
+        'city_from',
     ]
 
     if 'id' not in data.keys():
