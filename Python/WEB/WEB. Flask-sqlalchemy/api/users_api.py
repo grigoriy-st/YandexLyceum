@@ -11,6 +11,7 @@ from data.users import User
 
 users_api = Blueprint('users_apu', __name__)
 
+
 @users_api.route('/api/users', methods=['GET'])
 def get_all_users():
     """ Выдача всех пользователей. """
@@ -38,19 +39,12 @@ def get_all_users():
 def get_info_to_one_user_by_id(id):
     """ Прсомотр информации по одному пользователю. """
 
-    data = request.get_json()
-
-    # if 'id' not in data.keys():
-    #     return jsonify({'error': 'missing user id'}), 400
-
-    # user_id = data['id']
-
     db_ss = db_session.create_session()
     user = db_ss.query(User).filter(User.id == id).first()
     db_ss.close()
-    
+
     if not user:
-        return jsonify({'error': 'user was not found'})
+        return jsonify({'error': 'user was not found'}), 400
 
     response_of_user = {
         'id': user.id,
@@ -73,18 +67,20 @@ def add_user():
         'surname',
         'name',
         'age',
+        'address',
         'position',
         'speciality',
         'email',
         'password',
     ]
 
+    if 'id' not in data.keys() or 'password' not in data.keys():
+        return jsonify({'error': 'missing user id or password'}), 400
+
     for field in data.keys():
         if field not in necуssary_fields:
             return jsonify({'error': 'field not in necessary fields'})
 
-    if 'id' not in data.keys() or 'password' not in data.keys():
-        return jsonify({'error': 'missing user id or password'}), 400
 
     user_id = data['id']
 
@@ -93,53 +89,55 @@ def add_user():
 
     if user:
         return jsonify({'error': 'user with this id was found'})
-# ------------------------
-# Нужно сделать логику добавления только тех полей, 
-# которые указаны в запросе
-# ------------------------
+    
+    new_user = User()
 
-    try: 
-        new_user = User(
-            id=user_id,
-            surname=data['surname'],
-            name=data['name'],
-            age=data['age'],
-            position=data['position'],
-            speciality=data['speciality'],
-            address=data['address'],
-            email=data['email'],
-        )
+    for field in data.keys():
+        if field not in necуssary_fields:
+            db_ss.close()
+            return jsonify({'error': 'field not in necessary fields'})
+        else:
+            setattr(new_user, field, data[field])
 
+    try:
         new_user.set_password(data['password'])
         db_ss.add(new_user)
     finally:
         db_ss.commit()
         db_ss.close()
-    
+
+    return jsonify({'user': "is added"})
+
 
 @users_api.route('/api/users/delete', methods=['DELETE', 'POST'])
 def delete_user():
+    """ Удаление пользователя. """
     data = request.get_json()
 
     if 'id' not in data.keys():
         return jsonify({'error': 'missing id'}), 400
-    
-    user_id = data['id']
-    
-    db_ss = db_session.create_session()
-    user = db_ss.query(User).filter(User.id == user_id).first()
-    
-    if not user:
-        db_ss.close()
-        return jsonify({'error': 'user was not found'})
-    
-    db_ss.delete(user)
 
-    return jsonify({'user': 'is deleted'})
+    user_id = data['id']
+    try:
+        db_ss = db_session.create_session()
+        user = db_ss.query(User).filter(User.id == user_id).first()
+
+        if not user:
+            db_ss.close()
+            return jsonify({'error': 'user was not found'}), 400
+
+        db_ss.delete(user)
+    finally:
+        db_ss.commit()
+        db_ss.close()
+
+    return jsonify({'user': 'is deleted'}), 200
 
 
 @users_api.route('/api/users/edit', methods=['PUT', 'POST'])
 def edit_user():
+    """ Редактирование пользователя. """
+
     data = request.get_json()
 
     necуssary_fields = [
@@ -152,12 +150,12 @@ def edit_user():
         'email',
     ]
 
-    for field in data.keys():
-        if field not in necуssary_fields:
-            return jsonify({'error': 'field not in necessary fields'})
-
     if 'id' not in data.keys():
         return jsonify({'error': 'missing user id or password'}), 400
+
+    for field in data.keys():
+        if field not in necуssary_fields:
+            return jsonify({'error': 'field not in necessary fields'}), 400
 
     user_id = data['id']
 
@@ -171,7 +169,6 @@ def edit_user():
             setattr(user, field, data[field])
 
     db_ss.commit()
-    db_ss.close() 
+    db_ss.close()
 
     return jsonify({'user': 'updated successfully'})
-
