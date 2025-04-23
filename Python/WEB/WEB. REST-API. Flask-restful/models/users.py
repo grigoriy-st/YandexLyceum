@@ -1,5 +1,6 @@
 import datetime
 import sqlalchemy
+from sqlalchemy.orm import relationship
 from data import db_session
 from data.db_session import SqlAlchemyBase
 
@@ -19,6 +20,8 @@ class User(SqlAlchemyBase):
     created_date = sqlalchemy.Column(sqlalchemy.DateTime, 
                                      default=datetime.datetime.now)
 
+    news = relationship("News", back_populates='user')
+
     def set_password(self, password):
         self.hashed_password = generate_password_hash(password)
 
@@ -27,3 +30,15 @@ class User(SqlAlchemyBase):
 
     def __repr__(self):
         return f'{self.name}, {self.surname}, id={self.id}'
+
+    def to_dict(self, only=None):
+        """Преобразует объект в словарь."""
+        result = {
+            'id': self.id,
+            'name': self.name,
+            'about': self.about,
+            'email': self.email,
+        }
+        if only:
+            return {key: result[key] for key in only if key in result}
+        return result

@@ -1,5 +1,5 @@
 from data import db_session
-from data import user_reqparse
+from sources import user_reqparse
 from flask import jsonify
 from models.users import User
 from flask_restful import abort, Api, Resource

@@ -29,4 +29,6 @@ def global_init(db_file):
 
 def create_session() -> Session:
     global __factory
+    if __factory is None:
+        raise Exception("Session factory is not initialized. Make sure to call global_init() first.")
     return __factory()
