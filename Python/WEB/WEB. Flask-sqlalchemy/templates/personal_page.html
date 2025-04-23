@@ -2,37 +2,18 @@
 
 {% block content %}
 
+<style>
+    img {
+        border: 2px solid grey;
+    }
+</style>
+
 <h1>Nostalgy</h1>
 <h2>{{ user.name }} {{ user.surname }}</h2>
 
 <h3>{{ user.city_from }}</h3>
 
-<!-- Контейнер для карты -->
-<div id="map" style="width: 100%; height: 400px;"></div>
+<img src="{{ url_for('static', filename='/imgs/map_image.png')}}" alt="">
 
-<script src="https://api-maps.yandex.ru/2.1/?apikey={{ api_key }}&lang=ru_RU" type="text/javascript"></script>
-<script type="text/javascript">
-    ymaps.ready(init);
-    
-    function init() {
-        // Разделяем координаты на широту и долготу
-        var coordinates = "{{ coords }}".split(',');
-        var latitude = parseFloat(coordinates[1]);
-        var longitude = parseFloat(coordinates[0]);
-        
-        // Создаем карту
-        var myMap = new ymaps.Map("map", {
-            center: [latitude, longitude],  // Центр карты
-            zoom: 10  // Масштаб
-        });
-        
-        // Добавляем метку
-        var myPlacemark = new ymaps.Placemark([latitude, longitude], {
-            hintContent: '{{ user.city_from }}',
-        });
-        
-        myMap.geoObjects.add(myPlacemark);
-    }
-</script>
 
 {% endblock %}
