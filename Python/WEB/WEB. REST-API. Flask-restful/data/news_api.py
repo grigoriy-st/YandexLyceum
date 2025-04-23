@@ -1,7 +1,7 @@
 import flask
 
 from .. import db_session
-from .news import News
+from ..models.news import News
 
 blueprint = flask.Blueprint(
     'news_api',

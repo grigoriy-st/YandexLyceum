@@ -1,8 +1,9 @@
 from data import db_session
 from data import user_reqparse
 from flask import jsonify
-from data.users import User
-from flask_restful import reqparse, abort, Api, Resource
+from models.users import User
+from flask_restful import abort, Api, Resource
+from models.data_parser import reqparse as parser
 
 from werkzeug.security import generate_password_hash, check_password_hash
 
@@ -45,13 +46,17 @@ class UsersListResource(Resource):
     def post(self):
         args = parser.parse_args()
         session = db_session.create_session()
+
         users = User(
             id=args['id'],
             name=args['name'],
             about=args['about'],
             email=args['email'],
-            hashed_password=set_password(args['hashed_password']),
+            created_date=args['created_date']
         )
+        users.set_password(args['hashed_password'])
         session.add(users)
         session.commit()
+        session.close()
+
         return jsonify({'id': users.id})

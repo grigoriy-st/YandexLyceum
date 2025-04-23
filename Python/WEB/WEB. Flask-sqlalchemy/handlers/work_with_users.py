@@ -36,9 +36,7 @@ def get_user_page_with_map(user_id):
         flash(f"Не удалось найти координаты для города {user.city_from}")
         return redirect(url_for('work_with_users.get_user_list'))
 
-    return render_template('personal_page.html',
-                            user=user,
-                            api_key=API_KEY)
+    return render_template('personal_page.html', user=user)
 
 
 @work_with_users_bp.route('/user_list')

@@ -2,7 +2,7 @@ import datetime
 import sqlalchemy
 from sqlalchemy import orm
 
-from .db_session import SqlAlchemyBase
+from data.db_session import SqlAlchemyBase
 
 
 class News(SqlAlchemyBase):
@@ -20,3 +20,4 @@ class News(SqlAlchemyBase):
                                 sqlalchemy.ForeignKey("users.id"))
     user = orm.relationship('User')
     news = orm.relationship("News", back_populates='user')
+    is_published = sqlalchemy.Column(sqlalchemy.Boolean, default=True)
