@@ -16,6 +16,8 @@ db_session.global_init("db/blogs.sqlite")
 
 api.add_resource(news_resources.NewsListResource, '/api/v2/news')
 api.add_resource(news_resources.NewsResource, '/api/v2/news/<int:news_id>')
+api.add_resource(users_resource.UsersListResource, '/api/v2/users')
+api.add_resource(users_resource.UsersResource, '/api/v2/users/<int:user_id>')
 
 
 @app.route("/")
