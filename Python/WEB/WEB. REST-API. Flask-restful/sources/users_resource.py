@@ -3,8 +3,9 @@ from sources import user_reqparse
 from flask import jsonify
 from models.users import User
 from flask_restful import abort, Api, Resource
-from models.data_parser import reqparse as parser
 
+from flask_restful.reqparse import RequestParser
+from sqlalchemy.exc import IntegrityError
 from werkzeug.security import generate_password_hash, check_password_hash
 
 
@@ -25,7 +26,7 @@ class UsersResource(Resource):
         session = db_session.create_session()
         users = session.query(User).get(user_id)
         return jsonify({'users': users.to_dict(
-            only=('id', 'name', 'about', 'email'))})
+            only=('id', 'name', 'position', 'email'))})
 
     def delete(self, user_id):
         abort_if_user_not_found(user_id)
@@ -41,22 +42,40 @@ class UsersListResource(Resource):
         session = db_session.create_session()
         user = session.query(User).all()
         return jsonify({'users': [item.to_dict(
-            only=('id', 'name', 'about')) for item in user]})
+            only=('id', 'name', 'position')) for item in user]})
 
     def post(self):
+        parser = RequestParser()
+        parser.add_argument('id')
+        parser.add_argument('name')
+        parser.add_argument('position')
+        parser.add_argument('email')
+        parser.add_argument('modified_date')
+        parser.add_argument('hashed_password')
+
         args = parser.parse_args()
-        session = db_session.create_session()
+        try:
+            session = db_session.create_session()
 
-        users = User(
-            id=args['id'],
-            name=args['name'],
-            about=args['about'],
-            email=args['email'],
-            created_date=args['created_date']
-        )
-        users.set_password(args['hashed_password'])
-        session.add(users)
-        session.commit()
-        session.close()
-
-        return jsonify({'id': users.id})
+            users = User(
+                id=args['id'],
+                name=args['name'],
+                position=args['position'],
+                email=args['email'],
+                modified_date=args['modified_date']
+            )
+            users.set_password(args['hashed_password'])
+            session.add(users)
+            session.commit()
+            return jsonify({
+                'status': 'success',
+                'id': users.id}
+            )
+        except IntegrityError as e:
+            session.rollback()
+            return jsonify({
+                'status': 'error',
+                'message': e,
+            })
+        finally:
+            session.close()
