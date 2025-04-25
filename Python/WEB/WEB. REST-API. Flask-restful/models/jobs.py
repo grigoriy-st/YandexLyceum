@@ -7,7 +7,7 @@ import datetime
 import sqlalchemy
 from sqlalchemy import ForeignKey
 from sqlalchemy.orm import relationship
-from data.users import SqlAlchemyBase
+from models.users import SqlAlchemyBase
 from data.hazard_category import HazardCategory
 
 class Jobs(SqlAlchemyBase):

@@ -1,6 +1,8 @@
 # Данные по задачам
 
-## Рабочие запросы
+## Requests
+
+### News
 
 GET-запрос на получение новостей
 
@@ -22,10 +24,12 @@ curl -X POST http://localhost:8080/api/v2/news \
 }'
 ```
 
-Получение всех пользователей
+### Users
+
+Получение информации по пользователю
 
 ```bash
-curl -X GET http://localhost:8080/api/v2/users \
+curl -X GET http://localhost:8080/api/v2/users/1 \
 -H "Content-Type: application/json"
 ```
 
@@ -42,4 +46,15 @@ curl -X POST http://localhost:8080/api/v2/users \
     "created_date": "2023-10-01T12:00:00",
     "hashed_password": "password123"
 }'
+```
+### Jobs
+
+Получение одной работы
+
+```bash
+```
+
+Добавление работы
+
+```bash
 ```

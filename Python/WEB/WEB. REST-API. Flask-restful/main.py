@@ -4,7 +4,7 @@ import sqlalchemy
 from flask import jsonify, Flask, render_template, redirect
 from flask_restful import reqparse, abort, Api, Resource
 from data import db_session
-from sources import users_resource, news_resources
+from sources import users_resource, news_resources, jobs_resource
 from models.news import News
 from models.users import User
 
@@ -18,7 +18,8 @@ api.add_resource(news_resources.NewsListResource, '/api/v2/news')
 api.add_resource(news_resources.NewsResource, '/api/v2/news/<int:news_id>')
 api.add_resource(users_resource.UsersListResource, '/api/v2/users')
 api.add_resource(users_resource.UsersResource, '/api/v2/users/<int:user_id>')
-
+api.add_resource(jobs_resource.JobsListResource, '/api/v2/jobs')
+api.add_resource(jobs_resource.JobsResource, '/api/v2/jobs/<int:jobs_id>')
 
 @app.route("/")
 def get_news():
