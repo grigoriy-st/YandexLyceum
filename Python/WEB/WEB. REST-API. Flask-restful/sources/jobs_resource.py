@@ -12,7 +12,7 @@ from werkzeug.security import generate_password_hash, check_password_hash
 def abort_if_job_not_found(jobs_id):
     try:
         session = db_session.create_session()
-        job = session.query(Jobs).filter(Jobs.id == jobs_id).first()
+        job = session.query(Jobs).filter(Jobs.id == int(jobs_id)).first()
         if not job:
             abort(404, message=f"job {jobs_id} not found")
     finally:
@@ -20,10 +20,11 @@ def abort_if_job_not_found(jobs_id):
 
 
 class JobsResource(Resource):
-    def get(self, jobs_id):
-        abort_if_job_not_found(jobs_id)
+    def get(self, id):
+        abort_if_job_not_found(id)
         session = db_session.create_session()
-        job = session.query(Jobs).filter(Jobs.id == int(jobs_id)).first()
+        job = session.query(Jobs).filter(Jobs.id == int(id)).first()
+
         session.close()
         return {
             'job': {
@@ -36,11 +37,11 @@ class JobsResource(Resource):
             }
         }
 
-    def delete(self, jobs_id):
-        abort_if_job_not_found(jobs_id)
+    def delete(self, id):
+        abort_if_job_not_found(id)
 
         session = db_session.create_session()
-        job = session.query(Jobs).filter(Jobs.id == int(jobs_id)).first()
+        job = session.query(Jobs).filter(Jobs.id == int(id)).first()
         session.delete(job)
         session.commit()
         session.close()
@@ -63,6 +64,10 @@ class JobsListResource(Resource):
                     'work_size': job.work_size,
                     'hazard_category': job.hazard_category,
                 })
+            return {
+                'status': 'OK',
+                'jobs': jobs_list,
+            }
         except Exception as e:
             return {'status': 'error',
                     'message': str(e)
@@ -81,6 +86,7 @@ class JobsListResource(Resource):
                     'status': 'error',
                     'message': f'request doesn\'t have field {field}',
                 }, 400
+
         session = db_session.create_session()
         try:
             founded_job = session.query(Jobs).filter(Jobs.id == int(args['id'])).first()

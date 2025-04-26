@@ -62,27 +62,28 @@ class JobsResourceTestCase(unittest.TestCase):
         """ Добавление работы. """
 
         new_job_data = {
-            'id': '1002',
+            'id': 1002,
             'job_title': 'Test Job',
-            'author': '10',
-            'team_leader': '16',
-            'work_size': '25',
+            'author': 10,
+            'team_leader': 16,
+            'work_size': 25,
             'collaborators': '1, 2, 3',
-            'hazard_category': '3',
+            'hazard_category': 3,
         }
         response = self.app.post('/api/v2/jobs',
                                  data=json.dumps(new_job_data),
                                  content_type='application/json')
         self.assertEqual(response.status_code, 201)
         self.assertIn('id', response.get_json())
+        self.created_jobs.append(new_job_data['id'])
 
     def test_post_job_without_worksize(self):
         """ Добавление работы без обязательного поля work_size. """
         new_job_data = {
-            'id': '1011',
+            'id': 1010,
             'job_title': 'Test Job 3',
-            'author': '10',
-            'team_leader': '16',
+            'author': 10,
+            'team_leader': 16,
         }
         response = self.app.post('/api/v2/jobs',
                                  data=json.dumps(new_job_data),
@@ -91,9 +92,24 @@ class JobsResourceTestCase(unittest.TestCase):
 
     def test_delete_job(self):
         """ Удаление работы. """
-        response = self.app.delete('/api/v2/jobs/1002')
+        
+        new_job_data = {
+            'id': 1006,
+            'job_title': 'Test Job',
+            'author': 10,
+            'team_leader': 16,
+            'work_size': 25,
+            'collaborators': '1, 2, 3',
+            'hazard_category': 3,
+        }
+        response = self.app.post('/api/v2/jobs',
+                                 data=json.dumps(new_job_data),
+                                 content_type='application/json')
+        
+        response = self.app.delete('/api/v2/jobs/1006')
         self.assertEqual(response.status_code, 200)
         self.assertIn('OK', str(response.data))
+        self.created_jobs.append(new_job_data['id'])
 
     def test_delete_nonexistent_job(self):
         """ Удаление несущствующей работы. """

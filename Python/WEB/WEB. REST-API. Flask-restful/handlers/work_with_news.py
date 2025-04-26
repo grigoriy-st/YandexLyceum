@@ -10,9 +10,9 @@ from flask_login import login_user, logout_user, login_required, current_user
 from forms.NewsForm import NewsForm
 
 from data import db_session
-from data.users import User
-from data.jobs import Jobs
-from data.news import News
+from models.users import User
+from models.jobs import Jobs
+from models.news import News
 
 from data.db_session import create_session
 from sqlalchemy.exc import IntegrityError

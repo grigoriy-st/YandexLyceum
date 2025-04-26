@@ -2,7 +2,7 @@ import datetime
 import sqlalchemy
 from sqlalchemy import ForeignKey
 from sqlalchemy.orm import relationship
-from data.users import SqlAlchemyBase
+from models.users import SqlAlchemyBase
 
 
 class HazardCategory(SqlAlchemyBase):

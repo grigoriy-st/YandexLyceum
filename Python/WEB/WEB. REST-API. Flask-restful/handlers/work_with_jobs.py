@@ -10,7 +10,7 @@ from flask_login import login_user, logout_user, login_required, current_user
 from data import db_session
 from models.users import User
 from models.jobs import Jobs
-from data.hazard_category import HazardCategory
+from models.hazard_category import HazardCategory
 
 from sqlalchemy.exc import IntegrityError
 

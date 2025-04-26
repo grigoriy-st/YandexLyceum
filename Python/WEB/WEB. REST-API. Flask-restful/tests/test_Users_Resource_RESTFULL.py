@@ -60,7 +60,7 @@ class UsersResourceTestCase(unittest.TestCase):
         """ Добавление пользователя."""
 
         new_user_data = {
-            'id': '1002',
+            'id': 1001,
             'name': 'New User',
             'position': 'Swimmer',
             'email': 'new123@example.com',
@@ -70,7 +70,8 @@ class UsersResourceTestCase(unittest.TestCase):
         response = self.app.post('/api/v2/users', data=json.dumps(new_user_data), content_type='application/json')
         self.assertEqual(response.status_code, 201)
         self.assertIn('id', response.get_json())
-        self.created_users.append(1002)
+        
+        self.created_users.append(int(new_user_data['id']))
 
     def test_post_user_without_password(self):
         """ Добавление пользователя без пароля. """
@@ -85,9 +86,28 @@ class UsersResourceTestCase(unittest.TestCase):
 
     def test_delete_user(self):
         """ Удаление пользователя. """
+
+        new_user_data = {
+            'id': 1002,
+            'name': 'User to Delete',
+            'position': 'Temp',
+            'email': 'delete@example.com',
+            'hashed_password': 'temp123',
+            'created_date': '2025-03-26 02:17:37'
+        }
+        response = self.app.post(
+            '/api/v2/users',
+            data=json.dumps(new_user_data),
+            content_type='application/json'
+        )
+        self.assertEqual(response.status_code, 201)
+        self.created_users.append(1002)
+
         response = self.app.delete('/api/v2/users/1002')
         self.assertEqual(response.status_code, 200)
         self.assertIn('OK', str(response.data))
+
+        self.created_users.append(int(new_user_data['id']))
 
     def test_delete_nonexistent_user(self):
         """ Удаление несущствующего пользователя. """
