@@ -7,7 +7,7 @@ BASE_URL = 'http://localhost:8080/api/users'
 from flask import Blueprint, Flask, Response, abort, request, jsonify
 from data import db_session
 
-from data.users import User
+from models.users import User
 
 users_api = Blueprint('users_apu', __name__)
 

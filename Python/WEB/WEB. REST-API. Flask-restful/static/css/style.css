@@ -1,0 +1,102 @@
+* {
+    margin: 0px;
+    padding: 0px;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+header {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+
+    margin-top: 30px;
+    width: 100%;
+}
+
+main {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    
+    height: 100vh;
+    margin-top: 20px;
+}
+
+nav {
+    margin: 20px;
+}
+
+.auth_buttons {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    width: 17%;
+}
+
+.second_header {
+    display: flex;
+    justify-content: space-around;
+
+    align-items: center;
+    margin: 0 auto;
+    margin-top: 30px;
+    margin-left: 15vw;
+
+    width: 100%;
+}
+
+.second_header_text {
+    color: grey;
+    margin-top: 30px;
+    margin-left: 15vw;
+}
+
+.success_message {
+    color: green;
+}
+
+.error_message {
+    color: red;
+}
+
+.add_btn {
+    padding: 5px 10px;
+    border-radius: 15px;
+}
+
+input.post_button {
+    border-radius: 15px;
+    margin: 0 auto;
+    margin-top: 50px;
+    border: none;
+    background-color:rgb(6, 76, 255);
+    color: white;
+    
+    width: 100px;
+    height: 30px;
+}
+
+.buttons_block {
+    display: flex;
+    justify-content: space-between;
+    width: 230px;
+    margin-top: 5px;
+}
+
+.btn_for_edit, .btn_for_delete {
+    border-radius: 10px;
+    border-color: rgb(175, 176, 176);
+    height: 30px;
+    width: 80px;
+}
+
+
+.btn_for_edit {
+    background-color: yellow;
+}
+
+.btn_for_delete {
+    color: white;
+    background-color: red;
+}

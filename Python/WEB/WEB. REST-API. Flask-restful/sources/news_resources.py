@@ -2,6 +2,7 @@ from flask import jsonify, abort
 from flask_restful import Resource, reqparse
 from data import db_session
 from models.news import News
+from parsers import users_parser
 
 
 class NewsResource(Resource):
@@ -40,14 +41,9 @@ class NewsListResource(Resource):
         })
 
     def post(self):
-        parser = reqparse.RequestParser()
-        parser.add_argument('title', required=True)
-        parser.add_argument('content', required=True)
-        parser.add_argument('is_private', required=True, type=bool)
-        parser.add_argument('is_published', required=True, type=bool)
-        parser.add_argument('user_id', required=True, type=int)
-
+        parser = users_parser.create_user_parser()
         args = parser.parse_args()
+
         try:
             session = db_session.create_session()
             news = News(

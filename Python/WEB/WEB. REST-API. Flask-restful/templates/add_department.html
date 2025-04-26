@@ -1,0 +1,41 @@
+<!-- new_jos.html -->
+
+<!-- Этот файл скорее всего есть в репозитории
+https://github.com/grigoriy-st/YandexLyceum/tree/main/Python/WEB -->
+
+{% extends "base.html" %}
+
+{% block styles %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/new_job.css')}}"> 
+{% endblock %}
+
+{% block content %}
+<h1>Create new Department</h1>
+
+{% if message %}
+    <h2 class="success_message">{{ message }}</h2>
+{% endif %}
+
+<form action="/add_department" method="post" class="form1">
+
+    <input type="hidden" name="creator" value="{{ current_user_id }}">
+
+    <label for="title">Title</label>
+    <input type="text" name="title" id="title" required>
+
+    <label for="chief">Chief</label>
+    <select id="chief" name="chief">
+        {% for user in users %}
+        <option value="{{ user.id }}">{{ user.name }} {{ user.surname}} ({{ user.id}})</option>
+        {% endfor %}
+    </select>
+
+    <label for="members">Members</label>
+    <input type="text" name="members" id="members" required>
+
+    <label for="email">Email</label>
+    <input type="email" name="dep_email" id="">
+
+    <input type="submit" value="Send" class="post_button">
+</form>
+{% endblock %}

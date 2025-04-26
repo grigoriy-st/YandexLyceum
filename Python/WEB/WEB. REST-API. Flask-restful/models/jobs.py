@@ -10,6 +10,7 @@ from sqlalchemy.orm import relationship
 from models.users import SqlAlchemyBase
 from data.hazard_category import HazardCategory
 
+
 class Jobs(SqlAlchemyBase):
     __tablename__ = 'jobs'
 
@@ -29,7 +30,7 @@ class Jobs(SqlAlchemyBase):
     is_finished = sqlalchemy.Column(sqlalchemy.Boolean, default=False)
     hazard_category = sqlalchemy.Column(sqlalchemy.Integer,
                                         ForeignKey('hazard_category.id'),
-                                        nullable=None)
+                                        nullable=True)
 
     team_leader_user = relationship("User", backref='team_leader_jobs',
                                     foreign_keys=[team_leader])

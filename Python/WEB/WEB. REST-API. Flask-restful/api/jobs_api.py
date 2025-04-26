@@ -4,7 +4,7 @@ from flask import Blueprint, Response, abort, request, jsonify
 from data import db_session
 from sqlalchemy.exc import IntegrityError
 
-from data.jobs import Jobs
+from models.jobs import Jobs
 
 jobs_api = Blueprint('jobs_api', __name__)
 

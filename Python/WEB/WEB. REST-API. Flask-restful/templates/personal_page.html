@@ -1,0 +1,19 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<style>
+    img {
+        border: 2px solid grey;
+    }
+</style>
+
+<h1>Nostalgy</h1>
+<h2>{{ user.name }} {{ user.surname }}</h2>
+
+<h3>{{ user.city_from }}</h3>
+
+<img src="{{ url_for('static', filename='/imgs/map_image.png')}}" alt="">
+
+
+{% endblock %}

@@ -12,17 +12,18 @@ from werkzeug.security import generate_password_hash, check_password_hash
 def abort_if_job_not_found(jobs_id):
     try:
         session = db_session.create_session()
-        users = session.query(Jobs).filter(Jobs.id == jobs_id).first()
-        if not users:
-            abort(404, message=f"user {jobs_id} not found")
+        job = session.query(Jobs).filter(Jobs.id == jobs_id).first()
+        if not job:
+            abort(404, message=f"job {jobs_id} not found")
     finally:
         session.close()
+
 
 class JobsResource(Resource):
     def get(self, jobs_id):
         abort_if_job_not_found(jobs_id)
         session = db_session.create_session()
-        job = session.query(Jobs).filter(Jobs.id == jobs_id).first()
+        job = session.query(Jobs).filter(Jobs.id == int(jobs_id)).first()
         session.close()
         return {
             'job': {
@@ -31,16 +32,19 @@ class JobsResource(Resource):
                 'team_leader': job.team_leader,
                 'job_title': job.job_title,
                 'work_size': job.work_size,
+                'hazard_category': job.hazard_category,
             }
         }
-    
+
     def delete(self, jobs_id):
         abort_if_job_not_found(jobs_id)
+
         session = db_session.create_session()
-        job = session.query(Jobs).filter(Jobs.id == jobs_id).first()
+        job = session.query(Jobs).filter(Jobs.id == int(jobs_id)).first()
         session.delete(job)
         session.commit()
         session.close()
+
         return {'success': 'OK'}
 
 
@@ -57,6 +61,7 @@ class JobsListResource(Resource):
                     'team_leader': job.team_leader,
                     'job_title': job.job_title,
                     'work_size': job.work_size,
+                    'hazard_category': job.hazard_category,
                 })
         except Exception as e:
             return {'status': 'error',
@@ -69,21 +74,29 @@ class JobsListResource(Resource):
         parser = job_parser.create_job_parser()
         args = parser.parse_args()
 
+        necessary_fields = ['id', 'author', 'team_leader', 'work_size']
+        for field in necessary_fields:
+            if field not in args.keys():
+                return {
+                    'status': 'error',
+                    'message': f'request doesn\'t have field {field}',
+                }, 400
         session = db_session.create_session()
         try:
-            founded_job = session.query(Jobs).filter(Jobs.id == args['jobs_id']).first()
+            founded_job = session.query(Jobs).filter(Jobs.id == int(args['id'])).first()
             if founded_job:
                 return {
                     'status': 'error',
                     'message': 'Jobs with this ID alredy exists'
                 }, 400
-            
+
             job = Jobs(
-                id=args['jobs_id'],
+                id=int(args['id']),
                 author=args['author'],
                 team_leader=args['team_leader'],
                 job_title=args['job_title'],
                 work_size=args['work_size'],
+                hazard_category=args['hazard_category'],
             )
             session.add(job)
             session.commit()
@@ -91,7 +104,7 @@ class JobsListResource(Resource):
             return {
                 'status': 'success',
                 'id': f'{job.id}',
-            }
+            }, 201
         except SQLAlchemyError as e:
             session.rollback()
             return {

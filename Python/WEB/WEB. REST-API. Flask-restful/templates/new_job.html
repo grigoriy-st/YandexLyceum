@@ -1,0 +1,54 @@
+<!-- new_jos.html -->
+
+<!-- Этот файл скорее всего есть в репозитории
+https://github.com/grigoriy-st/YandexLyceum/tree/main/Python/WEB -->
+
+{% extends "base.html" %}
+
+{% block styles %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/new_job.css')}}"> 
+{% endblock %}
+
+{% block content %}
+<h1>Create new job</h1>
+
+{% if message %}
+    <h2 class="success_message">{{ message }}</h2>
+{% endif %}
+
+<form action="/create_job" method="post" class="form1">
+    <label for="job_title">Title</label>
+    <input type="text" name="job_title" id="job_title" required>
+
+    <label for="team_leader">Team leader</label>
+    <select id="team_leader" name="team_leader">
+        {% for team_leader in team_leaders %}
+        <option value="{{ team_leader.id }}">{{ team_leader.name }} {{team_leader.surname}} ({{team_leader.id}})</option>
+        {% endfor %}
+    </select>
+
+    <label for="beginning_of_duration">Начать работу с</label>
+    <input type="datetime-local" id="start_datetime" name="beginning_of_duration">
+
+    <label for="end_of_duration">Окончить работу</label>
+    <input type="datetime-local" id="end_datetime" name="end_of_duration">
+
+    <label for="collaborators">List of collaborators</label>
+    <input type="text" name="collaborators" id="collaborators" required>
+
+    <label for="is_finished">Is finished</label>
+    <select id="is_finished" name="is_finished" required>
+        <option value="finished">yes</option>
+        <option value="not_finished">no</option>
+    </select>
+
+    <label for="hazard_category">Hazard category</label>
+    <select id="hazard_category" name="hazard_category" required>
+        {% for category in hazard_category %}
+        <option value="{{ category.id }}">{{ category.hazard_category_title }}</option>
+        {% endfor %}
+    </select>
+
+    <input type="submit" value="Send" class="post_button">
+</form>
+{% endblock %}
