@@ -1,0 +1,50 @@
+█     cr 0 iter 0 
+ █    cr 1 iter 0 
+  █   cr 2 iter 0 
+   █  cr 3 iter 0 
+    █ cr 4 iter 0 
+   █  cr 3 iter 1 ■
+█     cr 0 iter 1 ■
+  █   cr 2 iter 1 ■
+ █    cr 1 iter 1 ■
+   █  cr 3 iter 2 ■■
+█     cr 0 iter 2 ■■
+    █ cr 4 iter 1 ■
+  █   cr 2 iter 2 ■■
+ █    cr 1 iter 2 ■■
+  █   cr 2 iter 3 ■■■
+   █  cr 3 iter 3 ■■■
+ █    cr 1 iter 3 ■■■
+   █  cr 3 iter 4 ■■■■
+█     cr 0 iter 3 ■■■
+    █ cr 4 iter 2 ■■
+  █   cr 2 iter 4 ■■■■
+ █    cr 1 iter 4 ■■■■
+ █    cr 1 iter 5 ■■■■■
+█     cr 0 iter 4 ■■■■
+  █   cr 2 iter 5 ■■■■■
+    █ cr 4 iter 3 ■■■
+█     cr 0 iter 5 ■■■■■
+   █  cr 3 iter 5 ■■■■■
+    █ cr 4 iter 4 ■■■■
+ █    cr 1 iter 6 ■■■■■■
+  █   cr 2 iter 6 ■■■■■■
+ █    cr 1 iter 7 ■■■■■■■
+  █   cr 2 iter 7 ■■■■■■■
+█     cr 0 iter 6 ■■■■■■
+   █  cr 3 iter 6 ■■■■■■
+ █    cr 1 iter 8 ■■■■■■■■
+█     cr 0 iter 7 ■■■■■■■
+    █ cr 4 iter 5 ■■■■■
+ █    cr 1 iter 9 ■■■■■■■■■
+  █   cr 2 iter 8 ■■■■■■■■
+   █  cr 3 iter 7 ■■■■■■■
+█     cr 0 iter 8 ■■■■■■■■
+  █   cr 2 iter 9 ■■■■■■■■■
+   █  cr 3 iter 8 ■■■■■■■■
+    █ cr 4 iter 6 ■■■■■■
+    █ cr 4 iter 7 ■■■■■■■
+   █  cr 3 iter 9 ■■■■■■■■■
+    █ cr 4 iter 8 ■■■■■■■■
+█     cr 0 iter 9 ■■■■■■■■■
+    █ cr 4 iter 9 ■■■■■■■■■

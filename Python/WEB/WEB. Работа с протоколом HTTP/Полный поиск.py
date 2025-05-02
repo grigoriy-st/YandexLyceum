@@ -1,51 +1,83 @@
+import sys
+from io import BytesIO
 import requests
+from PIL import Image
 
-search_api_server = "https://search-maps.yandex.ru/v1/"
-api_key = "dda3ddba-c9ea-4ead-9010-f43fbc15c6e3"
+def get_map_scale_params(toponym):
+    try:
+        envelope = toponym["boundedBy"]["Envelope"]
+        left, bottom = envelope["lowerCorner"].split(" ")
+        right, top = envelope["upperCorner"].split(" ")
+        
+        width = abs(float(right) - float(left))
+        height = abs(float(top) - float(bottom))
+        
+        # Добавляем небольшой зазор вокруг объекта
+        width = max(width, 0.005)
+        height = max(height, 0.005)
+        
+        return f"{width},{height}"
+    except KeyError:
+        # Если нет данных о границах, возвращаем значение по умолчанию
+        return "0.005,0.005"
 
-address_ll = "37.588392,55.734036"
+def main():
+    if len(sys.argv) < 2:
+        print("Использование: python search.py <адрес>")
+        return
 
-search_params = {
-    "apikey": api_key,
-    "text": "аптека",
-    "lang": "ru_RU",
-    "ll": address_ll,
-    "type": "biz"
-}
+    toponym_to_find = " ".join(sys.argv[1:])
+    print(f"Поиск адреса: {toponym_to_find}")
 
-response = requests.get(search_api_server, params=search_params)
-if not response:
-    #...
-    pass
-json_response = response.json()
+    geocoder_api_server = "http://geocode-maps.yandex.ru/1.x/"
+    geocoder_params = {
+        "apikey": "40d1649f-0493-4b70-98ba-98533de7710b",  # Замените на ваш действительный ключ
+        "geocode": toponym_to_find,
+        "format": "json"
+    }
 
-# Получаем первую найденную организацию.
-organization = json_response["features"][0]
-# Название организации.
-org_name = organization["properties"]["CompanyMetaData"]["name"]
-# Адрес организации.
-org_address = organization["properties"]["CompanyMetaData"]["address"]
+    try:
+        response = requests.get(geocoder_api_server, params=geocoder_params)
+        response.raise_for_status()  # Проверяем HTTP ошибки
+        
+        json_response = response.json()
+        
+        # Проверяем, есть ли результаты
+        feature_members = json_response["response"]["GeoObjectCollection"]["featureMember"]
+        if not feature_members:
+            print("Адрес не найден")
+            return
+            
+        toponym = feature_members[0]["GeoObject"]
+        toponym_coordinates = toponym["Point"]["pos"]
+        toponym_longitude, toponym_lattitude = toponym_coordinates.split(" ")
+        print(f"Найденные координаты: {toponym_longitude}, {toponym_lattitude}")
 
-# Получаем координаты ответа.
-point = organization["geometry"]["coordinates"]
-org_point = f"{point[0]},{point[1]}"
-delta = "0.005"
-apikey = "f3a0fe3a-b07e-4840-a1da-06f18b2ddf13"
+        spn = get_map_scale_params(toponym)
+        print(f"Параметры масштаба: {spn}")
 
+        map_api_server = "https://static-maps.yandex.ru/1.x"
+        map_params = {
+            "ll": ",".join([toponym_longitude, toponym_lattitude]),
+            "spn": spn,
+            "l": "map",
+            "pt": f"{toponym_longitude},{toponym_lattitude},pm2dgl",
+            "apikey": "40d1649f-0493-4b70-98ba-98533de7710b"  # Замените на ваш действительный ключ
+        }
 
-# Собираем параметры для запроса к StaticMapsAPI:
-map_params = {
-    # позиционируем карту центром на наш исходный адрес
-    "ll": address_ll,
-    "spn": ",".join([delta, delta]),
-    "apikey": apikey,
-    # добавим точку, чтобы указать найденную аптеку
-    "pt": "{0},pm2dgl".format(org_point)
-}
+        response = requests.get(map_api_server, params=map_params)
+        response.raise_for_status()
 
-map_api_server = "https://static-maps.yandex.ru/v1"
-# ... и выполняем запрос
-response = requests.get(map_api_server, params=map_params)
-im = BytesIO(response.content)
-opened_image = Image.open(im)
-opened_image.show()
+        im = BytesIO(response.content)
+        opened_image = Image.open(im)
+        opened_image.show()
+
+    except requests.exceptions.RequestException as e:
+        print(f"Ошибка при выполнении запроса: {e}")
+    except KeyError as e:
+        print(f"Ошибка при обработке ответа: отсутствует ключ {e}")
+    except Exception as e:
+        print(f"Неожиданная ошибка: {e}")
+
+if __name__ == "__main__":
+    main()
